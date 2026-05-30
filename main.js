@@ -61,6 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var preloader = document.getElementById('preloader');
     var barFill = document.getElementById('bar-fill');
     if (!preloader) return;
+    document.body.style.overflow = 'hidden';
     var overlay = preloader.querySelector('.preloader-overlay');
     var numberEl = preloader.querySelector('.preloader-number');
     var digits = [document.getElementById('dig0'), document.getElementById('dig1'), document.getElementById('dig2')];
@@ -104,6 +105,8 @@ document.addEventListener('DOMContentLoaded', function () {
     function finishPreloader() {
       if (finished) return;
       finished = true;
+      document.body.style.overflow = '';
+      window.scrollTo(0, 0);
       updateBar(1);
       setTimeout(function () {
         gsap.to(overlay, { y: '-100%', duration: 1, ease: 'power3.inOut', onComplete: function () { preloader.style.display = 'none'; } });
