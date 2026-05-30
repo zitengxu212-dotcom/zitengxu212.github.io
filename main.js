@@ -38,8 +38,14 @@ document.addEventListener('DOMContentLoaded', function () {
     var arrow = document.querySelector('.hero-decoration');
     if (arrow) {
       arrow.addEventListener('click', function () {
+        document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
         var target = document.querySelector('.section-home-intro');
-        if (target) target.scrollIntoView({ behavior: 'smooth' });
+        if (target) {
+          setTimeout(function () {
+            target.scrollIntoView({ behavior: 'smooth' });
+          }, 50);
+        }
       });
     }
   }
@@ -105,7 +111,6 @@ document.addEventListener('DOMContentLoaded', function () {
     function finishPreloader() {
       if (finished) return;
       finished = true;
-      document.body.style.overflow = '';
       window.scrollTo(0, 0);
       updateBar(1);
       setTimeout(function () {
