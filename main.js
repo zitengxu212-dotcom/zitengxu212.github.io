@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var numberEl = preloader.querySelector('.preloader-number');
     var digits = [document.getElementById('dig0'), document.getElementById('dig1'), document.getElementById('dig2')];
     var current = [0, 0, 0];
-    var duration = 4000;
+    var duration = 3000;
     var startTime = Date.now();
     var finished = false;
 
@@ -223,7 +223,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }, 40);
 
     // Safety: force finish at 4.5s max
-    setTimeout(function () { if (!finished) { setNumber(100); finishPreloader(); } }, 4500);
+    setTimeout(function () { if (!finished) { setNumber(100); finishPreloader(); } }, 3500);
   }
 
   // ===== Init =====
