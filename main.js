@@ -3,7 +3,8 @@ window.XUZITENG = window.XUZITENG || {};
 document.addEventListener('DOMContentLoaded', function () {
   'use strict';
 
-  // ===== Typewriter Effect =====
+  // ===== Typewriter Effect (deferred) =====
+  var startTypewriter = null;
   function initTypewriter() {
     var lines = document.querySelectorAll('.hero-title > span[data-text]');
     var currentLine = 0;
@@ -18,14 +19,19 @@ document.addEventListener('DOMContentLoaded', function () {
         ci++;
         if (ci > fullText.length) {
           clearInterval(iv);
-          el.classList.remove('typed');
-          el.classList.add('done');
+          if (index === lines.length - 1) {
+            // 最后一行：保留 typed，光标常驻闪烁
+          } else {
+            el.classList.remove('typed');
+            el.classList.add('done');
+          }
           currentLine++;
           setTimeout(function () { typeLine(currentLine); }, 150);
         }
       }, 80);
     }
-    typeLine(0);
+    startTypewriter = function () { typeLine(0); };
+    // Don't auto-start — wait for preloader signal
   }
 
   // ===== Scroll-down arrow =====
@@ -195,6 +201,8 @@ document.addEventListener('DOMContentLoaded', function () {
       setTimeout(function () {
         gsap.to(overlay, { y: '-100%', duration: 1, ease: 'power3.inOut', onComplete: function () { preloader.style.display = 'none'; } });
         gsap.to(numberEl, { opacity: 0, duration: 0.3 });
+        // Start typewriter as overlay reveals pink background
+        if (startTypewriter) startTypewriter();
       }, 400);
     }
 
