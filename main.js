@@ -189,60 +189,108 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  // ===== Card parallax + 3D tilt =====
+  // ===== Works Carousel =====
   function initWorks() {
-    // Parallax
-    document.querySelectorAll('[data-parallax]').forEach(function (card) {
-      var strength = parseFloat(card.getAttribute('data-parallax')) || 8;
-      var target = card.querySelector('[data-parallax-target]');
-      if (target) {
-        ScrollTrigger.create({
-          trigger: card, start: 'top bottom', end: 'bottom top',
-          onUpdate: function (self) { gsap.set(target, { y: (self.progress - 0.5) * strength * 2 }); }
-        });
-      }
-      // 3D tilt — quickTo for high-performance tracking
-      var image = card.querySelector('.t-card-featured-image');
-      var qkRotY = gsap.quickTo(card, "rotationY", { duration: 0.5, ease: "power2.out" });
-      var qkRotX = gsap.quickTo(card, "rotationX", { duration: 0.5, ease: "power2.out" });
-      var qkScale = gsap.quickTo(card, "scale", { duration: 0.5, ease: "power2.out" });
-      var qkShadowY = gsap.quickTo(card, "boxShadow", { duration: 0.5, ease: "power2.out" });
-      var qkImgX, qkImgY;
-      if (image) {
-        image.style.transform = 'translateZ(30px)';
-        qkImgX = gsap.quickTo(image, "x", { duration: 0.4, ease: "power2.out" });
-        qkImgY = gsap.quickTo(image, "y", { duration: 0.4, ease: "power2.out" });
+    var track = document.getElementById('works-track');
+    var viewport = document.getElementById('works-viewport');
+    var prevBtn = document.getElementById('works-prev');
+    var nextBtn = document.getElementById('works-next');
+    if (!track || !viewport) return;
+
+    var cards = track.querySelectorAll('.t-card');
+    var cardWidth = cards[0].offsetWidth + 60;
+    var totalCards = cards.length;
+    var halfWidth = (cardWidth * totalCards) / 2;
+
+    // rAF-driven marquee — immune to killable-tween position drift
+    var marqueeX = 0;
+    var autoSpeed = 60;       // px/s
+    var btnSpeed = 300;       // px/s on button hold
+    var isHovering = false;
+    var buttonHeld = null;    // 'prev' | 'next' | null
+    var lastTime = 0;
+
+    function loop(timestamp) {
+      if (!lastTime) lastTime = timestamp;
+      var dt = Math.min((timestamp - lastTime) / 1000, 0.1);
+      lastTime = timestamp;
+
+      if (buttonHeld === 'prev') {
+        marqueeX += btnSpeed * dt;
+      } else if (buttonHeld === 'next') {
+        marqueeX -= btnSpeed * dt;
+      } else if (!isHovering) {
+        marqueeX -= autoSpeed * dt;
       }
 
-      card.addEventListener('mousemove', function (e) {
-        var rect = card.getBoundingClientRect();
-        var mx = (e.clientX - rect.left) / rect.width - 0.5;
-        var my = (e.clientY - rect.top) / rect.height - 0.5;
-        qkRotY(mx * 48);
-        qkRotX(my * -32);
-        qkScale(1.03);
-        var sx = mx * -48, sy = my * -40;
-        qkShadowY(sx + 'px ' + sy + 'px 60px rgba(0,0,0,0.28)');
-        if (qkImgX) { qkImgX(mx * 40); qkImgY(my * -32); }
+      // Wrap
+      if (marqueeX <= -halfWidth) marqueeX += halfWidth;
+      if (marqueeX > 0) marqueeX -= halfWidth;
+
+      gsap.set(track, { x: marqueeX });
+
+      requestAnimationFrame(loop);
+    }
+
+    // Buttons: hold to scroll
+    function addButtonListeners(btn, direction) {
+      btn.addEventListener('mousedown', function () { buttonHeld = direction; });
+      btn.addEventListener('mouseup', function () { buttonHeld = null; });
+      btn.addEventListener('mouseleave', function () { buttonHeld = null; });
+      btn.addEventListener('touchstart', function (e) { e.preventDefault(); buttonHeld = direction; });
+      btn.addEventListener('touchend', function () { buttonHeld = null; });
+    }
+
+    addButtonListeners(prevBtn, 'prev');
+    addButtonListeners(nextBtn, 'next');
+
+    // Per-card: hover scale + 3D tilt (no centering — avoids mouseleave jitter)
+    cards.forEach(function (card) {
+      var cleanupTilt = null;
+
+      card.addEventListener('mouseenter', function () {
+        isHovering = true;
+        gsap.to(card, { scale: 1.08, duration: 0.4, ease: 'power2.out', zIndex: 10 });
+
+        var image = card.querySelector('.t-card-featured-image');
+        var qkRotY = gsap.quickTo(card, 'rotationY', { duration: 0.5, ease: 'power2.out' });
+        var qkRotX = gsap.quickTo(card, 'rotationX', { duration: 0.5, ease: 'power2.out' });
+        var qkShadowY = gsap.quickTo(card, 'boxShadow', { duration: 0.5, ease: 'power2.out' });
+        var qkImgX, qkImgY;
+        if (image) { image.style.transform = 'translateZ(30px)'; qkImgX = gsap.quickTo(image, 'x', { duration: 0.4, ease: 'power2.out' }); qkImgY = gsap.quickTo(image, 'y', { duration: 0.4, ease: 'power2.out' }); }
+        function onMove(e) {
+          var r = card.getBoundingClientRect();
+          var mx = (e.clientX - r.left) / r.width - 0.5, my = (e.clientY - r.top) / r.height - 0.5;
+          qkRotY(mx * 48); qkRotX(my * -32);
+          qkShadowY((mx * -48) + 'px ' + (my * -40) + 'px 60px rgba(0,0,0,0.28)');
+          if (qkImgX) { qkImgX(mx * 40); qkImgY(my * -32); }
+        }
+        card.addEventListener('mousemove', onMove);
+        cleanupTilt = function () {
+          card.removeEventListener('mousemove', onMove);
+          gsap.to(card, { rotationY: 0, rotationX: 0, duration: 0.8, ease: 'elastic.out(1, 0.5)' });
+          gsap.to(card, { boxShadow: '0 2px 12px rgba(0,0,0,0.06)', duration: 0.6, ease: 'power2.out' });
+          if (image) gsap.to(image, { x: 0, y: 0, duration: 0.6, ease: 'power2.out' });
+          cleanupTilt = null;
+        };
       });
 
       card.addEventListener('mouseleave', function () {
-        gsap.to(card, { rotationY: 0, rotationX: 0, scale: 1, duration: 0.8, ease: 'elastic.out(1, 0.5)' });
-        gsap.to(card, { boxShadow: '0 2px 12px rgba(0,0,0,0.06)', duration: 0.6, ease: 'power2.out' });
-        if (image) gsap.to(image, { x: 0, y: 0, duration: 0.6, ease: 'power2.out' });
+        isHovering = false;
+        if (cleanupTilt) { cleanupTilt(); cleanupTilt = null; }
+        gsap.to(card, { scale: 1, zIndex: 1, duration: 0.3, ease: 'power2.out' });
       });
     });
 
-    // Section entrance
+    requestAnimationFrame(loop);
+
+    // Entrance
     ScrollTrigger.create({
-      trigger: '.section-featured-works',
-      start: 'top 80%',
+      trigger: '.section-featured-works', start: 'top 80%',
       onEnter: function () {
-        gsap.fromTo('.list-work .t-card', { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.7, stagger: 0.1, ease: 'power3.out' });
         gsap.fromTo('.text-intro .hg, .text-intro .s-tag-label', { opacity: 0, y: 25 }, { opacity: 1, y: 0, duration: 0.6, stagger: 0.08, ease: 'power2.out', delay: 0.15 });
         gsap.fromTo('.cr-tag .t-tag', { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.35, stagger: 0.07, ease: 'back.out(1.4)', delay: 0.3 });
-      },
-      once: true
+      }, once: true
     });
   }
 
