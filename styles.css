@@ -596,6 +596,16 @@ ul {
   padding: 4px 14px;
   border-radius: 100px;
   font-family: var(--font-primary);
+  cursor: pointer;
+  transition: background .3s, border-color .3s;
+}
+.t-tag:hover {
+  border-color: rgba(255,67,180,.6);
+}
+.t-tag.active {
+  background: var(--color-pink);
+  color: var(--color-yellow);
+  border-color: var(--color-pink);
 }
 .works-wrapper { width: 100%; overflow: hidden; }
 .list-work { width: 100%; }
@@ -603,16 +613,16 @@ ul {
   width: 100%;
   overflow: hidden;
   perspective: 1000px;
-  padding-bottom: 30px;
+  padding: 60px 0;
 }
 .carousel-track {
   display: flex;
-  gap: 60px;
+  gap: 40px;
   will-change: transform;
 }
 .carousel-track .t-card {
   flex-shrink: 0;
-  width: calc((100% - 60px) / 2);
+  width: calc((100% - 80px) / 3);
 }
 .carousel-controls {
   display: flex;

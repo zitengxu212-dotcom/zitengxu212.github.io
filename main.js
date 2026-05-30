@@ -198,17 +198,74 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!track || !viewport) return;
 
     var cards = track.querySelectorAll('.t-card');
-    var cardWidth = cards[0].offsetWidth + 60;
+    var cardWidth = cards[0].offsetWidth + 40;
     var totalCards = cards.length;
     var halfWidth = (cardWidth * totalCards) / 2;
 
+    // Card data sets — each set 4 cards, doubled to 8 for seamless loop
+    var cardSets = {
+      set1: [
+        { img: 'https://placehold.co/600x400/FF43B4/FFF9C7?text=01', number: '01', title: 'Project One', tags: ['Brand', 'Design'] },
+        { img: 'https://placehold.co/600x400/FFF9C7/FF43B4?text=02', number: '02', title: 'Project Two', tags: ['Spatial', 'Motion'] },
+        { img: 'https://placehold.co/600x400/FF43B4/FFF9C7?text=03', number: '03', title: 'Project Three', tags: ['Graphic', 'Concept'] },
+        { img: 'https://placehold.co/600x400/FFF9C7/FF43B4?text=04', number: '04', title: 'Project Four', tags: ['Brand', 'Motion'] }
+      ],
+      set2: [
+        { img: 'https://placehold.co/600x400/FF43B4/FFF9C7?text=05', number: '05', title: 'Project Five', tags: ['UI', 'Design'] },
+        { img: 'https://placehold.co/600x400/FFF9C7/FF43B4?text=06', number: '06', title: 'Project Six', tags: ['Motion', '3D'] },
+        { img: 'https://placehold.co/600x400/FF43B4/FFF9C7?text=07', number: '07', title: 'Project Seven', tags: ['Editorial', 'Print'] },
+        { img: 'https://placehold.co/600x400/FFF9C7/FF43B4?text=08', number: '08', title: 'Project Eight', tags: ['Web', 'Code'] }
+      ],
+      set3: [
+        { img: 'https://placehold.co/600x400/FF43B4/FFF9C7?text=09', number: '09', title: 'Project Nine', tags: ['Photo', 'Art'] },
+        { img: 'https://placehold.co/600x400/FFF9C7/FF43B4?text=10', number: '10', title: 'Project Ten', tags: ['Type', 'Layout'] },
+        { img: 'https://placehold.co/600x400/FF43B4/FFF9C7?text=11', number: '11', title: 'Project Eleven', tags: ['Exhibition', 'Space'] },
+        { img: 'https://placehold.co/600x400/FFF9C7/FF43B4?text=12', number: '12', title: 'Project Twelve', tags: ['Digital', 'VR'] }
+      ]
+    };
+
+    function buildTrackData(set) { return set.concat(set); }
+
+    function renderCards(category) {
+      var data = buildTrackData(cardSets[category]);
+      cards.forEach(function (card, i) {
+        var d = data[i];
+        var img = card.querySelector('.t-card-featured-image');
+        if (img) { img.src = d.img; }
+        var num = card.querySelector('.t-card-number');
+        if (num) { num.textContent = d.number; }
+        var title = card.querySelector('.t-card-title');
+        if (title) { title.textContent = d.title; }
+        var terms = card.querySelectorAll('.t-card-term-name');
+        terms.forEach(function (term, j) { if (d.tags[j]) { term.textContent = d.tags[j]; } });
+      });
+      marqueeX = 0;
+      hoverProxy.val = 0;
+    }
+
+    // Tag filter buttons
+    var tagButtons = document.querySelectorAll('.cr-tag .t-tag');
+    tagButtons.forEach(function (tag) {
+      tag.addEventListener('click', function () {
+        var cat = tag.getAttribute('data-category');
+        if (!cat || tag.classList.contains('active')) return;
+        tagButtons.forEach(function (t) { t.classList.remove('active'); });
+        tag.classList.add('active');
+        renderCards(cat);
+      });
+    });
+
     // rAF-driven marquee — immune to killable-tween position drift
     var marqueeX = 0;
-    var autoSpeed = 60;       // px/s
-    var btnSpeed = 300;       // px/s on button hold
+    var autoSpeed = 100;       // px/s
+    var btnSpeed = 600;       // px/s on button hold
     var isHovering = false;
     var buttonHeld = null;    // 'prev' | 'next' | null
     var lastTime = 0;
+    var hoverProxy = { val: 0 };  // GSAP-animated centering offset, independent of marqueeX
+
+    // Default: show set1
+    renderCards('set1');
 
     function loop(timestamp) {
       if (!lastTime) lastTime = timestamp;
@@ -227,7 +284,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (marqueeX <= -halfWidth) marqueeX += halfWidth;
       if (marqueeX > 0) marqueeX -= halfWidth;
 
-      gsap.set(track, { x: marqueeX });
+      gsap.set(track, { x: marqueeX + hoverProxy.val });
 
       requestAnimationFrame(loop);
     }
@@ -250,27 +307,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
       card.addEventListener('mouseenter', function () {
         isHovering = true;
-        gsap.to(card, { scale: 1.08, duration: 0.4, ease: 'power2.out', zIndex: 10 });
+        // Center via hoverProxy — doesn't move track.x directly, avoids mouseleave jitter
+        var cardRect = card.getBoundingClientRect();
+        var cardCenter = cardRect.left + cardRect.width / 2;
+        var viewCenter = window.innerWidth / 2;
+        var offset = viewCenter - cardCenter;
+        gsap.to(hoverProxy, { val: offset, duration: 0.5, ease: 'power2.out', overwrite: true });
+        cards.forEach(function (c) { gsap.to(c, { scale: c === card ? 1.2 : 0.6, zIndex: c === card ? 10 : 1, duration: 0.4, ease: 'power2.out' }); });
 
         var image = card.querySelector('.t-card-featured-image');
         var qkRotY = gsap.quickTo(card, 'rotationY', { duration: 0.5, ease: 'power2.out' });
         var qkRotX = gsap.quickTo(card, 'rotationX', { duration: 0.5, ease: 'power2.out' });
         var qkShadowY = gsap.quickTo(card, 'boxShadow', { duration: 0.5, ease: 'power2.out' });
-        var qkImgX, qkImgY;
-        if (image) { image.style.transform = 'translateZ(30px)'; qkImgX = gsap.quickTo(image, 'x', { duration: 0.4, ease: 'power2.out' }); qkImgY = gsap.quickTo(image, 'y', { duration: 0.4, ease: 'power2.out' }); }
+        if (image) { image.style.transform = 'translateZ(30px)'; }
         function onMove(e) {
           var r = card.getBoundingClientRect();
           var mx = (e.clientX - r.left) / r.width - 0.5, my = (e.clientY - r.top) / r.height - 0.5;
           qkRotY(mx * 48); qkRotX(my * -32);
           qkShadowY((mx * -48) + 'px ' + (my * -40) + 'px 60px rgba(0,0,0,0.28)');
-          if (qkImgX) { qkImgX(mx * 40); qkImgY(my * -32); }
         }
         card.addEventListener('mousemove', onMove);
         cleanupTilt = function () {
           card.removeEventListener('mousemove', onMove);
           gsap.to(card, { rotationY: 0, rotationX: 0, duration: 0.8, ease: 'elastic.out(1, 0.5)' });
           gsap.to(card, { boxShadow: '0 2px 12px rgba(0,0,0,0.06)', duration: 0.6, ease: 'power2.out' });
-          if (image) gsap.to(image, { x: 0, y: 0, duration: 0.6, ease: 'power2.out' });
           cleanupTilt = null;
         };
       });
@@ -278,7 +338,9 @@ document.addEventListener('DOMContentLoaded', function () {
       card.addEventListener('mouseleave', function () {
         isHovering = false;
         if (cleanupTilt) { cleanupTilt(); cleanupTilt = null; }
-        gsap.to(card, { scale: 1, zIndex: 1, duration: 0.3, ease: 'power2.out' });
+        marqueeX += hoverProxy.val;  // absorb offset so scrolling resumes from centered position
+        hoverProxy.val = 0;
+        cards.forEach(function (c) { gsap.to(c, { scale: 1, zIndex: 1, duration: 0.3, ease: 'power2.out' }); });
       });
     });
 
