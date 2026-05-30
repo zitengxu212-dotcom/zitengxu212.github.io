@@ -108,6 +108,10 @@ document.addEventListener('DOMContentLoaded', function () {
       setTimeout(function () {
         gsap.to(overlay, { y: '-100%', duration: 1, ease: 'power3.inOut', onComplete: function () { preloader.style.display = 'none'; } });
         gsap.to(numberEl, { opacity: 0, duration: 0.3 });
+        // Header entrance
+        gsap.fromTo('#main-header', { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out', delay: 0.2, onComplete: function () {
+          document.getElementById('main-header').style.pointerEvents = 'auto';
+        }});
         if (startTypewriter) startTypewriter();
       }, 400);
     }
@@ -131,21 +135,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // ===== Header scroll behavior =====
   function initHeader() {
-    var header = document.getElementById('main-header');
-    if (!header) return;
-    var headerTl = gsap.timeline({ paused: true });
-    headerTl.to(header, { y: '-100%', duration: 0.4, ease: 'power2.inOut' });
-
-    ScrollTrigger.create({
-      start: 100, end: 'max',
-      onUpdate: function (self) {
-        if (self.direction > 0 && self.scroll() > 300) {
-          if (!headerTl.isActive() && headerTl.progress() < 0.5) headerTl.play();
-        } else if (self.direction < 0) {
-          headerTl.reverse();
-        }
-      }
-    });
+    // Header is now always-visible fixed bar — no scroll behavior needed
   }
 
   // ===== Text reveal (ScrollTrigger) =====

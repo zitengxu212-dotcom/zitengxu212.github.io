@@ -436,10 +436,12 @@ ul {
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 500;
+  z-index: 9999;
   padding: 20px 40px;
-  mix-blend-mode: difference;
-  color: #fff;
+  background: var(--color-pink);
+  color: var(--color-white);
+  opacity: 0;
+  pointer-events: none;
 }
 .main-header-inner {
   display: flex;
@@ -483,7 +485,7 @@ ul {
   background-position: center, 50% 20%;
   color: var(--color-white);
   overflow: hidden;
-  padding: 380px 40px 80px;
+  padding: 480px 40px 80px;
 }
 .section-home-intro .t-cr {
   max-width: 1200px;
