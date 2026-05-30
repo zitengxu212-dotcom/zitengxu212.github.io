@@ -143,7 +143,83 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  // ===== Preloader (fixed 4s countdown) =====
+  function initPreloader() {
+    var preloader = document.getElementById('preloader');
+    var barFill = document.getElementById('bar-fill');
+    if (!preloader) return;
+    var overlay = preloader.querySelector('.preloader-overlay');
+    var numberEl = preloader.querySelector('.preloader-number');
+    var digits = [document.getElementById('dig0'), document.getElementById('dig1'), document.getElementById('dig2')];
+    var current = [0, 0, 0];
+    var duration = 4000;
+    var startTime = Date.now();
+    var finished = false;
+
+    function animDigit(idx) {
+      var d = digits[idx];
+      if (!d) return;
+      var cur = d.querySelector('.num-current');
+      var nxt = d.querySelector('.num-next');
+      cur.style.transform = 'translateY(-100%)';
+      nxt.style.transform = 'translateY(-100%)';
+      setTimeout(function () {
+        cur.textContent = current[idx];
+        cur.style.transition = 'none';
+        cur.style.transform = 'translateY(0)';
+        nxt.textContent = (current[idx] + 1) % 10;
+        nxt.style.transition = 'none';
+        nxt.style.transform = 'translateY(100%)';
+        setTimeout(function () {
+          cur.style.transition = 'transform 0.6s cubic-bezier(.22, 1, .36, 1)';
+          nxt.style.transition = 'transform 0.6s cubic-bezier(.22, 1, .36, 1)';
+        }, 50);
+      }, 600);
+    }
+
+    function setNumber(n) {
+      n = Math.min(100, Math.max(0, Math.round(n)));
+      var s = n.toString().padStart(3, '0');
+      for (var i = 0; i < 3; i++) {
+        var val = parseInt(s[i]);
+        if (val !== current[i]) { current[i] = val; animDigit(i); }
+      }
+    }
+
+    function updateBar(pct) { if (barFill) barFill.style.width = (pct * 100) + '%'; }
+
+    function finishPreloader() {
+      if (finished) return;
+      finished = true;
+      updateBar(1);
+      setTimeout(function () {
+        gsap.to(overlay, { y: '-100%', duration: 1, ease: 'power3.inOut', onComplete: function () { preloader.style.display = 'none'; } });
+        gsap.to(numberEl, { opacity: 0, duration: 0.3 });
+      }, 400);
+    }
+
+    function tick() {
+      var elapsed = Date.now() - startTime;
+      var progress = Math.min(1, elapsed / duration);
+      var targetNumber = Math.round(progress * 100);
+      setNumber(targetNumber);
+      updateBar(progress);
+      if (progress >= 1) { finishPreloader(); }
+    }
+
+    updateBar(0);
+    setNumber(0);
+    var timer = setInterval(function () {
+      if (finished) { clearInterval(timer); return; }
+      tick();
+    }, 40);
+
+    // Safety: force finish at 4.5s max
+    setTimeout(function () { if (!finished) { setNumber(100); finishPreloader(); } }, 4500);
+  }
+
   // ===== Init =====
+  initPreloader();
   initTypewriter();
   initScrollArrow();
   initCardGallery();

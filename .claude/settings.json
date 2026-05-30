@@ -1,0 +1,21 @@
+{
+  "extraKnownMarketplaces": {
+    "gsap-skills": {
+      "source": {
+        "source": "directory",
+        "path": ".claude/skills/gsap-skills"
+      }
+    },
+    "mattpocock-skills": {
+      "source": {
+        "source": "directory",
+        "path": ".claude/skills/mattpocock-skills"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "gsap-skills@gsap-skills": true,
+    "mattpocock-skills@mattpocock-skills": true
+  }
+}
+
