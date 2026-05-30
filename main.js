@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (ci > fullText.length) {
           clearInterval(iv);
           if (index === lines.length - 1) {
-            // 最后一行：保留 typed，光标常驻闪烁
+            // Last line: keep typed, cursor stays blinking
           } else {
             el.classList.remove('typed');
             el.classList.add('done');
@@ -31,7 +31,6 @@ document.addEventListener('DOMContentLoaded', function () {
       }, 80);
     }
     startTypewriter = function () { typeLine(0); };
-    // Don't auto-start — wait for preloader signal
   }
 
   // ===== Scroll-down arrow =====
@@ -39,117 +38,25 @@ document.addEventListener('DOMContentLoaded', function () {
     var arrow = document.querySelector('.hero-decoration');
     if (arrow) {
       arrow.addEventListener('click', function () {
-        var target = document.querySelector('.gallery-container');
+        var target = document.querySelector('.section-home-intro');
         if (target) target.scrollIntoView({ behavior: 'smooth' });
       });
     }
   }
 
-  // ===== GSAP Card Gallery (exact reference) =====
-  function initCardGallery() {
-    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
-    if (!document.querySelector('.cards li')) return;
-
-    gsap.registerPlugin(ScrollTrigger, Draggable);
-
-    var iteration = 0;
-    gsap.set('.cards li', {xPercent: 400, opacity: 0, scale: 0});
-
-    var spacing = 0.1,
-      snapTime = gsap.utils.snap(spacing),
-      cards = gsap.utils.toArray('.cards li'),
-      animateFunc = function (element) {
-        var tl = gsap.timeline();
-        tl.fromTo(element, {scale: 0, opacity: 0}, {scale: 1, opacity: 1, zIndex: 100, duration: 0.5, yoyo: true, repeat: 1, ease: "power1.in", immediateRender: false})
-          .fromTo(element, {xPercent: 400}, {xPercent: -400, duration: 1, ease: "none", immediateRender: false}, 0);
-        return tl;
-      },
-      seamlessLoop = buildSeamlessLoop(cards, spacing, animateFunc),
-      playhead = {offset: 0},
-      wrapTime = gsap.utils.wrap(0, seamlessLoop.duration()),
-      scrub = gsap.to(playhead, {
-        offset: 0,
-        onUpdate: function () { seamlessLoop.time(wrapTime(playhead.offset)); },
-        duration: 0.5, ease: "power3", paused: true
-      }),
-      trigger = ScrollTrigger.create({
-        trigger: ".gallery-container",
-        start: "top top",
-        end: "bottom bottom",
-        onUpdate: function (self) {
-          scrub.vars.offset = self.progress * seamlessLoop.duration();
-          scrub.invalidate().restart();
-        }
-      });
-
-    function scrollToOffset(offset) {
-      var progress = offset / seamlessLoop.duration();
-      var scrollPos = trigger.start + progress * (trigger.end - trigger.start);
-      trigger.scroll(scrollPos);
-    }
-
-    document.querySelector(".next").addEventListener("click", function () {
-      scrollToOffset(scrub.vars.offset + spacing);
-    });
-    document.querySelector(".prev").addEventListener("click", function () {
-      scrollToOffset(scrub.vars.offset - spacing);
-    });
-
-    Draggable.create(".drag-proxy", {
-      type: "x", trigger: ".cards",
-      onPress: function () { this.startOffset = scrub.vars.offset; },
-      onDrag: function () {
-        scrub.vars.offset = this.startOffset + (this.startX - this.x) * 0.001;
-        scrub.invalidate().restart();
-      },
-      onDragEnd: function () { scrollToOffset(scrub.vars.offset); }
-    });
-
-    // Click navigation
-    var dragFlag = false;
-    document.querySelector('.cards').addEventListener('mousedown', function () { dragFlag = false; });
-    document.querySelector('.cards').addEventListener('mousemove', function () { dragFlag = true; });
-    document.querySelector('.cards').addEventListener('mouseup', function (e) {
-      if (dragFlag) return;
-      var card = e.target.closest('li');
-      if (!card) return;
-      var url = card.getAttribute('data-url');
-      if (url && url !== '#') { window.location.href = url; }
-    });
-    document.querySelector('.cards').addEventListener('touchstart', function () { dragFlag = false; });
-    document.querySelector('.cards').addEventListener('touchmove', function () { dragFlag = true; });
-    document.querySelector('.cards').addEventListener('touchend', function (e) {
-      if (dragFlag) return;
-      var card = e.target.closest('li');
-      if (!card) return;
-      var url = card.getAttribute('data-url');
-      if (url && url !== '#') { window.location.href = url; }
-    });
-
-    function buildSeamlessLoop(items, sp, af) {
-      var overlap = Math.ceil(1 / sp),
-        startTime = items.length * sp + 0.5,
-        loopTime = (items.length + overlap) * sp + 1,
-        rawSequence = gsap.timeline({paused: true}),
-        seamless = gsap.timeline({
-          paused: true, repeat: -1,
-          onRepeat: function () { this._time === this._dur && (this._tTime += this._dur - 0.01); }
-        }),
-        l = items.length + overlap * 2, time, i, index;
-      for (i = 0; i < l; i++) {
-        index = i % items.length;
-        time = i * sp;
-        rawSequence.add(af(items[index]), time);
-        i <= items.length && seamless.add("label" + i, time);
-      }
-      rawSequence.time(startTime);
-      seamless.to(rawSequence, { time: loopTime, duration: loopTime - startTime, ease: "none" })
-        .fromTo(rawSequence, {time: overlap * sp + 1}, { time: startTime, duration: startTime - (overlap * sp + 1), immediateRender: false, ease: "none" });
-      return seamless;
-    }
+  // ===== Clock =====
+  function updateClock() {
+    var d = new Date();
+    var t = d.getHours().toString().padStart(2, '0') + ':' + d.getMinutes().toString().padStart(2, '0');
+    var h = document.getElementById('header-time');
+    var f = document.getElementById('footer-time');
+    if (h) h.textContent = t;
+    if (f) f.textContent = t;
   }
+  updateClock();
+  setInterval(updateClock, 30000);
 
-  // ===== Preloader (fixed 4s countdown) =====
+  // ===== Preloader (fixed 3s countdown) =====
   function initPreloader() {
     var preloader = document.getElementById('preloader');
     var barFill = document.getElementById('bar-fill');
@@ -201,7 +108,6 @@ document.addEventListener('DOMContentLoaded', function () {
       setTimeout(function () {
         gsap.to(overlay, { y: '-100%', duration: 1, ease: 'power3.inOut', onComplete: function () { preloader.style.display = 'none'; } });
         gsap.to(numberEl, { opacity: 0, duration: 0.3 });
-        // Start typewriter as overlay reveals pink background
         if (startTypewriter) startTypewriter();
       }, 400);
     }
@@ -209,8 +115,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function tick() {
       var elapsed = Date.now() - startTime;
       var progress = Math.min(1, elapsed / duration);
-      var targetNumber = Math.round(progress * 100);
-      setNumber(targetNumber);
+      setNumber(Math.round(progress * 100));
       updateBar(progress);
       if (progress >= 1) { finishPreloader(); }
     }
@@ -221,14 +126,170 @@ document.addEventListener('DOMContentLoaded', function () {
       if (finished) { clearInterval(timer); return; }
       tick();
     }, 40);
-
-    // Safety: force finish at 4.5s max
     setTimeout(function () { if (!finished) { setNumber(100); finishPreloader(); } }, 3500);
   }
 
-  // ===== Init =====
+  // ===== Header scroll behavior =====
+  function initHeader() {
+    var header = document.getElementById('main-header');
+    if (!header) return;
+    var headerTl = gsap.timeline({ paused: true });
+    headerTl.to(header, { y: '-100%', duration: 0.4, ease: 'power2.inOut' });
+
+    ScrollTrigger.create({
+      start: 100, end: 'max',
+      onUpdate: function (self) {
+        if (self.direction > 0 && self.scroll() > 300) {
+          if (!headerTl.isActive() && headerTl.progress() < 0.5) headerTl.play();
+        } else if (self.direction < 0) {
+          headerTl.reverse();
+        }
+      }
+    });
+  }
+
+  // ===== Text reveal (ScrollTrigger) =====
+  function initTextReveal() {
+    var maskLines = document.querySelectorAll('.t-line-mask .hg-1');
+    maskLines.forEach(function (line) {
+      ScrollTrigger.create({
+        trigger: line.closest('.t-line'),
+        start: 'top 85%',
+        onEnter: function () { line.classList.add('revealed'); },
+        once: true
+      });
+    });
+
+    // Caption stagger entrance
+    ScrollTrigger.create({
+      trigger: '.section-home-intro',
+      start: 'top 75%',
+      onEnter: function () {
+        gsap.fromTo('.t-caption', { opacity: 0, x: -15 }, { opacity: 0.6, x: 0, duration: 0.7, stagger: 0.12, ease: 'power2.out' });
+      },
+      once: true
+    });
+  }
+
+  // ===== Card parallax + 3D tilt =====
+  function initWorks() {
+    // Parallax
+    document.querySelectorAll('[data-parallax]').forEach(function (card) {
+      var strength = parseFloat(card.getAttribute('data-parallax')) || 8;
+      var target = card.querySelector('[data-parallax-target]');
+      if (target) {
+        ScrollTrigger.create({
+          trigger: card, start: 'top bottom', end: 'bottom top',
+          onUpdate: function (self) { gsap.set(target, { y: (self.progress - 0.5) * strength * 2 }); }
+        });
+      }
+      // 3D tilt
+      card.addEventListener('mousemove', function (e) {
+        var rect = card.getBoundingClientRect();
+        var x = (e.clientX - rect.left) / rect.width - 0.5;
+        var y = (e.clientY - rect.top) / rect.height - 0.5;
+        gsap.to(card, { rotationY: x * 5, rotationX: -y * 5, duration: 0.4, ease: 'power2.out' });
+      });
+      card.addEventListener('mouseleave', function () {
+        gsap.to(card, { rotationY: 0, rotationX: 0, duration: 0.6, ease: 'power2.out' });
+      });
+    });
+
+    // Section entrance
+    ScrollTrigger.create({
+      trigger: '.section-featured-works',
+      start: 'top 80%',
+      onEnter: function () {
+        gsap.fromTo('.list-work .t-card', { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.7, stagger: 0.1, ease: 'power3.out' });
+        gsap.fromTo('.text-intro .hg, .text-intro .s-tag-label', { opacity: 0, y: 25 }, { opacity: 1, y: 0, duration: 0.6, stagger: 0.08, ease: 'power2.out', delay: 0.15 });
+        gsap.fromTo('.cr-tag .t-tag', { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.35, stagger: 0.07, ease: 'back.out(1.4)', delay: 0.3 });
+      },
+      once: true
+    });
+  }
+
+  // ===== Break section =====
+  function initBreak() {
+    // Hover image
+    var breakCards = document.querySelectorAll('.list-break .t-card[data-img]');
+    var hoverImg = document.getElementById('break-hover-img');
+    breakCards.forEach(function (card) {
+      card.addEventListener('mouseenter', function () {
+        hoverImg.src = card.getAttribute('data-img');
+        hoverImg.classList.add('visible');
+      });
+      card.addEventListener('mousemove', function (e) {
+        hoverImg.style.left = (e.clientX + 20) + 'px';
+        hoverImg.style.top = (e.clientY - 90) + 'px';
+      });
+      card.addEventListener('mouseleave', function () { hoverImg.classList.remove('visible'); });
+    });
+
+    // Marquee speed modulation
+    ScrollTrigger.create({
+      trigger: '.section-break',
+      start: 'top bottom', end: 'bottom top',
+      onUpdate: function (self) {
+        document.querySelectorAll('.section-break .t-marquee .hg').forEach(function (el) {
+          el.style.animationDuration = (12 + self.progress * 6) + 's';
+        });
+      }
+    });
+
+    // Section entrance
+    ScrollTrigger.create({
+      trigger: '.section-break',
+      start: 'top 80%',
+      onEnter: function () {
+        gsap.fromTo('.list-break .t-card', { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.5, stagger: 0.08, ease: 'power2.out' });
+      },
+      once: true
+    });
+  }
+
+  // ===== Footer entrance =====
+  function initFooter() {
+    ScrollTrigger.create({
+      trigger: '.main-footer-new',
+      start: 'top 90%',
+      onEnter: function () {
+        gsap.fromTo('.main-footer-new .labels span', { opacity: 0, y: 8 }, { opacity: 0.5, y: 0, duration: 0.4, stagger: 0.08, ease: 'power2.out' });
+        gsap.fromTo('.social-container .nav-item', { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.35, stagger: 0.08, ease: 'power2.out', delay: 0.1 });
+        gsap.fromTo('.nav-container .nav-item', { opacity: 0, y: 8 }, { opacity: 0.7, y: 0, duration: 0.35, stagger: 0.06, ease: 'power2.out', delay: 0.2 });
+        gsap.fromTo('.footer-metadata span, .footer-metadata .copyright', { opacity: 0 }, { opacity: 0.5, duration: 0.4, stagger: 0.06, ease: 'power2.out', delay: 0.3 });
+      },
+      once: true
+    });
+  }
+
+  // ===== Back to top =====
+  function initBackToTop() {
+    var btn = document.getElementById('back-to-top');
+    if (btn) {
+      btn.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+    }
+  }
+
+  // ===== Smooth anchor scroll =====
+  function initSmoothAnchors() {
+    document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+      a.addEventListener('click', function (e) {
+        var target = document.querySelector(this.getAttribute('href'));
+        if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+      });
+    });
+  }
+
+  // ===== Init all =====
+  gsap.registerPlugin(ScrollTrigger);
   initPreloader();
   initTypewriter();
   initScrollArrow();
-  initCardGallery();
+  initHeader();
+  initTextReveal();
+  initWorks();
+  initBreak();
+  initFooter();
+  initBackToTop();
+  initSmoothAnchors();
 });

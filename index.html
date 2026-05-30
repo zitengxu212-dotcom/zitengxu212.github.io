@@ -22,9 +22,24 @@
   </div>
   <div class="page-loading-bar"><div class="bar-fill" id="bar-fill"></div></div>
 
+  <!-- Header -->
+  <header class="main-header" id="main-header">
+    <div class="main-header-inner">
+      <div class="location">XUZITENG</div>
+      <div class="time" id="header-time"></div>
+      <div class="coords">DESIGNER</div>
+      <nav>
+        <a class="nav-item__outer" href="#hero"><div class="nav-item">Home</div></a>
+        <a class="nav-item__outer" href="#about"><div class="nav-item">About</div></a>
+        <a class="nav-item__outer" href="#works"><div class="nav-item">Works</div></a>
+        <a class="nav-item__outer" href="#break"><div class="nav-item">Break</div></a>
+      </nav>
+    </div>
+  </header>
+
   <!-- ═══ ① Hero ═══ -->
   <div class="homepage">
-    <section class="hero">
+    <section class="hero" id="hero">
       <h1 class="hero-title">
         <span class="hero-title__prefix" data-text="I'm"></span>
         <span class="hero-title__name" data-text="XUZITENG"></span>
@@ -41,67 +56,128 @@
         </svg>
       </div>
       <nav class="navbar">
-        <div class="navbar-inner">
-          <span class="navbar-text">WELCOME TO MY WEB&nbsp;&nbsp;&nbsp;WELCOME TO MY WEB&nbsp;&nbsp;&nbsp;WELCOME TO MY WEB&nbsp;&nbsp;&nbsp;WELCOME TO MY WEB&nbsp;&nbsp;&nbsp;WELCOME TO MY WEB&nbsp;&nbsp;&nbsp;</span>
-          <span class="navbar-text">WELCOME TO MY WEB&nbsp;&nbsp;&nbsp;WELCOME TO MY WEB&nbsp;&nbsp;&nbsp;WELCOME TO MY WEB&nbsp;&nbsp;&nbsp;WELCOME TO MY WEB&nbsp;&nbsp;&nbsp;WELCOME TO MY WEB&nbsp;&nbsp;&nbsp;</span>
+        <div class="navbar-inner t-marquee">
+          <div class="navbar-text hg">WELCOME TO MY WEB&nbsp;&nbsp;&nbsp;WELCOME TO MY WEB&nbsp;&nbsp;&nbsp;WELCOME TO MY WEB&nbsp;&nbsp;&nbsp;WELCOME TO MY WEB&nbsp;&nbsp;&nbsp;WELCOME TO MY WEB&nbsp;&nbsp;&nbsp;</div>
         </div>
       </nav>
     </section>
   </div>
 
-  <!-- ═══ ②③ Main Content ═══ -->
-  <div class="main-content">
-    <!-- Card Gallery Module (card-demo 效果) -->
-    <div class="gallery-container">
-      <div class="gallery">
-        <ul class="cards">
-          <li style="background-image:url(https://placehold.co/252x448/FF43B4/FFF9C7?text=01)" data-url="#project-1"></li>
-          <li style="background-image:url(https://placehold.co/252x448/FFF9C7/FF43B4?text=02)" data-url="#project-2"></li>
-          <li style="background-image:url(https://placehold.co/252x448/FF43B4/FFF9C7?text=03)" data-url="#project-3"></li>
-          <li style="background-image:url(https://placehold.co/252x448/FFF9C7/FF43B4?text=04)" data-url="#project-4"></li>
-          <li style="background-image:url(https://placehold.co/252x448/FF43B4/FFF9C7?text=05)" data-url="#project-5"></li>
-          <li style="background-image:url(https://placehold.co/252x448/FFF9C7/FF43B4?text=06)" data-url="#project-6"></li>
-          <li style="background-image:url(https://placehold.co/252x448/FF43B4/FFF9C7?text=07)" data-url="#project-7"></li>
-          <li style="background-image:url(https://placehold.co/252x448/FF43B4/FFF9C7?text=01)" data-url="#project-1"></li>
-          <li style="background-image:url(https://placehold.co/252x448/FFF9C7/FF43B4?text=02)" data-url="#project-2"></li>
-          <li style="background-image:url(https://placehold.co/252x448/FF43B4/FFF9C7?text=03)" data-url="#project-3"></li>
-          <li style="background-image:url(https://placehold.co/252x448/FFF9C7/FF43B4?text=04)" data-url="#project-4"></li>
-          <li style="background-image:url(https://placehold.co/252x448/FF43B4/FFF9C7?text=05)" data-url="#project-5"></li>
-          <li style="background-image:url(https://placehold.co/252x448/FFF9C7/FF43B4?text=06)" data-url="#project-6"></li>
-          <li style="background-image:url(https://placehold.co/252x448/FF43B4/FFF9C7?text=07)" data-url="#project-7"></li>
-        </ul>
-        <div class="actions">
-          <button class="prev">Prev</button>
-          <button class="next">Next</button>
+  <!-- ═══ ② About ═══ -->
+  <section class="section-home-intro" id="about">
+    <div class="t-cr">
+      <h2 class="heading-display">
+        <div class="heading-display-inner">
+          <div class="t-line">
+            <div class="t-caption-wrapper"><div class="t-caption caption-1">PURPOSEFUL <br>Design</div></div>
+            <div class="t-line-mask"><div class="hg-1">CREATING</div></div>
+          </div>
+          <div class="t-line">
+            <div class="t-line-mask"><div class="hg-1">MOTION</div></div>
+            <div class="t-caption-wrapper"><div class="t-caption caption-2">Narrative through ANIMATION</div></div>
+          </div>
+          <div class="t-line">
+            <div class="t-line-mask"><div class="hg-1">WITH MEANING</div></div>
+          </div>
+        </div>
+      </h2>
+    </div>
+  </section>
+
+  <!-- ═══ ③ Works ═══ -->
+  <section class="section-featured-works" id="works">
+    <div class="t-cr">
+      <div class="t-box text-intro">
+        <div class="hg">FEATURED WORKS</div>
+        <div class="i-line"></div>
+        <div class="s-tag-label">DESIGN INSIGHTS</div>
+        <div class="cr-tag">
+          <div class="t-tag">CONCEPTUAL</div>
+          <div class="t-tag">expressive</div>
+          <div class="t-tag">immersive</div>
         </div>
       </div>
-      <div class="drag-proxy"></div>
-    </div>
-  </div>
-
-  <!-- ═══ ③ Footer ═══ -->
-  <footer class="footer">
-    <div class="footer-inner">
-      <div class="footer-socials">
-        <a href="#" class="social-icon" aria-label="Social 1">
-          <img src="https://placehold.co/36x30" alt="" width="36" height="30">
-        </a>
-        <span class="social-dot"></span>
-        <a href="#" class="social-icon" aria-label="Social 2">
-          <img src="https://placehold.co/67x24" alt="" width="67" height="24">
-        </a>
-        <a href="#" class="social-icon" aria-label="Social 3">
-          <img src="https://placehold.co/36x23" alt="" width="36" height="23">
-        </a>
-        <a href="#" class="social-icon" aria-label="Social 4">
-          <img src="https://placehold.co/30x31" alt="" width="30" height="31">
-        </a>
+      <div class="t-box works-wrapper">
+        <article class="list-work">
+          <div class="t-card-container">
+            <a class="t-card" href="#"><div class="t-card-inner" data-parallax="8">
+              <div class="t-card-media-wrapper" data-parallax-target>
+                <picture class="t-card-featured-image-wrapper"><img class="t-card-featured-image" src="https://placehold.co/600x400/FF43B4/FFF9C7?text=01" alt=""></picture>
+              </div>
+              <div class="t-card-intro"><div class="t-card-number">01</div><h3 class="t-card-title">Project One</h3><div class="t-card-tags"><div class="t-card-term"><div class="t-card-term-name">Brand</div></div><div class="t-card-term"><div class="t-card-term-name">Design</div></div></div></div>
+            </div></a>
+            <a class="t-card" href="#"><div class="t-card-inner" data-parallax="8">
+              <div class="t-card-media-wrapper" data-parallax-target>
+                <picture class="t-card-featured-image-wrapper"><img class="t-card-featured-image" src="https://placehold.co/600x400/FFF9C7/FF43B4?text=02" alt=""></picture>
+              </div>
+              <div class="t-card-intro"><div class="t-card-number">02</div><h3 class="t-card-title">Project Two</h3><div class="t-card-tags"><div class="t-card-term"><div class="t-card-term-name">Spatial</div></div><div class="t-card-term"><div class="t-card-term-name">Motion</div></div></div></div>
+            </div></a>
+            <a class="t-card" href="#"><div class="t-card-inner" data-parallax="8">
+              <div class="t-card-media-wrapper" data-parallax-target>
+                <picture class="t-card-featured-image-wrapper"><img class="t-card-featured-image" src="https://placehold.co/600x400/FF43B4/FFF9C7?text=03" alt=""></picture>
+              </div>
+              <div class="t-card-intro"><div class="t-card-number">03</div><h3 class="t-card-title">Project Three</h3><div class="t-card-tags"><div class="t-card-term"><div class="t-card-term-name">Graphic</div></div><div class="t-card-term"><div class="t-card-term-name">Concept</div></div></div></div>
+            </div></a>
+            <a class="t-card" href="#"><div class="t-card-inner" data-parallax="8">
+              <div class="t-card-media-wrapper" data-parallax-target>
+                <picture class="t-card-featured-image-wrapper"><img class="t-card-featured-image" src="https://placehold.co/600x400/FFF9C7/FF43B4?text=04" alt=""></picture>
+              </div>
+              <div class="t-card-intro"><div class="t-card-number">04</div><h3 class="t-card-title">Project Four</h3><div class="t-card-tags"><div class="t-card-term"><div class="t-card-term-name">Brand</div></div><div class="t-card-term"><div class="t-card-term-name">Motion</div></div></div></div>
+            </div></a>
+          </div>
+        </article>
       </div>
-      <div class="footer-links">
-        <span>xxxxxx</span><span>xxxxxx</span><span>xxxxxx</span><span>xxxxxx</span>
+      <div class="t-box bottom-cta"><div class="cta-wrapper"><a class="btn-cta solid" href="#"><span class="btn-cta-text">See All Work</span></a></div></div>
+    </div>
+  </section>
+
+  <!-- ═══ ④ Break ═══ -->
+  <section class="section-break" id="break">
+    <div class="t-marquee"><div class="hg">WELCOME TO MY WEB&nbsp;&nbsp;&nbsp;WELCOME TO MY WEB&nbsp;&nbsp;&nbsp;WELCOME TO MY WEB&nbsp;&nbsp;&nbsp;WELCOME TO MY WEB&nbsp;&nbsp;&nbsp;WELCOME TO MY WEB&nbsp;&nbsp;&nbsp;</div></div>
+    <div class="t-cr">
+      <div class="t-box text-intro">
+        <div class="s-tag"><div class="s-tag-label">short, experimental designS</div></div>
+      </div>
+      <div class="t-box breaks-wrapper">
+        <article class="list-break">
+          <div class="t-card-container">
+            <div class="t-card" data-img="https://placehold.co/400x280/FF43B4/FFF9C7?text=01"><div class="t-card-inner"><h3 class="t-card-title"><div class="t-card-number">01</div><div class="t-card-link">Avant-Garde 2025</div></h3></div></div>
+            <div class="t-card" data-img="https://placehold.co/400x280/FFF9C7/FF43B4?text=02"><div class="t-card-inner"><h3 class="t-card-title"><div class="t-card-number">02</div><div class="t-card-link">Pea</div></h3></div></div>
+            <div class="t-card" data-img="https://placehold.co/400x280/FF43B4/FFF9C7?text=03"><div class="t-card-inner"><h3 class="t-card-title"><div class="t-card-number">03</div><div class="t-card-link">Graff Mayhem</div></h3></div></div>
+            <div class="t-card" data-img="https://placehold.co/400x280/FFF9C7/FF43B4?text=04"><div class="t-card-inner"><h3 class="t-card-title"><div class="t-card-number">04</div><div class="t-card-link">Future Proof</div></h3></div></div>
+            <div class="t-card" data-img="https://placehold.co/400x280/FF43B4/FFF9C7?text=05"><div class="t-card-inner"><h3 class="t-card-title"><div class="t-card-number">05</div><div class="t-card-link">Xenoflora</div></h3></div></div>
+          </div>
+        </article>
+      </div>
+      <div class="t-box bottom-cta"><div class="cta-wrapper"><a class="btn-cta solid" href="#"><span class="btn-cta-text">See All Work</span></a></div></div>
+    </div>
+  </section>
+
+  <!-- ═══ ⑤ Footer ═══ -->
+  <footer class="main-footer-new">
+    <div class="t-cr">
+      <div class="t-box labels"><div class="label-left">(FOLLOW)</div><div class="label-right">(NAVIGATION)</div></div>
+      <div class="i-line"></div>
+      <div class="t-box navigations">
+        <div class="social-container">
+          <a class="nav-item" href="#">INSTAGRAM</a><a class="nav-item" href="#">LINKEDIN</a>
+        </div>
+        <div class="to-top" id="back-to-top">BACK TO TOP</div>
+        <nav class="nav-container">
+          <a class="nav-item" href="#hero">Home</a><a class="nav-item" href="#works">Works</a><a class="nav-item" href="#break">Break</a><a class="nav-item" href="#about">About</a>
+        </nav>
+      </div>
+    </div>
+    <div class="t-marquee"><div class="t-marquee-item-inner">LET'S TALK&nbsp;&nbsp;&nbsp;LET'S TALK&nbsp;&nbsp;&nbsp;LET'S TALK&nbsp;&nbsp;&nbsp;</div></div>
+    <div class="t-cr">
+      <div class="t-box footer-metadata">
+        <div class="t-location">XUZITENG</div>
+        <div class="t-time" id="footer-time"></div>
+        <div class="copyright"><svg width="14" height="17" viewBox="0 0 14 17"><circle cx="6.66" cy="9.1" r="6.12" stroke="currentColor"/></svg> ALL RIGHTS RESERVED</div>
       </div>
     </div>
   </footer>
+  <img class="break-hover-img" id="break-hover-img" src="" alt="">
 
   <script src="main.js"></script>
 </body>
