@@ -1,0 +1,16 @@
+# 凡科相关
+dist/
+
+# 参考文件
+参考*.txt
+j参考.txt
+凡科代码.txt
+1.txt
+
+# 系统文件
+__pycache__/
+.DS_Store
+Thumbs.db
+
+# Python
+*.pyc

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XUZITENG - Designer Portfolio</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Draggable.min.js"></script>
+</head>
+<body>
+
+  <!-- ═══ ① Hero ═══ -->
+  <div class="homepage">
+    <section class="hero">
+      <h1 class="hero-title">
+        <span class="hero-title__prefix" data-text="I'm"></span>
+        <span class="hero-title__name" data-text="XUZITENG"></span>
+        <span class="hero-title__role" data-text="A Designer"></span>
+        <span class="hero-title__welcome" data-text="Welcome to my personal"></span>
+        <span class="hero-title__welcome" data-text="website"></span>
+      </h1>
+      <div class="hero-decoration" id="hero-scroll-arrow">
+        <svg class="hero-icon" width="126" height="126" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M53 28C53 14.1929 41.8071 3 28 3C14.1929 3 3 14.1929 3 28C3 41.8071 14.1929 53 28 53V56C12.536 56 0 43.464 0 28C0 12.536 12.536 0 28 0C43.464 0 56 12.536 56 28C56 43.464 43.464 56 28 56V53C41.8071 53 53 41.8071 53 28Z" fill="white"/>
+          <path d="M49.5293 25.5879L49.5293 28.5879L6 28.5879L6 25.5879L49.5293 25.5879Z" fill="white"/>
+          <path d="M33.6172 46C33.6172 37.2121 40.7414 30.0879 49.5293 30.0879V27.0879C39.0846 27.0879 30.6172 35.5553 30.6172 46H33.6172Z" fill="white"/>
+          <path d="M33.6172 8C33.6172 16.7879 40.7414 23.9121 49.5293 23.9121V26.9121C39.0846 26.9121 30.6172 18.4447 30.6172 8H33.6172Z" fill="white"/>
+        </svg>
+      </div>
+      <nav class="navbar">
+        <div class="navbar-inner">
+          <span class="navbar-text">WELCOME TO MY WEB&nbsp;&nbsp;&nbsp;WELCOME TO MY WEB&nbsp;&nbsp;&nbsp;WELCOME TO MY WEB&nbsp;&nbsp;&nbsp;WELCOME TO MY WEB&nbsp;&nbsp;&nbsp;WELCOME TO MY WEB&nbsp;&nbsp;&nbsp;</span>
+          <span class="navbar-text">WELCOME TO MY WEB&nbsp;&nbsp;&nbsp;WELCOME TO MY WEB&nbsp;&nbsp;&nbsp;WELCOME TO MY WEB&nbsp;&nbsp;&nbsp;WELCOME TO MY WEB&nbsp;&nbsp;&nbsp;WELCOME TO MY WEB&nbsp;&nbsp;&nbsp;</span>
+        </div>
+      </nav>
+    </section>
+  </div>
+
+  <!-- ═══ ②③ Main Content ═══ -->
+  <div class="main-content">
+    <!-- Card Gallery Module (card-demo 效果) -->
+    <div class="gallery-container">
+      <div class="gallery">
+        <ul class="cards">
+          <li style="background-image:url(https://placehold.co/252x448/FF43B4/FFF9C7?text=01)" data-url="#project-1"></li>
+          <li style="background-image:url(https://placehold.co/252x448/FFF9C7/FF43B4?text=02)" data-url="#project-2"></li>
+          <li style="background-image:url(https://placehold.co/252x448/FF43B4/FFF9C7?text=03)" data-url="#project-3"></li>
+          <li style="background-image:url(https://placehold.co/252x448/FFF9C7/FF43B4?text=04)" data-url="#project-4"></li>
+          <li style="background-image:url(https://placehold.co/252x448/FF43B4/FFF9C7?text=05)" data-url="#project-5"></li>
+          <li style="background-image:url(https://placehold.co/252x448/FFF9C7/FF43B4?text=06)" data-url="#project-6"></li>
+          <li style="background-image:url(https://placehold.co/252x448/FF43B4/FFF9C7?text=07)" data-url="#project-7"></li>
+          <li style="background-image:url(https://placehold.co/252x448/FF43B4/FFF9C7?text=01)" data-url="#project-1"></li>
+          <li style="background-image:url(https://placehold.co/252x448/FFF9C7/FF43B4?text=02)" data-url="#project-2"></li>
+          <li style="background-image:url(https://placehold.co/252x448/FF43B4/FFF9C7?text=03)" data-url="#project-3"></li>
+          <li style="background-image:url(https://placehold.co/252x448/FFF9C7/FF43B4?text=04)" data-url="#project-4"></li>
+          <li style="background-image:url(https://placehold.co/252x448/FF43B4/FFF9C7?text=05)" data-url="#project-5"></li>
+          <li style="background-image:url(https://placehold.co/252x448/FFF9C7/FF43B4?text=06)" data-url="#project-6"></li>
+          <li style="background-image:url(https://placehold.co/252x448/FF43B4/FFF9C7?text=07)" data-url="#project-7"></li>
+        </ul>
+        <div class="actions">
+          <button class="prev">Prev</button>
+          <button class="next">Next</button>
+        </div>
+      </div>
+      <div class="drag-proxy"></div>
+    </div>
+  </div>
+
+  <!-- ═══ ③ Footer ═══ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-socials">
+        <a href="#" class="social-icon" aria-label="Social 1">
+          <img src="https://placehold.co/36x30" alt="" width="36" height="30">
+        </a>
+        <span class="social-dot"></span>
+        <a href="#" class="social-icon" aria-label="Social 2">
+          <img src="https://placehold.co/67x24" alt="" width="67" height="24">
+        </a>
+        <a href="#" class="social-icon" aria-label="Social 3">
+          <img src="https://placehold.co/36x23" alt="" width="36" height="23">
+        </a>
+        <a href="#" class="social-icon" aria-label="Social 4">
+          <img src="https://placehold.co/30x31" alt="" width="30" height="31">
+        </a>
+      </div>
+      <div class="footer-links">
+        <span>xxxxxx</span><span>xxxxxx</span><span>xxxxxx</span><span>xxxxxx</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>

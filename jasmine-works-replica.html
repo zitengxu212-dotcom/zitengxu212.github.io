@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Works — Jasmine Gunarto (Replica)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/embla-carousel@8.1.3/embla-carousel.umd.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:auto}
+body{font-family:'Manrope',sans-serif;background:#090909;color:#EBEAE4;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+img,video{display:block;max-width:100%}
+:root{--bg:#090909;--tx:#EBEAE4;--footer:#341c09}
+
+/* HEADER */
+.main-header{position:fixed;top:0;left:0;width:100%;z-index:100;padding:24px 40px;mix-blend-mode:difference;color:#fff}
+.main-header-inner{display:flex;justify-content:space-between;align-items:center;font-size:13px;letter-spacing:1px;text-transform:uppercase}
+.main-header-inner .location,.main-header-inner .coords{opacity:.6;font-weight:600}
+.main-header-inner .time{font-weight:700;font-variant-numeric:tabular-nums}
+.main-header-inner nav{display:flex;gap:24px}
+.nav-item__outer .nav-item{font-weight:700;letter-spacing:1px;transition:opacity .3s}
+.nav-item__outer:hover .nav-item{opacity:.5}
+
+/* PRELOADER */
+.preloader{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.preloader-overlay{position:absolute;inset:0;background:var(--bg)}
+.preloader-number{display:flex;gap:4px;position:relative;z-index:1;font-size:clamp(60px,10vw,120px);font-weight:800;font-family:'Manrope',sans-serif}
+.num-wrap{width:clamp(50px,8vw,100px);height:clamp(80px,13vw,160px);overflow:hidden;text-align:center;position:relative;line-height:1}
+.num-current{position:absolute;top:0;left:0;width:100%;height:100%;transition:transform 0.6s cubic-bezier(.22,1,.36,1)}
+.num-next{position:absolute;top:100%;left:0;width:100%;height:100%}
+
+/* PAGE LOADING BAR */
+.page-loading-bar{position:fixed;top:0;left:0;width:100%;height:2px;z-index:10000;pointer-events:none;background:transparent}
+.page-loading-bar .bar-fill{height:100%;background:var(--tx);width:0;transition:width .3s ease}
+
+/* ─── WORKS SECTION ─── */
+.section-curated-works{position:relative;width:100%;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:120px 40px}
+.t-cr{width:100%;max-width:1400px;margin:0 auto}
+.list-curated-work-wrapper{position:relative;width:100%}
+.list-curated-work{position:relative;width:100%}
+
+/* Play State */
+.play-state{display:flex;align-items:center;gap:12px;margin-bottom:40px;opacity:.7}
+.play-state-duration{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:1px}
+.play-state-label{display:flex;align-items:center;gap:8px}
+.play-state-label-dot{width:6px;height:6px;border-radius:50%;background:#4ade80;animation:pulse-dot 2s ease infinite}
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.3}}
+.play-state-label-text{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase}
+
+/* Corner Ornaments */
+.corner-ornament-container{display:flex;justify-content:space-between;margin-bottom:20px}
+.corner-ornament-wrapper{opacity:.6}
+.corner-ornament-d{display:block}
+.corner-ornament-m{display:none}
+
+/* Line Ornaments */
+.line-ornament-container{display:flex;flex-direction:column;gap:8px;margin-bottom:30px;opacity:.15}
+.t-line{display:flex;gap:20px}
+.t-line__1{flex:1;height:1px;background:var(--tx)}
+.t-line__2{flex:2;height:1px;background:var(--tx)}
+.t-line__3{flex:1;height:1px;background:var(--tx)}
+
+/* Title Slider */
+.title-slider{width:100%;margin-bottom:30px;overflow:hidden}
+.title-slider-container-wrapper{overflow:hidden}
+.title-slider-container{display:flex;gap:0}
+.title-slider-item{flex:0 0 auto;padding:0 4px;cursor:pointer;transition:opacity .3s}
+.title-slider-item.slide-inactive{opacity:.2}
+.title-slider-item.slide-active{opacity:1}
+.title-slider-inner{font-size:clamp(36px,6vw,80px);font-weight:800;letter-spacing:-2px;line-height:1;white-space:nowrap;color:var(--tx)}
+
+/* Card Slider */
+.card-slider{width:100%;margin-bottom:40px}
+.card-container-wrapper{overflow:hidden}
+.card-container{display:flex;gap:0}
+.card-item{flex:0 0 100%;min-width:0;padding:0 2px;cursor:pointer}
+.card-media{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:4px;background:#1a1a1a}
+.card-media img{width:100%;height:100%;object-fit:cover}
+.card-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease}
+.card-item:hover .card-media video{opacity:1}
+.card-item:hover .card-media img{opacity:0}
+.card-info{display:flex;align-items:baseline;gap:16px;padding:16px 0 0}
+.card-number{font-size:28px;font-weight:800;opacity:.25;line-height:1}
+.card-title{font-size:clamp(20px,3vw,40px);font-weight:700;letter-spacing:-1px}
+.card-tags{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap}
+.card-tag{font-size:11px;text-transform:uppercase;letter-spacing:1px;opacity:.5;font-weight:600}
+
+/* Slide Number */
+.slide-number{display:flex;align-items:baseline;gap:8px;font-size:14px;font-weight:700;letter-spacing:2px;opacity:.5}
+.slide-number-current{font-size:32px;font-weight:800;opacity:1}
+.slide-number-divider{opacity:.3}
+
+/* Controls */
+.works-controls{display:flex;align-items:center;gap:24px;margin-top:20px}
+.slide-nav-btn{width:50px;height:50px;border-radius:50%;border:1px solid rgba(235,234,228,.3);background:transparent;color:var(--tx);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .3s,background .3s}
+.slide-nav-btn:hover{border-color:rgba(235,234,228,.6);background:rgba(235,234,228,.08)}
+
+/* FOOTER */
+.main-footer{position:relative;width:100%;padding:80px 40px 40px;background:var(--footer);color:var(--tx)}
+.main-footer .t-cr{display:flex;flex-direction:column;gap:40px}
+.main-footer .labels{display:flex;justify-content:space-between;font-size:11px;letter-spacing:3px;text-transform:uppercase;opacity:.5;font-weight:700}
+.main-footer .i-line{width:100%;height:1px;background:rgba(235,234,228,.15)}
+.main-footer .navigations{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap}
+.social-container{display:flex;gap:24px}
+.social-container .nav-item{font-size:14px;font-weight:700;letter-spacing:1px;transition:opacity .3s}
+.social-container .nav-item:hover{opacity:.5}
+.to-top{font-size:12px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;opacity:.5;transition:opacity .3s}
+.to-top:hover{opacity:1}
+.nav-container{display:flex;gap:20px}
+.nav-container .nav-item{font-size:13px;font-weight:600;letter-spacing:1px;opacity:.7}
+.nav-container .nav-item:hover{opacity:1}
+.t-marquee-item-inner{font-size:clamp(48px,10vw,120px);font-weight:800;letter-spacing:-3px}
+.footer-metadata{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;font-size:11px;letter-spacing:1px;opacity:.5;font-weight:600}
+.footer-metadata .copyright{display:flex;align-items:center;gap:6px}
+
+@media(max-width:900px){
+  .main-header-inner .location,.main-header-inner .coords{display:none}
+  .section-curated-works{padding:100px 20px}
+  .main-footer{padding:60px 20px 30px}
+  .social-container,.nav-container{flex-direction:column;gap:8px}
+  .corner-ornament-d{display:none}.corner-ornament-m{display:block}
+}
+@media(max-width:600px){
+  .main-header{padding:16px 20px}
+}
+</style>
+</head>
+<body>
+
+<!-- PRELOADER -->
+<div class="preloader" id="preloader">
+  <div class="preloader-overlay"></div>
+  <div class="preloader-number">
+    <div class="num-wrap" id="dig0"><div class="num-current">0</div><div class="num-next">1</div></div>
+    <div class="num-wrap" id="dig1"><div class="num-current">0</div><div class="num-next">1</div></div>
+    <div class="num-wrap" id="dig2"><div class="num-current">0</div><div class="num-next">1</div></div>
+  </div>
+</div>
+<div class="page-loading-bar"><div class="bar-fill" id="bar-fill"></div></div>
+
+<!-- HEADER -->
+<header class="main-header">
+  <div class="main-header-inner">
+    <div class="location">NEW YORK, US</div>
+    <div class="time" id="header-time"></div>
+    <div class="coords">36.7783 N, 119.4179</div>
+    <nav>
+      <a class="nav-item__outer" href="jasmine-replica.html"><div class="nav-item">Home</div></a>
+      <a class="nav-item__outer" href="jasmine-works-replica.html"><div class="nav-item">Works</div></a>
+      <a class="nav-item__outer" href="#"><div class="nav-item">Break</div></a>
+      <a class="nav-item__outer" href="#"><div class="nav-item">About</div></a>
+    </nav>
+  </div>
+</header>
+
+<!-- ═══ CURATED WORKS ═══ -->
+<section class="section-curated-works">
+  <div class="t-cr">
+    <div class="list-curated-work-wrapper">
+      <div class="list-curated-work">
+
+        <!-- Play State -->
+        <div class="play-state">
+          <div class="play-state-duration" id="play-time">00:00:00</div>
+          <div class="play-state-label">
+            <div class="play-state-label-dot"></div>
+            <div class="play-state-label-text">PLAYING</div>
+          </div>
+        </div>
+
+        <!-- Corner Ornaments -->
+        <div class="corner-ornament-container">
+          <div class="corner-ornament-wrapper">
+            <svg class="corner-ornament-m" width="21" height="19" viewBox="0 0 21 19" fill="none"><path d="M21 1.99H1.74v16.47" stroke="#EBEAE4" stroke-width="2"/></svg>
+            <svg class="corner-ornament-d" width="29" height="24" viewBox="0 0 29 24" fill="none"><path d="M28.15 1.08H.76v22.83" stroke="#EBEAE4"/></svg>
+          </div>
+          <div class="corner-ornament-wrapper">
+            <svg class="corner-ornament-m" width="21" height="19" viewBox="0 0 21 19" fill="none"><path d="M21 1.99H1.74v16.47" stroke="#EBEAE4" stroke-width="2"/></svg>
+            <svg class="corner-ornament-d" width="29" height="24" viewBox="0 0 29 24" fill="none"><path d="M28.15 1.08H.76v22.83" stroke="#EBEAE4"/></svg>
+          </div>
+          <div class="corner-ornament-wrapper">
+            <svg class="corner-ornament-m" width="21" height="19" viewBox="0 0 21 19" fill="none"><path d="M21 1.99H1.74v16.47" stroke="#EBEAE4" stroke-width="2"/></svg>
+            <svg class="corner-ornament-d" width="29" height="24" viewBox="0 0 29 24" fill="none"><path d="M28.15 1.08H.76v22.83" stroke="#EBEAE4"/></svg>
+          </div>
+          <div class="corner-ornament-wrapper">
+            <svg class="corner-ornament-m" width="21" height="19" viewBox="0 0 21 19" fill="none"><path d="M21 1.99H1.74v16.47" stroke="#EBEAE4" stroke-width="2"/></svg>
+            <svg class="corner-ornament-d" width="29" height="24" viewBox="0 0 29 24" fill="none"><path d="M28.15 1.08H.76v22.83" stroke="#EBEAE4"/></svg>
+          </div>
+        </div>
+
+        <!-- Line Ornaments -->
+        <div class="line-ornament-container">
+          <div class="t-line"><div class="t-line__1"></div><div class="t-line__2"></div><div class="t-line__3"></div></div>
+          <div class="t-line"><div class="t-line__1"></div><div class="t-line__2"></div><div class="t-line__3"></div></div>
+          <div class="t-line"><div class="t-line__1"></div><div class="t-line__2"></div><div class="t-line__3"></div></div>
+          <div class="t-line"><div class="t-line__1"></div><div class="t-line__2"></div><div class="t-line__3"></div></div>
+        </div>
+
+        <!-- Title Slider (Embla) -->
+        <div class="title-slider">
+          <div class="embla title-slider-container-wrapper" id="title-slider-embla">
+            <div class="embla__container title-slider-container" id="title-slider-container"></div>
+          </div>
+        </div>
+
+        <!-- Card Slider (Embla) -->
+        <div class="card-slider">
+          <div class="embla card-container-wrapper" id="card-slider-embla">
+            <div class="embla__container card-container" id="card-slider-container"></div>
+          </div>
+        </div>
+
+        <!-- Controls + Slide Number -->
+        <div class="works-controls">
+          <button class="slide-nav-btn" id="btn-prev">&#8592;</button>
+          <button class="slide-nav-btn" id="btn-next">&#8594;</button>
+          <div class="slide-number">
+            <span class="slide-number-current" id="slide-num-current">01</span>
+            <span class="slide-number-divider">/</span>
+            <span id="slide-num-total">12</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="main-footer">
+  <div class="t-cr">
+    <div class="labels"><span>(FOLLOW)</span><span>(NAVIGATION)</span></div>
+    <div class="i-line"></div>
+    <div class="navigations">
+      <div class="social-container">
+        <a class="nav-item" href="#">INSTAGRAM</a><a class="nav-item" href="#">LINKEDIN</a>
+      </div>
+      <div class="to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">BACK TO TOP</div>
+      <nav class="nav-container">
+        <a class="nav-item" href="jasmine-replica.html">Home</a><a class="nav-item" href="jasmine-works-replica.html">Works</a><a class="nav-item" href="#">Break</a><a class="nav-item" href="#">About</a>
+      </nav>
+    </div>
+    <div class="t-marquee-item-inner">LET'S TALK&nbsp;&nbsp;&nbsp;LET'S TALK&nbsp;&nbsp;&nbsp;LET'S TALK&nbsp;&nbsp;&nbsp;</div>
+    <div class="footer-metadata">
+      <span>NEW YORK, US</span><span id="footer-time"></span><span>36.7783 N, 119.4179</span>
+      <div class="copyright"><svg width="14" height="17" viewBox="0 0 14 17"><circle cx="6.66" cy="9.1" r="6.12" stroke="#EBEAE4"/></svg> ALL RIGHTS RESERVED</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ===== CLOCK =====
+function updateClock(){var d=new Date();var t=d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0');var h=document.getElementById('header-time');var f=document.getElementById('footer-time');if(h)h.textContent=t;if(f)f.textContent=t}
+updateClock();setInterval(updateClock,30000);
+
+// ===== PRELOADER =====
+(function(){
+  var overlay=document.querySelector('.preloader-overlay');
+  var bar=document.getElementById('bar-fill');
+  var digits=[document.getElementById('dig0'),document.getElementById('dig1'),document.getElementById('dig2')];
+  var current=[0,0,0];var totalItems=0;var loadedItems=0;
+
+  function setNumber(n){var s=n.toString().padStart(3,'0');for(var i=0;i<3;i++){var d=digits[i];var cur=d.querySelector('.num-current');var nxt=d.querySelector('.num-next');var val=parseInt(s[i]);if(val!==current[i]){current[i]=val;cur.style.transform='translateY(-100%)';nxt.style.transform='translateY(-100%)';setTimeout(function(){cur.textContent=val;cur.style.transition='none';cur.style.transform='translateY(0)';nxt.textContent=(val+1)%10;nxt.style.transition='none';nxt.style.transform='translateY(100%)';setTimeout(function(){cur.style.transition='transform 0.6s cubic-bezier(.22,1,.36,1)';nxt.style.transition='transform 0.6s cubic-bezier(.22,1,.36,1)'},50)},600)}}}
+
+  var imgs=document.querySelectorAll('img');totalItems+=imgs.length;
+  imgs.forEach(function(img){if(img.complete){loadedItems++}else{img.addEventListener('load',function(){loadedItems++;updateProgress()});img.addEventListener('error',function(){loadedItems++;updateProgress()})}});
+
+  totalItems+=1;document.fonts.ready.then(function(){loadedItems++;updateProgress()});
+  totalItems+=1;window.addEventListener('load',function(){loadedItems++;updateProgress()});
+
+  function updateProgress(){var pct=Math.min(1,loadedItems/totalItems);bar.style.width=(pct*100)+'%';var num=Math.round(pct*100);if(num>=100)num=99;setNumber(num);
+    if(loadedItems>=totalItems){setTimeout(function(){setNumber(100);bar.style.width='100%';finishPreloader()},300)}}
+
+  function finishPreloader(){
+    setTimeout(function(){
+      gsap.to(overlay,{y:'-100%',duration:1,ease:'power3.inOut',onComplete:function(){document.getElementById('preloader').style.display='none'}});
+      gsap.to(document.querySelector('.preloader-number'),{opacity:0,duration:.3});
+      initContent();
+    },400);
+  }
+  updateProgress();setNumber(0);
+})();
+
+// ===== CONTENT INIT =====
+function initContent(){
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Project data (12 projects — matching original site)
+  var projects=[
+    {title:"Home in a Hot Pot",num:"01",img:"https://jasminegunarto.com/wp-content/uploads/2026/01/hotpot_styleframe18-1.webp",video:"https://jasminegunarto.com/wp-content/uploads/2025/09/f-hotpot.mp4",tags:["Concept","Design","Motion"]},
+    {title:"FLOW",num:"02",img:"https://jasminegunarto.com/wp-content/uploads/2026/01/flow_stickers-scaled-2.webp",video:"",tags:["Art Direction","Concept","Design"]},
+    {title:"PreCollege '25",num:"03",img:"https://jasminegunarto.com/wp-content/uploads/2026/01/precollege_still-scaled-1.webp",video:"https://jasminegunarto.com/wp-content/uploads/2025/12/f-precollege.mp4",tags:["Concept","Design","Motion"]},
+    {title:"The Taste Gap",num:"04",img:"https://jasminegunarto.com/wp-content/uploads/2026/01/jgunarto_p03_Frame08-1.webp",video:"",tags:["Concept","Design","Motion"]},
+    {title:"PINC",num:"05",img:"https://placehold.co/1200x675/222/EEE?text=PINC",video:"",tags:["Brand","Design","Motion"]},
+    {title:"National Ad Council",num:"06",img:"https://placehold.co/1200x675/222/EEE?text=NAC",video:"",tags:["Campaign","Design","Motion"]},
+    {title:"Telemundo",num:"07",img:"https://placehold.co/1200x675/222/EEE?text=Telemundo",video:"",tags:["Broadcast","Design","Motion"]},
+    {title:"Vote Boldly",num:"08",img:"https://placehold.co/1200x675/222/EEE?text=Vote+Boldly",video:"",tags:["Campaign","Design"]},
+    {title:"Moving Poster",num:"09",img:"https://placehold.co/1200x675/222/EEE?text=Moving+Poster",video:"",tags:["Experimental","Motion"]},
+    {title:"Nature + Abstraction",num:"10",img:"https://placehold.co/1200x675/222/EEE?text=Nature+Abstraction",video:"",tags:["Experimental","Design"]},
+    {title:"Einstein's Dreams",num:"11",img:"https://placehold.co/1200x675/222/EEE?text=Einsteins+Dreams",video:"",tags:["Title+Sequence","Motion"]},
+    {title:"Demo Reel",num:"12",img:"https://placehold.co/1200x675/222/EEE?text=Demo+Reel",video:"",tags:["Motion","Showcase"]}
+  ];
+
+  // Fill title slider
+  var titleContainer=document.getElementById('title-slider-container');
+  projects.forEach(function(p,i){
+    var a=document.createElement('a');a.className='embla__slide title-slider-item';a.href='#';a.setAttribute('data-index',i);
+    a.innerHTML='<div class="title-slider-inner">'+p.title+'</div>';
+    titleContainer.appendChild(a);
+  });
+
+  // Fill card slider
+  var cardContainer=document.getElementById('card-slider-container');
+  projects.forEach(function(p,i){
+    var a=document.createElement('a');a.className='embla__slide card-item';a.href='#';a.setAttribute('data-index',i);
+    var videoHTML=p.video?'<video src="'+p.video+'" muted loop playsinline></video>':'';
+    var tagsHTML=p.tags.map(function(t){return'<span class="card-tag">'+t+'</span>'}).join('');
+    a.innerHTML='<div class="card-media"><img src="'+p.img+'" alt=""><div style="position:absolute;inset:0;opacity:0;transition:opacity .4s ease">'+videoHTML+'</div></div><div class="card-info"><div class="card-number">'+p.num+'</div><div class="card-title">'+p.title+'</div><div class="card-tags">'+tagsHTML+'</div></div>';
+    cardContainer.appendChild(a);
+  });
+
+  // Init Embla
+  if(typeof EmblaCarousel!=='undefined'){
+    var titleEmbla=EmblaCarousel(document.getElementById('title-slider-embla'),{loop:true,dragFree:false,containScroll:false,align:'start'});
+    var cardEmbla=EmblaCarousel(document.getElementById('card-slider-embla'),{loop:true});
+    var total=projects.length;
+    var updateCounter=function(idx){document.getElementById('slide-num-current').textContent=String(idx+1).padStart(2,'0');document.getElementById('slide-num-total').textContent=total;document.getElementById('play-time').textContent=new Date((idx+1)*1000).toISOString().slice(11,19)};
+
+    // Sync both sliders
+    cardEmbla.on('select',function(){var i=cardEmbla.selectedScrollSnap();titleEmbla.scrollTo(i);updateCounter(i);
+      // Update title active/inactive
+      document.querySelectorAll('.title-slider-item').forEach(function(el,j){el.classList.toggle('slide-active',j===i);el.classList.toggle('slide-inactive',j!==i)});
+    });
+    titleEmbla.on('select',function(){var i=titleEmbla.selectedScrollSnap();cardEmbla.scrollTo(i);updateCounter(i)});
+
+    document.getElementById('btn-prev').addEventListener('click',function(){cardEmbla.scrollPrev();titleEmbla.scrollPrev()});
+    document.getElementById('btn-next').addEventListener('click',function(){cardEmbla.scrollNext();titleEmbla.scrollNext()});
+
+    // Hover video
+    cardContainer.addEventListener('mouseenter',function(e){var card=e.target.closest('.card-item');if(card){var v=card.querySelector('video');if(v&&v.src){v.play();v.style.opacity='1';card.querySelector('img').style.opacity='0'}}},true);
+    cardContainer.addEventListener('mouseleave',function(e){var card=e.target.closest('.card-item');if(card){var v=card.querySelector('video');if(v){v.pause();v.style.opacity='0'};var img=card.querySelector('img');if(img)img.style.opacity='1'}},true);
+
+    updateCounter(0);
+    // Init active state
+    document.querySelectorAll('.title-slider-item').forEach(function(el,j){el.classList.toggle('slide-active',j===0);el.classList.toggle('slide-inactive',j!==0)});
+  }
+
+  // GSAP entrance
+  gsap.fromTo('.play-state',{opacity:0,y:20},{opacity:.7,y:0,duration:.8,ease:'power3.out'});
+  gsap.fromTo('.corner-ornament-container',{opacity:0},{opacity:1,duration:1,ease:'power3.out',delay:.2});
+  gsap.fromTo('.t-line',{scaleX:0},{scaleX:1,duration:1,ease:'power3.out',delay:.3,stagger:.08});
+  gsap.fromTo('.title-slider,.card-slider',{opacity:0,y:30},{opacity:1,y:0,duration:1,ease:'power3.out',delay:.5});
+  gsap.fromTo('.works-controls',{opacity:0,y:20},{opacity:1,y:0,duration:.8,ease:'power3.out',delay:.7});
+}
+</script>
+</body>
+</html>
