@@ -193,15 +193,35 @@ document.addEventListener('DOMContentLoaded', function () {
           onUpdate: function (self) { gsap.set(target, { y: (self.progress - 0.5) * strength * 2 }); }
         });
       }
-      // 3D tilt
+      // 3D tilt — quickTo for high-performance tracking
+      var image = card.querySelector('.t-card-featured-image');
+      var qkRotY = gsap.quickTo(card, "rotationY", { duration: 0.5, ease: "power2.out" });
+      var qkRotX = gsap.quickTo(card, "rotationX", { duration: 0.5, ease: "power2.out" });
+      var qkScale = gsap.quickTo(card, "scale", { duration: 0.5, ease: "power2.out" });
+      var qkShadowY = gsap.quickTo(card, "boxShadow", { duration: 0.5, ease: "power2.out" });
+      var qkImgX, qkImgY;
+      if (image) {
+        image.style.transform = 'translateZ(30px)';
+        qkImgX = gsap.quickTo(image, "x", { duration: 0.4, ease: "power2.out" });
+        qkImgY = gsap.quickTo(image, "y", { duration: 0.4, ease: "power2.out" });
+      }
+
       card.addEventListener('mousemove', function (e) {
         var rect = card.getBoundingClientRect();
-        var x = (e.clientX - rect.left) / rect.width - 0.5;
-        var y = (e.clientY - rect.top) / rect.height - 0.5;
-        gsap.to(card, { rotationY: x * 5, rotationX: -y * 5, duration: 0.4, ease: 'power2.out' });
+        var mx = (e.clientX - rect.left) / rect.width - 0.5;
+        var my = (e.clientY - rect.top) / rect.height - 0.5;
+        qkRotY(mx * 48);
+        qkRotX(my * -32);
+        qkScale(1.03);
+        var sx = mx * -48, sy = my * -40;
+        qkShadowY(sx + 'px ' + sy + 'px 60px rgba(0,0,0,0.28)');
+        if (qkImgX) { qkImgX(mx * 40); qkImgY(my * -32); }
       });
+
       card.addEventListener('mouseleave', function () {
-        gsap.to(card, { rotationY: 0, rotationX: 0, duration: 0.6, ease: 'power2.out' });
+        gsap.to(card, { rotationY: 0, rotationX: 0, scale: 1, duration: 0.8, ease: 'elastic.out(1, 0.5)' });
+        gsap.to(card, { boxShadow: '0 2px 12px rgba(0,0,0,0.06)', duration: 0.6, ease: 'power2.out' });
+        if (image) gsap.to(image, { x: 0, y: 0, duration: 0.6, ease: 'power2.out' });
       });
     });
 

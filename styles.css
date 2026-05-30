@@ -519,6 +519,7 @@ ul {
   transform: translateY(105%);
   transition: transform 0.9s cubic-bezier(.22, 1, .36, 1);
   font-family: var(--font-primary);
+  color: var(--color-pink);
 }
 .t-line-mask .hg-1.revealed {
   transform: translateY(0);
@@ -545,7 +546,7 @@ ul {
 .section-featured-works {
   width: 100%;
   padding: 120px 40px;
-  background: var(--color-yellow);
+  background: var(--color-black);
   color: var(--color-pink);
 }
 .section-featured-works .t-cr {
@@ -612,9 +613,13 @@ ul {
   transform-style: preserve-3d;
   text-decoration: none;
   color: inherit;
+  box-shadow: 0 2px 12px rgba(0,0,0,.06);
+  border-radius: 6px;
+  transition: box-shadow 0.4s ease;
 }
 .t-card-inner {
   position: relative;
+  transform-style: preserve-3d;
 }
 .t-card-media-wrapper {
   position: relative;
@@ -622,6 +627,10 @@ ul {
   border-radius: 6px;
   aspect-ratio: 4/3;
   background: rgba(255, 67, 180, .08);
+  transform: translateZ(0);
+}
+.t-card-featured-image {
+  transform: translateZ(0);
 }
 .t-card-featured-image-wrapper {
   display: block;
