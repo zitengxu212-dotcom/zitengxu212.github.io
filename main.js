@@ -169,6 +169,26 @@ document.addEventListener('DOMContentLoaded', function () {
       },
       once: true
     });
+
+    // 3D Parallax: captions 1.4x / main text 1.15x / bg 0.6x
+    var aboutSection = document.querySelector('.section-home-intro');
+    var aboutCaptions = document.querySelectorAll('.section-home-intro .t-caption-wrapper');
+    var aboutTextLines = document.querySelectorAll('.section-home-intro .t-line-mask');
+    if (aboutSection) {
+      // Single timeline for synced parallax, shorter range = visible effect
+      var aboutTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: aboutSection,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true
+        }
+      });
+      // Captions: fastest (closest layer)
+      aboutTl.to(aboutCaptions, { y: -1000, ease: 'none' }, 0);
+      // Main text: middle layer
+      aboutTl.to(aboutTextLines, { y: -400, ease: 'none' }, 0);
+    }
   }
 
   // ===== Card parallax + 3D tilt =====
