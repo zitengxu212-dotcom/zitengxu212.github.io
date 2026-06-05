@@ -205,22 +205,22 @@ document.addEventListener('DOMContentLoaded', function () {
     // Card data sets — each set 4 cards, doubled to 8 for seamless loop
     var cardSets = {
       set1: [
-        { img: 'https://placehold.co/600x400/FF43B4/FFF9C7?text=01', number: '01', title: 'Project One', tags: ['Brand', 'Design'] },
-        { img: 'https://placehold.co/600x400/FFF9C7/FF43B4?text=02', number: '02', title: 'Project Two', tags: ['Spatial', 'Motion'] },
-        { img: 'https://placehold.co/600x400/FF43B4/FFF9C7?text=03', number: '03', title: 'Project Three', tags: ['Graphic', 'Concept'] },
-        { img: 'https://placehold.co/600x400/FFF9C7/FF43B4?text=04', number: '04', title: 'Project Four', tags: ['Brand', 'Motion'] }
+        { img: 'https://placehold.co/600x400/FF43B4/FFF9C7?text=01', number: '01', title: 'Project One', tags: ['Brand', 'Design'], detailId: '01' },
+        { img: 'https://placehold.co/600x400/FFF9C7/FF43B4?text=02', number: '02', title: 'Project Two', tags: ['Spatial', 'Motion'], detailId: '02' },
+        { img: 'https://placehold.co/600x400/FF43B4/FFF9C7?text=03', number: '03', title: 'Project Three', tags: ['Graphic', 'Concept'], detailId: '03' },
+        { img: 'https://placehold.co/600x400/FFF9C7/FF43B4?text=04', number: '04', title: 'Project Four', tags: ['Brand', 'Motion'], detailId: '04' }
       ],
       set2: [
-        { img: 'https://placehold.co/600x400/FF43B4/FFF9C7?text=05', number: '05', title: 'Project Five', tags: ['UI', 'Design'] },
-        { img: 'https://placehold.co/600x400/FFF9C7/FF43B4?text=06', number: '06', title: 'Project Six', tags: ['Motion', '3D'] },
-        { img: 'https://placehold.co/600x400/FF43B4/FFF9C7?text=07', number: '07', title: 'Project Seven', tags: ['Editorial', 'Print'] },
-        { img: 'https://placehold.co/600x400/FFF9C7/FF43B4?text=08', number: '08', title: 'Project Eight', tags: ['Web', 'Code'] }
+        { img: 'https://placehold.co/600x400/FF43B4/FFF9C7?text=05', number: '05', title: 'Project Five', tags: ['UI', 'Design'], detailId: '05' },
+        { img: 'https://placehold.co/600x400/FFF9C7/FF43B4?text=06', number: '06', title: 'Project Six', tags: ['Motion', '3D'], detailId: '06' },
+        { img: 'https://placehold.co/600x400/FF43B4/FFF9C7?text=07', number: '07', title: 'Project Seven', tags: ['Editorial', 'Print'], detailId: '07' },
+        { img: 'https://placehold.co/600x400/FFF9C7/FF43B4?text=08', number: '08', title: 'Project Eight', tags: ['Web', 'Code'], detailId: '08' }
       ],
       set3: [
-        { img: 'https://placehold.co/600x400/FF43B4/FFF9C7?text=09', number: '09', title: 'Project Nine', tags: ['Photo', 'Art'] },
-        { img: 'https://placehold.co/600x400/FFF9C7/FF43B4?text=10', number: '10', title: 'Project Ten', tags: ['Type', 'Layout'] },
-        { img: 'https://placehold.co/600x400/FF43B4/FFF9C7?text=11', number: '11', title: 'Project Eleven', tags: ['Exhibition', 'Space'] },
-        { img: 'https://placehold.co/600x400/FFF9C7/FF43B4?text=12', number: '12', title: 'Project Twelve', tags: ['Digital', 'VR'] }
+        { img: 'https://placehold.co/600x400/FF43B4/FFF9C7?text=09', number: '09', title: 'Project Nine', tags: ['Photo', 'Art'], detailId: '09' },
+        { img: 'https://placehold.co/600x400/FFF9C7/FF43B4?text=10', number: '10', title: 'Project Ten', tags: ['Type', 'Layout'], detailId: '10' },
+        { img: 'https://placehold.co/600x400/FF43B4/FFF9C7?text=11', number: '11', title: 'Project Eleven', tags: ['Exhibition', 'Space'], detailId: '11' },
+        { img: 'https://placehold.co/600x400/FFF9C7/FF43B4?text=12', number: '12', title: 'Project Twelve', tags: ['Digital', 'VR'], detailId: '12' }
       ]
     };
 
@@ -230,6 +230,7 @@ document.addEventListener('DOMContentLoaded', function () {
       var data = buildTrackData(cardSets[category]);
       cards.forEach(function (card, i) {
         var d = data[i];
+        card.setAttribute('data-detail', d.detailId);
         var img = card.querySelector('.t-card-featured-image');
         if (img) { img.src = d.img; }
         var num = card.querySelector('.t-card-number');
@@ -240,7 +241,11 @@ document.addEventListener('DOMContentLoaded', function () {
         terms.forEach(function (term, j) { if (d.tags[j]) { term.textContent = d.tags[j]; } });
       });
       marqueeX = 0;
-      hoverProxy.val = 0;
+      // Update onclick handlers after category switch
+      cards.forEach(function (card) {
+        var did = card.getAttribute('data-detail');
+        if (did) card.setAttribute('onclick', "XZT.openDetail('" + did + "')");
+      });
     }
 
     // Tag filter buttons
@@ -262,7 +267,8 @@ document.addEventListener('DOMContentLoaded', function () {
     var isHovering = false;
     var buttonHeld = null;    // 'prev' | 'next' | null
     var lastTime = 0;
-    var hoverProxy = { val: 0 };  // GSAP-animated centering offset, independent of marqueeX
+
+    // Card click is handled via inline onclick (see HTML: XZT.openDetail)
 
     // Default: show set1
     renderCards('set1');
@@ -284,7 +290,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (marqueeX <= -halfWidth) marqueeX += halfWidth;
       if (marqueeX > 0) marqueeX -= halfWidth;
 
-      gsap.set(track, { x: marqueeX + hoverProxy.val });
+      gsap.set(track, { x: marqueeX });
 
       requestAnimationFrame(loop);
     }
@@ -301,18 +307,12 @@ document.addEventListener('DOMContentLoaded', function () {
     addButtonListeners(prevBtn, 'prev');
     addButtonListeners(nextBtn, 'next');
 
-    // Per-card: hover scale + 3D tilt (no centering — avoids mouseleave jitter)
+    // Per-card: hover scale + 3D tilt
     cards.forEach(function (card) {
       var cleanupTilt = null;
 
       card.addEventListener('mouseenter', function () {
         isHovering = true;
-        // Center via hoverProxy — doesn't move track.x directly, avoids mouseleave jitter
-        var cardRect = card.getBoundingClientRect();
-        var cardCenter = cardRect.left + cardRect.width / 2;
-        var viewCenter = window.innerWidth / 2;
-        var offset = viewCenter - cardCenter;
-        gsap.to(hoverProxy, { val: offset, duration: 0.5, ease: 'power2.out', overwrite: true });
         cards.forEach(function (c) { gsap.to(c, { scale: c === card ? 1.2 : 0.6, zIndex: c === card ? 10 : 1, duration: 0.4, ease: 'power2.out' }); });
 
         var image = card.querySelector('.t-card-featured-image');
@@ -338,8 +338,6 @@ document.addEventListener('DOMContentLoaded', function () {
       card.addEventListener('mouseleave', function () {
         isHovering = false;
         if (cleanupTilt) { cleanupTilt(); cleanupTilt = null; }
-        marqueeX += hoverProxy.val;  // absorb offset so scrolling resumes from centered position
-        hoverProxy.val = 0;
         cards.forEach(function (c) { gsap.to(c, { scale: 1, zIndex: 1, duration: 0.3, ease: 'power2.out' }); });
       });
     });
@@ -418,11 +416,150 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  // ===== Global XZT namespace for detail panel =====
+  window.XZT = {
+    // Gallery images per project — edit here to add/change images
+    _galleryImages: {
+      '01': [
+        'https://placehold.co/1200x675/FF43B4/FFF9C7?text=01-01',
+        'https://placehold.co/1200x675/FFF9C7/FF43B4?text=01-02',
+        'https://placehold.co/1200x675/FF43B4/FFF9C7?text=01-03'
+      ],
+      '02': [
+        'https://placehold.co/1200x675/FF43B4/FFF9C7?text=02-01',
+        'https://placehold.co/1200x675/FFF9C7/FF43B4?text=02-02'
+      ],
+      '03': [
+        'https://placehold.co/1200x675/FF43B4/FFF9C7?text=03-01',
+        'https://placehold.co/1200x675/FFF9C7/FF43B4?text=03-02',
+        'https://placehold.co/1200x675/FF43B4/FFF9C7?text=03-03'
+      ],
+      '04': [
+        'https://placehold.co/1200x675/FF43B4/FFF9C7?text=04-01',
+        'https://placehold.co/1200x675/FFF9C7/FF43B4?text=04-02'
+      ]
+    },
+
+    _currentIdx: {},
+
+    // Open detail panel for a project (called from onclick)
+    openDetail: function (detailId) {
+      var panel = document.getElementById('project-detail-panel');
+      var article = document.getElementById('detail-' + detailId);
+      if (!panel || !article) return;
+
+      // Toggle: close if same article already open
+      if (article.classList.contains('active')) {
+        panel.style.display = 'none';
+        article.classList.remove('active');
+        document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
+        this._currentIdx[detailId] = 0;
+        return;
+      }
+
+      // Hide all articles
+      panel.querySelectorAll('.project-detail').forEach(function (a) { a.classList.remove('active'); });
+
+      // Show target
+      panel.style.display = 'block';
+      article.classList.add('active');
+
+      // Reset gallery to first image
+      this._currentIdx[detailId] = 0;
+      var track = article.querySelector('.gallery-track');
+      if (track) {
+        track.style.position = '';
+        track.querySelectorAll('.gallery-img').forEach(function (img, i) { if (i > 0) img.remove(); });
+        var firstImg = track.querySelector('.gallery-img');
+        var imgs = this._galleryImages[detailId];
+        if (firstImg && imgs && imgs.length) {
+          firstImg.src = imgs[0];
+          firstImg.style.position = '';
+          firstImg.style.top = '';
+          firstImg.style.left = '';
+        }
+      }
+
+      // Scroll to panel, then lock
+      panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      var self = this;
+      setTimeout(function () {
+        document.body.style.overflow = 'hidden';
+        document.documentElement.style.overflow = 'hidden';
+      }, 350);
+    },
+
+    // Close detail (called from back button)
+    closeDetail: function () {
+      var panel = document.getElementById('project-detail-panel');
+      if (!panel) return;
+      panel.style.display = 'none';
+      panel.querySelectorAll('.project-detail').forEach(function (a) { a.classList.remove('active'); });
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+      this._currentIdx = {};
+    },
+
+    // Gallery prev/next
+    galleryShift: function (detailId, direction) {
+      var article = document.getElementById('detail-' + detailId);
+      if (!article) return;
+      var imgs = this._galleryImages[detailId];
+      if (!imgs || !imgs.length) return;
+      var track = article.querySelector('.gallery-track');
+      var cur = track ? track.querySelector('.gallery-img') : null;
+      if (!cur) return;
+
+      var idx = this._currentIdx[detailId] || 0;
+      var newIdx = direction === 'prev'
+        ? (idx - 1 + imgs.length) % imgs.length
+        : (idx + 1) % imgs.length;
+      this._currentIdx[detailId] = newIdx;
+
+      var fromX = direction === 'prev' ? '-100%' : '100%';
+      var img = document.createElement('img');
+      img.className = 'gallery-img';
+      img.src = imgs[newIdx];
+      img.alt = 'Image ' + (newIdx + 1);
+      img.style.position = 'absolute';
+      img.style.top = '0';
+      img.style.left = '0';
+      img.style.width = '100%';
+
+      cur.style.position = 'relative';
+      track.style.position = 'relative';
+      gsap.to(cur, { x: direction === 'prev' ? '100%' : '-100%', duration: 0.4, ease: 'power2.inOut', onComplete: function () { cur.remove(); } });
+      track.appendChild(img);
+      gsap.fromTo(img, { x: fromX }, { x: '0%', duration: 0.4, ease: 'power2.inOut' });
+    }
+  };
+
+  // Back button + gallery arrows — event delegation on panel
+  (function () {
+    var panel = document.getElementById('project-detail-panel');
+    if (!panel) return;
+    panel.addEventListener('click', function (e) {
+      if (e.target.closest('.detail-back')) { XZT.closeDetail(); return; }
+      var prevBtn = e.target.closest('.gallery-prev');
+      var nextBtn = e.target.closest('.gallery-next');
+      if (prevBtn || nextBtn) {
+        var article = e.target.closest('.project-detail');
+        if (article) {
+          var did = article.getAttribute('data-project');
+          if (did) XZT.galleryShift(did, prevBtn ? 'prev' : 'next');
+        }
+      }
+    });
+  })();
+
   // ===== Smooth anchor scroll =====
   function initSmoothAnchors() {
     document.querySelectorAll('a[href^="#"]').forEach(function (a) {
       a.addEventListener('click', function (e) {
-        var target = document.querySelector(this.getAttribute('href'));
+        var href = this.getAttribute('href');
+        if (!href || href === '#') return;
+        var target = document.querySelector(href);
         if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
       });
     });

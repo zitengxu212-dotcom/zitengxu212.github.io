@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>XUZITENG - Designer Portfolio</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=3">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/Draggable.min.js"></script>
@@ -100,14 +100,14 @@
       <div class="t-box works-wrapper">
         <div class="carousel-viewport" id="works-viewport">
           <div class="carousel-track" id="works-track">
-            <a class="t-card" href="#"><div class="t-card-inner"><div class="t-card-media-wrapper"><picture class="t-card-featured-image-wrapper"><img class="t-card-featured-image" src="https://placehold.co/600x400/FF43B4/FFF9C7?text=01" alt=""></picture></div><div class="t-card-intro"><div class="t-card-number">01</div><h3 class="t-card-title">Project One</h3><div class="t-card-tags"><div class="t-card-term"><div class="t-card-term-name">Brand</div></div><div class="t-card-term"><div class="t-card-term-name">Design</div></div></div></div></div></a>
-            <a class="t-card" href="#"><div class="t-card-inner"><div class="t-card-media-wrapper"><picture class="t-card-featured-image-wrapper"><img class="t-card-featured-image" src="https://placehold.co/600x400/FFF9C7/FF43B4?text=02" alt=""></picture></div><div class="t-card-intro"><div class="t-card-number">02</div><h3 class="t-card-title">Project Two</h3><div class="t-card-tags"><div class="t-card-term"><div class="t-card-term-name">Spatial</div></div><div class="t-card-term"><div class="t-card-term-name">Motion</div></div></div></div></div></a>
-            <a class="t-card" href="#"><div class="t-card-inner"><div class="t-card-media-wrapper"><picture class="t-card-featured-image-wrapper"><img class="t-card-featured-image" src="https://placehold.co/600x400/FF43B4/FFF9C7?text=03" alt=""></picture></div><div class="t-card-intro"><div class="t-card-number">03</div><h3 class="t-card-title">Project Three</h3><div class="t-card-tags"><div class="t-card-term"><div class="t-card-term-name">Graphic</div></div><div class="t-card-term"><div class="t-card-term-name">Concept</div></div></div></div></div></a>
-            <a class="t-card" href="#"><div class="t-card-inner"><div class="t-card-media-wrapper"><picture class="t-card-featured-image-wrapper"><img class="t-card-featured-image" src="https://placehold.co/600x400/FFF9C7/FF43B4?text=04" alt=""></picture></div><div class="t-card-intro"><div class="t-card-number">04</div><h3 class="t-card-title">Project Four</h3><div class="t-card-tags"><div class="t-card-term"><div class="t-card-term-name">Brand</div></div><div class="t-card-term"><div class="t-card-term-name">Motion</div></div></div></div></div></a>
-            <a class="t-card" href="#"><div class="t-card-inner"><div class="t-card-media-wrapper"><picture class="t-card-featured-image-wrapper"><img class="t-card-featured-image" src="https://placehold.co/600x400/FF43B4/FFF9C7?text=01" alt=""></picture></div><div class="t-card-intro"><div class="t-card-number">01</div><h3 class="t-card-title">Project One</h3><div class="t-card-tags"><div class="t-card-term"><div class="t-card-term-name">Brand</div></div><div class="t-card-term"><div class="t-card-term-name">Design</div></div></div></div></div></a>
-            <a class="t-card" href="#"><div class="t-card-inner"><div class="t-card-media-wrapper"><picture class="t-card-featured-image-wrapper"><img class="t-card-featured-image" src="https://placehold.co/600x400/FFF9C7/FF43B4?text=02" alt=""></picture></div><div class="t-card-intro"><div class="t-card-number">02</div><h3 class="t-card-title">Project Two</h3><div class="t-card-tags"><div class="t-card-term"><div class="t-card-term-name">Spatial</div></div><div class="t-card-term"><div class="t-card-term-name">Motion</div></div></div></div></div></a>
-            <a class="t-card" href="#"><div class="t-card-inner"><div class="t-card-media-wrapper"><picture class="t-card-featured-image-wrapper"><img class="t-card-featured-image" src="https://placehold.co/600x400/FF43B4/FFF9C7?text=03" alt=""></picture></div><div class="t-card-intro"><div class="t-card-number">03</div><h3 class="t-card-title">Project Three</h3><div class="t-card-tags"><div class="t-card-term"><div class="t-card-term-name">Graphic</div></div><div class="t-card-term"><div class="t-card-term-name">Concept</div></div></div></div></div></a>
-            <a class="t-card" href="#"><div class="t-card-inner"><div class="t-card-media-wrapper"><picture class="t-card-featured-image-wrapper"><img class="t-card-featured-image" src="https://placehold.co/600x400/FFF9C7/FF43B4?text=04" alt=""></picture></div><div class="t-card-intro"><div class="t-card-number">04</div><h3 class="t-card-title">Project Four</h3><div class="t-card-tags"><div class="t-card-term"><div class="t-card-term-name">Brand</div></div><div class="t-card-term"><div class="t-card-term-name">Motion</div></div></div></div></div></a>
+            <a class="t-card" data-detail="01" onclick="XZT.openDetail('01')"><div class="t-card-inner"><div class="t-card-media-wrapper"><picture class="t-card-featured-image-wrapper"><img class="t-card-featured-image" src="https://placehold.co/600x400/FF43B4/FFF9C7?text=01" alt=""></picture></div><div class="t-card-intro"><div class="t-card-number">01</div><h3 class="t-card-title">Project One</h3><div class="t-card-tags"><div class="t-card-term"><div class="t-card-term-name">Brand</div></div><div class="t-card-term"><div class="t-card-term-name">Design</div></div></div></div></div></a>
+            <a class="t-card" data-detail="02" onclick="XZT.openDetail('02')"><div class="t-card-inner"><div class="t-card-media-wrapper"><picture class="t-card-featured-image-wrapper"><img class="t-card-featured-image" src="https://placehold.co/600x400/FFF9C7/FF43B4?text=02" alt=""></picture></div><div class="t-card-intro"><div class="t-card-number">02</div><h3 class="t-card-title">Project Two</h3><div class="t-card-tags"><div class="t-card-term"><div class="t-card-term-name">Spatial</div></div><div class="t-card-term"><div class="t-card-term-name">Motion</div></div></div></div></div></a>
+            <a class="t-card" data-detail="03" onclick="XZT.openDetail('03')"><div class="t-card-inner"><div class="t-card-media-wrapper"><picture class="t-card-featured-image-wrapper"><img class="t-card-featured-image" src="https://placehold.co/600x400/FF43B4/FFF9C7?text=03" alt=""></picture></div><div class="t-card-intro"><div class="t-card-number">03</div><h3 class="t-card-title">Project Three</h3><div class="t-card-tags"><div class="t-card-term"><div class="t-card-term-name">Graphic</div></div><div class="t-card-term"><div class="t-card-term-name">Concept</div></div></div></div></div></a>
+            <a class="t-card" data-detail="04" onclick="XZT.openDetail('04')"><div class="t-card-inner"><div class="t-card-media-wrapper"><picture class="t-card-featured-image-wrapper"><img class="t-card-featured-image" src="https://placehold.co/600x400/FFF9C7/FF43B4?text=04" alt=""></picture></div><div class="t-card-intro"><div class="t-card-number">04</div><h3 class="t-card-title">Project Four</h3><div class="t-card-tags"><div class="t-card-term"><div class="t-card-term-name">Brand</div></div><div class="t-card-term"><div class="t-card-term-name">Motion</div></div></div></div></div></a>
+            <a class="t-card" data-detail="01" onclick="XZT.openDetail('01')"><div class="t-card-inner"><div class="t-card-media-wrapper"><picture class="t-card-featured-image-wrapper"><img class="t-card-featured-image" src="https://placehold.co/600x400/FF43B4/FFF9C7?text=01" alt=""></picture></div><div class="t-card-intro"><div class="t-card-number">01</div><h3 class="t-card-title">Project One</h3><div class="t-card-tags"><div class="t-card-term"><div class="t-card-term-name">Brand</div></div><div class="t-card-term"><div class="t-card-term-name">Design</div></div></div></div></div></a>
+            <a class="t-card" data-detail="02" onclick="XZT.openDetail('02')"><div class="t-card-inner"><div class="t-card-media-wrapper"><picture class="t-card-featured-image-wrapper"><img class="t-card-featured-image" src="https://placehold.co/600x400/FFF9C7/FF43B4?text=02" alt=""></picture></div><div class="t-card-intro"><div class="t-card-number">02</div><h3 class="t-card-title">Project Two</h3><div class="t-card-tags"><div class="t-card-term"><div class="t-card-term-name">Spatial</div></div><div class="t-card-term"><div class="t-card-term-name">Motion</div></div></div></div></div></a>
+            <a class="t-card" data-detail="03" onclick="XZT.openDetail('03')"><div class="t-card-inner"><div class="t-card-media-wrapper"><picture class="t-card-featured-image-wrapper"><img class="t-card-featured-image" src="https://placehold.co/600x400/FF43B4/FFF9C7?text=03" alt=""></picture></div><div class="t-card-intro"><div class="t-card-number">03</div><h3 class="t-card-title">Project Three</h3><div class="t-card-tags"><div class="t-card-term"><div class="t-card-term-name">Graphic</div></div><div class="t-card-term"><div class="t-card-term-name">Concept</div></div></div></div></div></a>
+            <a class="t-card" data-detail="04" onclick="XZT.openDetail('04')"><div class="t-card-inner"><div class="t-card-media-wrapper"><picture class="t-card-featured-image-wrapper"><img class="t-card-featured-image" src="https://placehold.co/600x400/FFF9C7/FF43B4?text=04" alt=""></picture></div><div class="t-card-intro"><div class="t-card-number">04</div><h3 class="t-card-title">Project Four</h3><div class="t-card-tags"><div class="t-card-term"><div class="t-card-term-name">Brand</div></div><div class="t-card-term"><div class="t-card-term-name">Motion</div></div></div></div></div></a>
           </div>
         </div>
         <div class="carousel-controls">
@@ -118,6 +118,219 @@
       <div class="t-box bottom-cta"><div class="cta-wrapper"><a class="btn-cta solid" href="#"><span class="btn-cta-text">See All Work</span></a></div></div>
     </div>
   </section>
+
+  <!-- ═══ 项目详情面板 ═══ -->
+  <div class="project-detail-panel" id="project-detail-panel">
+
+    <!-- ══ 项目 01 ══ -->
+    <article class="project-detail" id="detail-01" data-project="01">
+      <button class="detail-back" aria-label="Back to works">
+        <svg width="64" height="64" viewBox="0 0 56 56" fill="none">
+          <path d="M53 28C53 14.1929 41.8071 3 28 3C14.1929 3 3 14.1929 3 28C3 41.8071 14.1929 53 28 53V56C12.536 56 0 43.464 0 28C0 12.536 12.536 0 28 0C43.464 0 56 12.536 56 28C56 43.464 43.464 56 28 56V53C41.8071 53 53 41.8071 53 28Z" fill="currentColor"/>
+          <path d="M49.5293 25.5879L49.5293 28.5879L6 28.5879L6 25.5879L49.5293 25.5879Z" fill="currentColor"/>
+          <path d="M33.6172 46C33.6172 37.2121 40.7414 30.0879 49.5293 30.0879V27.0879C39.0846 27.0879 30.6172 35.5553 30.6172 46H33.6172Z" fill="currentColor"/>
+          <path d="M33.6172 8C33.6172 16.7879 40.7414 23.9121 49.5293 23.9121V26.9121C39.0846 26.9121 30.6172 18.4447 30.6172 8H33.6172Z" fill="currentColor"/>
+        </svg>
+      </button>
+      <h1 class="detail-title">Project One</h1>
+      <div class="detail-text-row">
+        <div class="detail-meta">
+          <dl>
+            <dt>Project</dt><dd>Project One</dd>
+            <dt>Year</dt><dd>2025</dd>
+            <dt>Client</dt><dd>—</dd>
+            <dt>Category</dt><dd>Brand Design</dd>
+          </dl>
+        </div>
+        <div class="detail-en">
+          <p>This is the English description for Project One. Describe the design concept, the approach, and the outcome. Keep it concise but informative.</p>
+        </div>
+        <div class="detail-cn">
+          <p>这是项目一的中文介绍。描述设计理念、方法和成果。保持简洁但信息丰富。</p>
+        </div>
+      </div>
+      <div class="detail-gallery">
+        <button class="gallery-arrow gallery-prev" aria-label="Previous image">
+          <svg width="48" height="48" viewBox="0 0 56 56" fill="none">
+            <path d="M53 28C53 14.1929 41.8071 3 28 3C14.1929 3 3 14.1929 3 28C3 41.8071 14.1929 53 28 53V56C12.536 56 0 43.464 0 28C0 12.536 12.536 0 28 0C43.464 0 56 12.536 56 28C56 43.464 43.464 56 28 56V53C41.8071 53 53 41.8071 53 28Z" fill="currentColor"/>
+            <path d="M49.5293 25.5879L49.5293 28.5879L6 28.5879L6 25.5879L49.5293 25.5879Z" fill="currentColor"/>
+            <path d="M33.6172 46C33.6172 37.2121 40.7414 30.0879 49.5293 30.0879V27.0879C39.0846 27.0879 30.6172 35.5553 30.6172 46H33.6172Z" fill="currentColor"/>
+            <path d="M33.6172 8C33.6172 16.7879 40.7414 23.9121 49.5293 23.9121V26.9121C39.0846 26.9121 30.6172 18.4447 30.6172 8H33.6172Z" fill="currentColor"/>
+          </svg>
+        </button>
+        <div class="gallery-stage">
+          <div class="gallery-track">
+            <img class="gallery-img" src="https://placehold.co/1200x675/FF43B4/FFF9C7?text=01-01" alt="Project One - Image 1">
+          </div>
+        </div>
+        <button class="gallery-arrow gallery-next" aria-label="Next image">
+          <svg width="48" height="48" viewBox="0 0 56 56" fill="none">
+            <path d="M53 28C53 14.1929 41.8071 3 28 3C14.1929 3 3 14.1929 3 28C3 41.8071 14.1929 53 28 53V56C12.536 56 0 43.464 0 28C0 12.536 12.536 0 28 0C43.464 0 56 12.536 56 28C56 43.464 43.464 56 28 56V53C41.8071 53 53 41.8071 53 28Z" fill="currentColor"/>
+            <path d="M49.5293 25.5879L49.5293 28.5879L6 28.5879L6 25.5879L49.5293 25.5879Z" fill="currentColor"/>
+            <path d="M33.6172 46C33.6172 37.2121 40.7414 30.0879 49.5293 30.0879V27.0879C39.0846 27.0879 30.6172 35.5553 30.6172 46H33.6172Z" fill="currentColor"/>
+            <path d="M33.6172 8C33.6172 16.7879 40.7414 23.9121 49.5293 23.9121V26.9121C39.0846 26.9121 30.6172 18.4447 30.6172 8H33.6172Z" fill="currentColor"/>
+          </svg>
+        </button>
+      </div>
+    </article>
+
+    <!-- ══ 项目 02 ══ -->
+    <article class="project-detail" id="detail-02" data-project="02">
+      <button class="detail-back" aria-label="Back to works">
+        <svg width="64" height="64" viewBox="0 0 56 56" fill="none">
+          <path d="M53 28C53 14.1929 41.8071 3 28 3C14.1929 3 3 14.1929 3 28C3 41.8071 14.1929 53 28 53V56C12.536 56 0 43.464 0 28C0 12.536 12.536 0 28 0C43.464 0 56 12.536 56 28C56 43.464 43.464 56 28 56V53C41.8071 53 53 41.8071 53 28Z" fill="currentColor"/>
+          <path d="M49.5293 25.5879L49.5293 28.5879L6 28.5879L6 25.5879L49.5293 25.5879Z" fill="currentColor"/>
+          <path d="M33.6172 46C33.6172 37.2121 40.7414 30.0879 49.5293 30.0879V27.0879C39.0846 27.0879 30.6172 35.5553 30.6172 46H33.6172Z" fill="currentColor"/>
+          <path d="M33.6172 8C33.6172 16.7879 40.7414 23.9121 49.5293 23.9121V26.9121C39.0846 26.9121 30.6172 18.4447 30.6172 8H33.6172Z" fill="currentColor"/>
+        </svg>
+      </button>
+      <h1 class="detail-title">Project Two</h1>
+      <div class="detail-text-row">
+        <div class="detail-meta">
+          <dl>
+            <dt>Project</dt><dd>Project Two</dd>
+            <dt>Year</dt><dd>2025</dd>
+            <dt>Client</dt><dd>—</dd>
+            <dt>Category</dt><dd>Spatial Design</dd>
+          </dl>
+        </div>
+        <div class="detail-en">
+          <p>English description for Project Two. Discuss the spatial design approach, the challenges faced, and the final solution.</p>
+        </div>
+        <div class="detail-cn">
+          <p>项目二的中文介绍。讨论空间设计方法、面临的挑战和最终解决方案。</p>
+        </div>
+      </div>
+      <div class="detail-gallery">
+        <button class="gallery-arrow gallery-prev" aria-label="Previous image">
+          <svg width="48" height="48" viewBox="0 0 56 56" fill="none">
+            <path d="M53 28C53 14.1929 41.8071 3 28 3C14.1929 3 3 14.1929 3 28C3 41.8071 14.1929 53 28 53V56C12.536 56 0 43.464 0 28C0 12.536 12.536 0 28 0C43.464 0 56 12.536 56 28C56 43.464 43.464 56 28 56V53C41.8071 53 53 41.8071 53 28Z" fill="currentColor"/>
+            <path d="M49.5293 25.5879L49.5293 28.5879L6 28.5879L6 25.5879L49.5293 25.5879Z" fill="currentColor"/>
+            <path d="M33.6172 46C33.6172 37.2121 40.7414 30.0879 49.5293 30.0879V27.0879C39.0846 27.0879 30.6172 35.5553 30.6172 46H33.6172Z" fill="currentColor"/>
+            <path d="M33.6172 8C33.6172 16.7879 40.7414 23.9121 49.5293 23.9121V26.9121C39.0846 26.9121 30.6172 18.4447 30.6172 8H33.6172Z" fill="currentColor"/>
+          </svg>
+        </button>
+        <div class="gallery-stage">
+          <div class="gallery-track">
+            <img class="gallery-img" src="https://placehold.co/1200x675/FF43B4/FFF9C7?text=02-01" alt="Project Two - Image 1">
+          </div>
+        </div>
+        <button class="gallery-arrow gallery-next" aria-label="Next image">
+          <svg width="48" height="48" viewBox="0 0 56 56" fill="none">
+            <path d="M53 28C53 14.1929 41.8071 3 28 3C14.1929 3 3 14.1929 3 28C3 41.8071 14.1929 53 28 53V56C12.536 56 0 43.464 0 28C0 12.536 12.536 0 28 0C43.464 0 56 12.536 56 28C56 43.464 43.464 56 28 56V53C41.8071 53 53 41.8071 53 28Z" fill="currentColor"/>
+            <path d="M49.5293 25.5879L49.5293 28.5879L6 28.5879L6 25.5879L49.5293 25.5879Z" fill="currentColor"/>
+            <path d="M33.6172 46C33.6172 37.2121 40.7414 30.0879 49.5293 30.0879V27.0879C39.0846 27.0879 30.6172 35.5553 30.6172 46H33.6172Z" fill="currentColor"/>
+            <path d="M33.6172 8C33.6172 16.7879 40.7414 23.9121 49.5293 23.9121V26.9121C39.0846 26.9121 30.6172 18.4447 30.6172 8H33.6172Z" fill="currentColor"/>
+          </svg>
+        </button>
+      </div>
+    </article>
+
+    <!-- ══ 项目 03 ══ -->
+    <article class="project-detail" id="detail-03" data-project="03">
+      <button class="detail-back" aria-label="Back to works">
+        <svg width="64" height="64" viewBox="0 0 56 56" fill="none">
+          <path d="M53 28C53 14.1929 41.8071 3 28 3C14.1929 3 3 14.1929 3 28C3 41.8071 14.1929 53 28 53V56C12.536 56 0 43.464 0 28C0 12.536 12.536 0 28 0C43.464 0 56 12.536 56 28C56 43.464 43.464 56 28 56V53C41.8071 53 53 41.8071 53 28Z" fill="currentColor"/>
+          <path d="M49.5293 25.5879L49.5293 28.5879L6 28.5879L6 25.5879L49.5293 25.5879Z" fill="currentColor"/>
+          <path d="M33.6172 46C33.6172 37.2121 40.7414 30.0879 49.5293 30.0879V27.0879C39.0846 27.0879 30.6172 35.5553 30.6172 46H33.6172Z" fill="currentColor"/>
+          <path d="M33.6172 8C33.6172 16.7879 40.7414 23.9121 49.5293 23.9121V26.9121C39.0846 26.9121 30.6172 18.4447 30.6172 8H33.6172Z" fill="currentColor"/>
+        </svg>
+      </button>
+      <h1 class="detail-title">Project Three</h1>
+      <div class="detail-text-row">
+        <div class="detail-meta">
+          <dl>
+            <dt>Project</dt><dd>Project Three</dd>
+            <dt>Year</dt><dd>2025</dd>
+            <dt>Client</dt><dd>—</dd>
+            <dt>Category</dt><dd>Graphic Design</dd>
+          </dl>
+        </div>
+        <div class="detail-en">
+          <p>English description for Project Three. Detail the graphic design process, inspiration, and visual language developed for this project.</p>
+        </div>
+        <div class="detail-cn">
+          <p>项目三的中文介绍。详细说明平面设计过程、灵感和为此项目开发的视觉语言。</p>
+        </div>
+      </div>
+      <div class="detail-gallery">
+        <button class="gallery-arrow gallery-prev" aria-label="Previous image">
+          <svg width="48" height="48" viewBox="0 0 56 56" fill="none">
+            <path d="M53 28C53 14.1929 41.8071 3 28 3C14.1929 3 3 14.1929 3 28C3 41.8071 14.1929 53 28 53V56C12.536 56 0 43.464 0 28C0 12.536 12.536 0 28 0C43.464 0 56 12.536 56 28C56 43.464 43.464 56 28 56V53C41.8071 53 53 41.8071 53 28Z" fill="currentColor"/>
+            <path d="M49.5293 25.5879L49.5293 28.5879L6 28.5879L6 25.5879L49.5293 25.5879Z" fill="currentColor"/>
+            <path d="M33.6172 46C33.6172 37.2121 40.7414 30.0879 49.5293 30.0879V27.0879C39.0846 27.0879 30.6172 35.5553 30.6172 46H33.6172Z" fill="currentColor"/>
+            <path d="M33.6172 8C33.6172 16.7879 40.7414 23.9121 49.5293 23.9121V26.9121C39.0846 26.9121 30.6172 18.4447 30.6172 8H33.6172Z" fill="currentColor"/>
+          </svg>
+        </button>
+        <div class="gallery-stage">
+          <div class="gallery-track">
+            <img class="gallery-img" src="https://placehold.co/1200x675/FF43B4/FFF9C7?text=03-01" alt="Project Three - Image 1">
+          </div>
+        </div>
+        <button class="gallery-arrow gallery-next" aria-label="Next image">
+          <svg width="48" height="48" viewBox="0 0 56 56" fill="none">
+            <path d="M53 28C53 14.1929 41.8071 3 28 3C14.1929 3 3 14.1929 3 28C3 41.8071 14.1929 53 28 53V56C12.536 56 0 43.464 0 28C0 12.536 12.536 0 28 0C43.464 0 56 12.536 56 28C56 43.464 43.464 56 28 56V53C41.8071 53 53 41.8071 53 28Z" fill="currentColor"/>
+            <path d="M49.5293 25.5879L49.5293 28.5879L6 28.5879L6 25.5879L49.5293 25.5879Z" fill="currentColor"/>
+            <path d="M33.6172 46C33.6172 37.2121 40.7414 30.0879 49.5293 30.0879V27.0879C39.0846 27.0879 30.6172 35.5553 30.6172 46H33.6172Z" fill="currentColor"/>
+            <path d="M33.6172 8C33.6172 16.7879 40.7414 23.9121 49.5293 23.9121V26.9121C39.0846 26.9121 30.6172 18.4447 30.6172 8H33.6172Z" fill="currentColor"/>
+          </svg>
+        </button>
+      </div>
+    </article>
+
+    <!-- ══ 项目 04 ══ -->
+    <article class="project-detail" id="detail-04" data-project="04">
+      <button class="detail-back" aria-label="Back to works">
+        <svg width="64" height="64" viewBox="0 0 56 56" fill="none">
+          <path d="M53 28C53 14.1929 41.8071 3 28 3C14.1929 3 3 14.1929 3 28C3 41.8071 14.1929 53 28 53V56C12.536 56 0 43.464 0 28C0 12.536 12.536 0 28 0C43.464 0 56 12.536 56 28C56 43.464 43.464 56 28 56V53C41.8071 53 53 41.8071 53 28Z" fill="currentColor"/>
+          <path d="M49.5293 25.5879L49.5293 28.5879L6 28.5879L6 25.5879L49.5293 25.5879Z" fill="currentColor"/>
+          <path d="M33.6172 46C33.6172 37.2121 40.7414 30.0879 49.5293 30.0879V27.0879C39.0846 27.0879 30.6172 35.5553 30.6172 46H33.6172Z" fill="currentColor"/>
+          <path d="M33.6172 8C33.6172 16.7879 40.7414 23.9121 49.5293 23.9121V26.9121C39.0846 26.9121 30.6172 18.4447 30.6172 8H33.6172Z" fill="currentColor"/>
+        </svg>
+      </button>
+      <h1 class="detail-title">Project Four</h1>
+      <div class="detail-text-row">
+        <div class="detail-meta">
+          <dl>
+            <dt>Project</dt><dd>Project Four</dd>
+            <dt>Year</dt><dd>2025</dd>
+            <dt>Client</dt><dd>—</dd>
+            <dt>Category</dt><dd>Brand Design</dd>
+          </dl>
+        </div>
+        <div class="detail-en">
+          <p>English description for Project Four. Outline the branding strategy, identity system, and deliverables created.</p>
+        </div>
+        <div class="detail-cn">
+          <p>项目四的中文介绍。概述品牌策略、识别系统和创建的可交付成果。</p>
+        </div>
+      </div>
+      <div class="detail-gallery">
+        <button class="gallery-arrow gallery-prev" aria-label="Previous image">
+          <svg width="48" height="48" viewBox="0 0 56 56" fill="none">
+            <path d="M53 28C53 14.1929 41.8071 3 28 3C14.1929 3 3 14.1929 3 28C3 41.8071 14.1929 53 28 53V56C12.536 56 0 43.464 0 28C0 12.536 12.536 0 28 0C43.464 0 56 12.536 56 28C56 43.464 43.464 56 28 56V53C41.8071 53 53 41.8071 53 28Z" fill="currentColor"/>
+            <path d="M49.5293 25.5879L49.5293 28.5879L6 28.5879L6 25.5879L49.5293 25.5879Z" fill="currentColor"/>
+            <path d="M33.6172 46C33.6172 37.2121 40.7414 30.0879 49.5293 30.0879V27.0879C39.0846 27.0879 30.6172 35.5553 30.6172 46H33.6172Z" fill="currentColor"/>
+            <path d="M33.6172 8C33.6172 16.7879 40.7414 23.9121 49.5293 23.9121V26.9121C39.0846 26.9121 30.6172 18.4447 30.6172 8H33.6172Z" fill="currentColor"/>
+          </svg>
+        </button>
+        <div class="gallery-stage">
+          <div class="gallery-track">
+            <img class="gallery-img" src="https://placehold.co/1200x675/FF43B4/FFF9C7?text=04-01" alt="Project Four - Image 1">
+          </div>
+        </div>
+        <button class="gallery-arrow gallery-next" aria-label="Next image">
+          <svg width="48" height="48" viewBox="0 0 56 56" fill="none">
+            <path d="M53 28C53 14.1929 41.8071 3 28 3C14.1929 3 3 14.1929 3 28C3 41.8071 14.1929 53 28 53V56C12.536 56 0 43.464 0 28C0 12.536 12.536 0 28 0C43.464 0 56 12.536 56 28C56 43.464 43.464 56 28 56V53C41.8071 53 53 41.8071 53 28Z" fill="currentColor"/>
+            <path d="M49.5293 25.5879L49.5293 28.5879L6 28.5879L6 25.5879L49.5293 25.5879Z" fill="currentColor"/>
+            <path d="M33.6172 46C33.6172 37.2121 40.7414 30.0879 49.5293 30.0879V27.0879C39.0846 27.0879 30.6172 35.5553 30.6172 46H33.6172Z" fill="currentColor"/>
+            <path d="M33.6172 8C33.6172 16.7879 40.7414 23.9121 49.5293 23.9121V26.9121C39.0846 26.9121 30.6172 18.4447 30.6172 8H33.6172Z" fill="currentColor"/>
+          </svg>
+        </button>
+      </div>
+    </article>
+
+  </div>
 
   <!-- ═══ ④ Break ═══ -->
   <section class="section-break" id="break">
@@ -167,6 +380,6 @@
   </footer>
   <img class="break-hover-img" id="break-hover-img" src="" alt="">
 
-  <script src="main.js"></script>
+  <script src="main.js?v=5"></script>
 </body>
 </html>

@@ -538,6 +538,7 @@ ul {
   opacity: .6;
   line-height: 1.4;
   font-family: var(--font-primary);
+  color: var(--color-pink);
 }
 .caption-1 { text-align: right; }
 .caption-2 { text-align: left; }
@@ -734,6 +735,147 @@ ul {
 .btn-cta:hover {
   background: rgba(255, 67, 180, .08);
   border-color: rgba(255, 67, 180, .6);
+}
+
+/* ===== Project Detail Panel ===== */
+.project-detail-panel {
+  display: none;
+  width: 100%;
+  background: var(--color-black);
+  overflow: hidden;
+}
+
+.project-detail {
+  display: none;
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 120px 40px;
+  box-sizing: border-box;
+}
+
+.project-detail.active { display: block; }
+
+/* Back button */
+.detail-back {
+  display: block;
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  margin: 0 0 32px 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-pink);
+  transition: opacity .3s, transform .3s;
+  transform: scaleX(-1);
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+}
+.detail-back:hover { opacity: .7; transform: scaleX(-1) translateX(-4px); }
+
+/* Title */
+.detail-title {
+  font-size: 64px;
+  font-weight: 400;
+  color: var(--color-pink);
+  margin: 0 0 80px 0;
+  font-family: var(--font-primary);
+  line-height: 1.1;
+}
+
+/* Three-column text row */
+.detail-text-row {
+  display: flex;
+  gap: 60px;
+  margin: 0 0 80px 0;
+}
+
+.detail-meta {
+  flex: 1;
+  min-width: 0;
+  color: var(--color-white);
+  font-size: 20px;
+  font-family: var(--font-primary);
+  line-height: 1.6;
+}
+.detail-meta dl { margin: 0; }
+.detail-meta dt {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  opacity: .5;
+  margin: 0 0 2px 0;
+}
+.detail-meta dd {
+  margin: 0 0 20px 0;
+  font-size: 20px;
+}
+
+.detail-en {
+  flex: 2;
+  min-width: 0;
+  color: var(--color-white);
+  font-size: 20px;
+  font-family: var(--font-primary);
+  line-height: 1.6;
+}
+.detail-en p { margin: 0 0 20px 0; }
+
+.detail-cn {
+  flex: 2;
+  min-width: 0;
+  color: var(--color-white);
+  font-size: 20px;
+  font-family: var(--font-primary);
+  line-height: 1.6;
+}
+.detail-cn p { margin: 0 0 20px 0; }
+
+/* Gallery */
+.detail-gallery {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+
+.gallery-arrow {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--color-pink);
+  transition: opacity .3s, transform .3s;
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+}
+.gallery-arrow:hover { opacity: .7; }
+.gallery-prev { transform: scaleX(-1); }
+.gallery-prev:hover { transform: scaleX(-1) translateX(-4px); }
+.gallery-next:hover { transform: translateX(4px); }
+
+.gallery-stage {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.gallery-track {
+  display: flex;
+  will-change: transform;
+}
+
+.gallery-img {
+  width: 100%;
+  height: auto;
+  flex-shrink: 0;
+  display: block;
 }
 
 /* ===== Section Break ===== */
@@ -957,6 +1099,15 @@ ul {
   .main-footer-new .t-cr { padding: 0 20px; }
   .social-container,
   .nav-container { flex-direction: column; gap: 8px; }
+  /* Detail panel */
+  .project-detail { padding: 80px 20px; }
+  .detail-title { font-size: 48px; margin-bottom: 60px; }
+  .detail-text-row { flex-direction: column; gap: 40px; }
+  .detail-meta { flex: none; }
+  .detail-meta dl { display: flex; flex-wrap: wrap; gap: 4px 24px; }
+  .detail-meta dd { margin-bottom: 0; }
+  .detail-en,
+  .detail-cn { flex: none; }
 }
 @media (max-width: 600px) {
   .main-header { padding: 14px 16px; }
@@ -966,4 +1117,18 @@ ul {
   .list-break .t-card { min-width: 130px; }
   .t-marquee .hg { font-size: 48px; }
   .main-footer-new .t-marquee-item-inner { font-size: 36px; }
+  /* Detail panel */
+  .project-detail { padding: 60px 16px; }
+  .detail-back { width: 48px; height: 48px; }
+  .detail-back svg { width: 48px; height: 48px; }
+  .detail-title { font-size: 36px; margin-bottom: 40px; }
+  .detail-text-row { gap: 32px; }
+  .detail-meta,
+  .detail-en,
+  .detail-cn { font-size: 16px; }
+  .detail-meta dt { font-size: 11px; }
+  .detail-meta dd { font-size: 16px; }
+  .detail-gallery { gap: 12px; }
+  .gallery-arrow { width: 36px; height: 36px; }
+  .gallery-arrow svg { width: 36px; height: 36px; }
 }
