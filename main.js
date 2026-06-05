@@ -450,9 +450,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       // Toggle: close if same article already open
       if (article.classList.contains('active')) {
-        panel.style.display = 'none';
-        article.classList.remove('active');
-        this._currentIdx[detailId] = 0;
+        this.closeDetail();
         return;
       }
 
@@ -467,37 +465,74 @@ document.addEventListener('DOMContentLoaded', function () {
       this._currentIdx[detailId] = 0;
       var track = article.querySelector('.gallery-track');
       if (track) {
-        track.style.position = '';
+        track.style.position = 'relative';
         track.querySelectorAll('.gallery-img').forEach(function (img, i) { if (i > 0) img.remove(); });
         var firstImg = track.querySelector('.gallery-img');
         var imgs = this._galleryImages[detailId];
         if (firstImg && imgs && imgs.length) {
           firstImg.src = imgs[0];
-          firstImg.style.position = '';
+          firstImg.style.position = 'relative';
           firstImg.style.top = '';
           firstImg.style.left = '';
+          firstImg.style.width = '100%';
+          gsap.set(firstImg, { x: 0 });
         }
       }
+
+      // Animate panel dropdown (reset any prior transform)
+      gsap.set(panel, { y: 0, height: 0, opacity: 0 });
+      var panelHeight = panel.scrollHeight;
+      gsap.to(panel, { height: panelHeight, opacity: 1, duration: 0.5, ease: 'power2.out', onComplete: function () { panel.style.height = 'auto'; } });
 
       // Scroll to panel
       panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
     },
 
-    // Close detail (called from back button)
+    // Close detail — scroll to Works first, then fold panel
     closeDetail: function () {
       var panel = document.getElementById('project-detail-panel');
-      if (!panel) return;
-      panel.style.display = 'none';
-      panel.querySelectorAll('.project-detail').forEach(function (a) { a.classList.remove('active'); });
-      this._currentIdx = {};
+      var worksEl = document.getElementById('works');
+      if (!panel || !worksEl) return;
+
+      var panelHeight = panel.scrollHeight;
+      var self = this;
+
+      // Lock current height for collapse
+      panel.style.height = panelHeight + 'px';
+      panel.style.overflow = 'hidden';
+
+      var proxy = { s: window.pageYOffset || document.documentElement.scrollTop };
+      var tl = gsap.timeline({ onComplete: function () {
+        panel.style.display = 'none';
+        panel.style.height = '';
+        panel.style.overflow = '';
+        panel.querySelectorAll('.project-detail').forEach(function (a) { a.classList.remove('active'); });
+        self._currentIdx = {};
+      } });
+
+      // Step 1: scroll to Works first (0→0.5s)
+      tl.to(proxy, {
+        s: worksEl.offsetTop,
+        duration: 0.5,
+        ease: 'power2.inOut',
+        onUpdate: function () { window.scrollTo(0, proxy.s); }
+      }, 0);
+
+      // Step 2: fold panel after scroll completes (0.6→0.95s, 0.1s pause)
+      tl.to(panel, {
+        height: 0,
+        opacity: 0,
+        duration: 0.35,
+        ease: 'power2.inOut'
+      }, 0.6);
     },
 
-    // Gallery prev/next
+    // Gallery prev/next — infinite loop with horizontal slide
     galleryShift: function (detailId, direction) {
       var article = document.getElementById('detail-' + detailId);
       if (!article) return;
       var imgs = this._galleryImages[detailId];
-      if (!imgs || !imgs.length) return;
+      if (!imgs || imgs.length < 2) return;
       var track = article.querySelector('.gallery-track');
       var cur = track ? track.querySelector('.gallery-img') : null;
       if (!cur) return;
@@ -509,6 +544,9 @@ document.addEventListener('DOMContentLoaded', function () {
       this._currentIdx[detailId] = newIdx;
 
       var fromX = direction === 'prev' ? '-100%' : '100%';
+      var exitX = direction === 'prev' ? '100%' : '-100%';
+
+      // Create new image — absolute positioned, slides in
       var img = document.createElement('img');
       img.className = 'gallery-img';
       img.src = imgs[newIdx];
@@ -517,12 +555,22 @@ document.addEventListener('DOMContentLoaded', function () {
       img.style.top = '0';
       img.style.left = '0';
       img.style.width = '100%';
+      img.style.display = 'block';
 
-      cur.style.position = 'relative';
       track.style.position = 'relative';
-      gsap.to(cur, { x: direction === 'prev' ? '100%' : '-100%', duration: 0.4, ease: 'power2.inOut', onComplete: function () { cur.remove(); } });
+      // Keep current image relative to maintain track height
+      if (cur.style.position !== 'relative') cur.style.position = 'relative';
+
+      // Animate: old exits, new enters
+      gsap.to(cur, { x: exitX, duration: 0.4, ease: 'power2.inOut' });
       track.appendChild(img);
-      gsap.fromTo(img, { x: fromX }, { x: '0%', duration: 0.4, ease: 'power2.inOut' });
+      gsap.fromTo(img, { x: fromX }, { x: '0%', duration: 0.4, ease: 'power2.inOut', onComplete: function () {
+        // Cleanup: remove old, make new relative to maintain track height
+        cur.remove();
+        img.style.position = 'relative';
+        img.style.top = '';
+        img.style.left = '';
+      } });
     }
   };
 
