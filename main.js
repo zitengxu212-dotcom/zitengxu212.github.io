@@ -452,8 +452,6 @@ document.addEventListener('DOMContentLoaded', function () {
       if (article.classList.contains('active')) {
         panel.style.display = 'none';
         article.classList.remove('active');
-        document.body.style.overflow = '';
-        document.documentElement.style.overflow = '';
         this._currentIdx[detailId] = 0;
         return;
       }
@@ -481,13 +479,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       }
 
-      // Scroll to panel, then lock
+      // Scroll to panel
       panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      var self = this;
-      setTimeout(function () {
-        document.body.style.overflow = 'hidden';
-        document.documentElement.style.overflow = 'hidden';
-      }, 350);
     },
 
     // Close detail (called from back button)
@@ -496,8 +489,6 @@ document.addEventListener('DOMContentLoaded', function () {
       if (!panel) return;
       panel.style.display = 'none';
       panel.querySelectorAll('.project-detail').forEach(function (a) { a.classList.remove('active'); });
-      document.body.style.overflow = '';
-      document.documentElement.style.overflow = '';
       this._currentIdx = {};
     },
 
