@@ -442,23 +442,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
     _currentIdx: {},
 
-    // Open detail panel for a project (called from onclick)
+    // Open detail panel — fixed overlay slides up from bottom
     openDetail: function (detailId) {
       var panel = document.getElementById('project-detail-panel');
       var article = document.getElementById('detail-' + detailId);
       if (!panel || !article) return;
 
       // Toggle: close if same article already open
-      if (article.classList.contains('active')) {
+      if (panel.classList.contains('open') && article.classList.contains('active')) {
         this.closeDetail();
         return;
       }
 
-      // Hide all articles
+      // Switch to another project
       panel.querySelectorAll('.project-detail').forEach(function (a) { a.classList.remove('active'); });
-
-      // Show target
-      panel.style.display = 'block';
       article.classList.add('active');
 
       // Reset gallery to first image
@@ -479,52 +476,35 @@ document.addEventListener('DOMContentLoaded', function () {
         }
       }
 
-      // Animate panel dropdown (reset any prior transform)
-      gsap.set(panel, { y: 0, height: 0, opacity: 0 });
-      var panelHeight = panel.scrollHeight;
-      gsap.to(panel, { height: panelHeight, opacity: 1, duration: 0.5, ease: 'power2.out', onComplete: function () { panel.style.height = 'auto'; } });
+      // Show fixed overlay — clear any residual inline display:none
+      panel.style.display = '';
+      panel.classList.add('open');
+      document.body.style.overflow = 'hidden';
 
-      // Scroll to panel
-      panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // Animate: slide up from bottom
+      gsap.fromTo(panel, { y: '100%' }, { y: '0%', duration: 0.5, ease: 'power2.out' });
     },
 
-    // Close detail — scroll to Works first, then fold panel
+    // Close detail — slide overlay down, restore page scroll
     closeDetail: function () {
       var panel = document.getElementById('project-detail-panel');
-      var worksEl = document.getElementById('works');
-      if (!panel || !worksEl) return;
+      if (!panel) return;
 
-      var panelHeight = panel.scrollHeight;
       var self = this;
 
-      // Lock current height for collapse
-      panel.style.height = panelHeight + 'px';
-      panel.style.overflow = 'hidden';
-
-      var proxy = { s: window.pageYOffset || document.documentElement.scrollTop };
-      var tl = gsap.timeline({ onComplete: function () {
-        panel.style.display = 'none';
-        panel.style.height = '';
-        panel.style.overflow = '';
-        panel.querySelectorAll('.project-detail').forEach(function (a) { a.classList.remove('active'); });
-        self._currentIdx = {};
-      } });
-
-      // Step 1: scroll to Works first (0→0.5s)
-      tl.to(proxy, {
-        s: worksEl.offsetTop,
-        duration: 0.5,
+      // Animate: slide down and away
+      gsap.to(panel, {
+        y: '100%',
+        duration: 0.4,
         ease: 'power2.inOut',
-        onUpdate: function () { window.scrollTo(0, proxy.s); }
-      }, 0);
-
-      // Step 2: fold panel after scroll completes (0.6→0.95s, 0.1s pause)
-      tl.to(panel, {
-        height: 0,
-        opacity: 0,
-        duration: 0.35,
-        ease: 'power2.inOut'
-      }, 0.6);
+        onComplete: function () {
+          panel.classList.remove('open');
+          gsap.set(panel, { y: 0 });
+          document.body.style.overflow = '';
+          panel.querySelectorAll('.project-detail').forEach(function (a) { a.classList.remove('active'); });
+          self._currentIdx = {};
+        }
+      });
     },
 
     // Gallery prev/next — infinite loop with horizontal slide

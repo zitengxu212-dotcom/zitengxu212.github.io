@@ -745,6 +745,17 @@ ul {
   overflow: hidden;
 }
 
+/* Open state: fixed overlay covering entire viewport */
+.project-detail-panel.open {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: auto;
+}
+
 .project-detail {
   display: none;
   width: 100%;
