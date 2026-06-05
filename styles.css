@@ -632,20 +632,25 @@ ul {
   margin-top: 30px;
 }
 .carousel-btn {
-  width: 50px; height: 50px;
+  width: 48px; height: 48px;
+  padding: 0;
   border-radius: 50%;
   border: 1px solid rgba(255,67,180,.35);
   background: transparent;
   color: var(--color-pink);
-  font-size: 28px; cursor: pointer;
+  cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   transition: background .3s, border-color .3s;
-  font-family: var(--font-primary); line-height: 1;
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
 }
 .carousel-btn:hover {
   background: rgba(255,67,180,.12);
   border-color: rgba(255,67,180,.6);
 }
+#works-prev { transform: scaleX(-1); }
+#works-prev:hover { transform: scaleX(-1); }
 .t-card {
   position: relative;
   display: block;
