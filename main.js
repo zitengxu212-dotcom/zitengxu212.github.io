@@ -197,18 +197,18 @@ document.addEventListener('DOMContentLoaded', function () {
     var nextBtn = document.getElementById('works-next');
     if (!track || !viewport) return;
 
+    // 8 fixed DOM cards — never added or removed (per design constraint)
     var cards = track.querySelectorAll('.t-card');
     var cardWidth = cards[0].offsetWidth + 40;
-    var totalCards = cards.length;
-    var halfWidth = (cardWidth * totalCards) / 2;
+    var halfWidth = (cardWidth * cards.length) / 2;  // recalculated in renderCards
 
-    // Card data sets — each set 4 cards, doubled to 8 for seamless loop
     // ═══ Master project registry — single source of truth ═══
+    // Each category ≤ 4 unique cards so 4×2=8 fits the fixed 8-card track.
     // To add a project: add entry here → add article#detail-XX in HTML → add _galleryImages entry
     var projects = {
       '01': { number: '01', title: 'Project One',   tags: ['Brand', 'Design'],  category: 'spatial', representative: true  },
       '02': { number: '02', title: 'Project Two',   tags: ['Spatial', 'Motion'], category: 'spatial', representative: false },
-      '03': { number: '03', title: 'Project Three', tags: ['Graphic', 'Concept'], category: 'spatial', representative: true  },
+      '03': { number: '03', title: 'Project Three', tags: ['Graphic', 'Concept'], category: 'spatial', representative: false },
       '04': { number: '04', title: 'Project Four',  tags: ['Brand', 'Motion'],  category: 'spatial', representative: false },
       '05': { number: '05', title: 'Project Five',  tags: ['UI', 'Design'],     category: 'graphic', representative: true  },
       '06': { number: '06', title: 'Project Six',   tags: ['Motion', '3D'],     category: 'graphic', representative: false },
@@ -217,7 +217,7 @@ document.addEventListener('DOMContentLoaded', function () {
       '09': { number: '09', title: 'Project Nine',  tags: ['Photo', 'Art'],     category: 'brand',   representative: true  },
       '10': { number: '10', title: 'Project Ten',   tags: ['Type', 'Layout'],  category: 'brand',   representative: false },
       '11': { number: '11', title: 'Project Eleven',tags: ['Exhibition', 'Space'], category: 'brand', representative: false },
-      '12': { number: '12', title: 'Project Twelve',tags: ['Digital', 'VR'],   category: 'brand',   representative: true  }
+      '12': { number: '12', title: 'Project Twelve',tags: ['Digital', 'VR'],   category: 'brand',   representative: false }
     };
 
     // Build a card-data entry from a project registry entry
@@ -232,7 +232,7 @@ document.addEventListener('DOMContentLoaded', function () {
       };
     }
 
-    // Derive card sets from master registry
+    // Derive card sets from master registry — each ≤ 4 unique (4×2=8 fits track)
     var projectIds = Object.keys(projects);
     var cardSets = {
       set1: projectIds.filter(function(id) { return projects[id].representative; }).map(function(id) { return toCardData(id, projects[id]); }),
@@ -244,7 +244,11 @@ document.addEventListener('DOMContentLoaded', function () {
     function buildTrackData(set) { return set.concat(set); }
 
     function renderCards(category) {
-      var data = buildTrackData(cardSets[category]);
+      var uniqueSet = cardSets[category];      // array of unique cards (≤ 4)
+      var data = buildTrackData(uniqueSet);    // doubled: [A,B,C,D, A,B,C,D]
+      var uniqueCount = uniqueSet.length;      // 4 unique → 8 doubled → halfWidth=4*cw
+
+      // Fill each fixed card with its data
       cards.forEach(function (card, i) {
         var d = data[i];
         card.setAttribute('data-detail', d.detailId);
@@ -257,12 +261,21 @@ document.addEventListener('DOMContentLoaded', function () {
         var terms = card.querySelectorAll('.t-card-term-name');
         terms.forEach(function (term, j) { if (d.tags[j]) { term.textContent = d.tags[j]; } });
       });
-      marqueeX = 0;
-      // Update onclick handlers after category switch
+
+      // Update onclick handlers
       cards.forEach(function (card) {
         var did = card.getAttribute('data-detail');
-        if (did) card.setAttribute('onclick', "XZT.openDetail('" + did + "')");
+        card.setAttribute('onclick', did ? "XZT.openDetail('" + did + "')" : '');
       });
+
+      // ── Recalculate geometry (card width may change with different text) ──
+      cardWidth = cards[0].offsetWidth + 40;
+      halfWidth = uniqueCount * cardWidth;  // 1 full unique set width → seamless wrap
+
+      // Immediately apply position reset (not deferred to next rAF frame)
+      marqueeX = 0;
+      gsap.set(track, { x: 0 });
+      lastTime = 0;
     }
 
     // Tag filter buttons
@@ -330,7 +343,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       card.addEventListener('mouseenter', function () {
         isHovering = true;
-        cards.forEach(function (c) { gsap.to(c, { scale: c === card ? 1.2 : 0.6, zIndex: c === card ? 10 : 1, duration: 0.4, ease: 'power2.out' }); });
+        track.querySelectorAll('.t-card').forEach(function (c) { gsap.to(c, { scale: c === card ? 1.2 : 0.6, zIndex: c === card ? 10 : 1, duration: 0.4, ease: 'power2.out' }); });
 
         var image = card.querySelector('.t-card-featured-image');
         var qkRotY = gsap.quickTo(card, 'rotationY', { duration: 0.5, ease: 'power2.out' });
@@ -348,6 +361,7 @@ document.addEventListener('DOMContentLoaded', function () {
           card.removeEventListener('mousemove', onMove);
           gsap.to(card, { rotationY: 0, rotationX: 0, duration: 0.8, ease: 'elastic.out(1, 0.5)' });
           gsap.to(card, { boxShadow: '0 2px 12px rgba(0,0,0,0.06)', duration: 0.6, ease: 'power2.out' });
+          if (image) { image.style.transform = ''; }
           cleanupTilt = null;
         };
       });
@@ -355,7 +369,7 @@ document.addEventListener('DOMContentLoaded', function () {
       card.addEventListener('mouseleave', function () {
         isHovering = false;
         if (cleanupTilt) { cleanupTilt(); cleanupTilt = null; }
-        cards.forEach(function (c) { gsap.to(c, { scale: 1, zIndex: 1, duration: 0.3, ease: 'power2.out' }); });
+        track.querySelectorAll('.t-card').forEach(function (c) { gsap.to(c, { scale: 1, zIndex: 1, duration: 0.3, ease: 'power2.out' }); });
       });
     });
 
