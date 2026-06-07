@@ -203,25 +203,37 @@ document.addEventListener('DOMContentLoaded', function () {
     var halfWidth = (cardWidth * totalCards) / 2;
 
     // Card data sets — each set 4 cards, doubled to 8 for seamless loop
+    // ═══ Master project registry — single source of truth ═══
+    // To add a project: add entry here → add article#detail-XX in HTML → add _galleryImages entry
+    var projects = {
+      '01': { number: '01', title: 'Project One',   tags: ['Brand', 'Design'],  category: 'spatial', representative: true  },
+      '02': { number: '02', title: 'Project Two',   tags: ['Spatial', 'Motion'], category: 'spatial', representative: false },
+      '03': { number: '03', title: 'Project Three', tags: ['Graphic', 'Concept'], category: 'spatial', representative: true  },
+      '04': { number: '04', title: 'Project Four',  tags: ['Brand', 'Motion'],  category: 'spatial', representative: false },
+      '05': { number: '05', title: 'Project Five',  tags: ['UI', 'Design'],     category: 'graphic', representative: true  },
+      '06': { number: '06', title: 'Project Six',   tags: ['Motion', '3D'],     category: 'graphic', representative: false },
+      '07': { number: '07', title: 'Project Seven', tags: ['Editorial', 'Print'], category: 'graphic', representative: false },
+      '08': { number: '08', title: 'Project Eight', tags: ['Web', 'Code'],      category: 'graphic', representative: true  }
+    };
+
+    // Build a card-data entry from a project registry entry
+    function toCardData(id, p) {
+      var palette = (p.category === 'spatial') ? ['FF43B4', 'FFF9C7'] : ['000000', 'FF43B4'];
+      return {
+        img: 'https://placehold.co/600x400/' + palette[0] + '/' + palette[1] + '?text=' + p.number,
+        number: p.number,
+        title: p.title,
+        tags: p.tags,
+        detailId: id
+      };
+    }
+
+    // Derive card sets from master registry
+    var projectIds = Object.keys(projects);
     var cardSets = {
-      set1: [
-        { img: 'https://placehold.co/600x400/FF43B4/FFF9C7?text=01', number: '01', title: 'Project One', tags: ['Brand', 'Design'], detailId: '01' },
-        { img: 'https://placehold.co/600x400/FFF9C7/FF43B4?text=02', number: '02', title: 'Project Two', tags: ['Spatial', 'Motion'], detailId: '02' },
-        { img: 'https://placehold.co/600x400/FF43B4/FFF9C7?text=03', number: '03', title: 'Project Three', tags: ['Graphic', 'Concept'], detailId: '03' },
-        { img: 'https://placehold.co/600x400/FFF9C7/FF43B4?text=04', number: '04', title: 'Project Four', tags: ['Brand', 'Motion'], detailId: '04' }
-      ],
-      set2: [
-        { img: 'https://placehold.co/600x400/FF43B4/FFF9C7?text=05', number: '05', title: 'Project Five', tags: ['UI', 'Design'], detailId: '05' },
-        { img: 'https://placehold.co/600x400/FFF9C7/FF43B4?text=06', number: '06', title: 'Project Six', tags: ['Motion', '3D'], detailId: '06' },
-        { img: 'https://placehold.co/600x400/FF43B4/FFF9C7?text=07', number: '07', title: 'Project Seven', tags: ['Editorial', 'Print'], detailId: '07' },
-        { img: 'https://placehold.co/600x400/FFF9C7/FF43B4?text=08', number: '08', title: 'Project Eight', tags: ['Web', 'Code'], detailId: '08' }
-      ],
-      set3: [
-        { img: 'https://placehold.co/600x400/FF43B4/FFF9C7?text=09', number: '09', title: 'Project Nine', tags: ['Photo', 'Art'], detailId: '09' },
-        { img: 'https://placehold.co/600x400/FFF9C7/FF43B4?text=10', number: '10', title: 'Project Ten', tags: ['Type', 'Layout'], detailId: '10' },
-        { img: 'https://placehold.co/600x400/FF43B4/FFF9C7?text=11', number: '11', title: 'Project Eleven', tags: ['Exhibition', 'Space'], detailId: '11' },
-        { img: 'https://placehold.co/600x400/FFF9C7/FF43B4?text=12', number: '12', title: 'Project Twelve', tags: ['Digital', 'VR'], detailId: '12' }
-      ]
+      set1: projectIds.filter(function(id) { return projects[id].representative; }).map(function(id) { return toCardData(id, projects[id]); }),
+      set2: projectIds.filter(function(id) { return projects[id].category === 'spatial'; }).map(function(id) { return toCardData(id, projects[id]); }),
+      set3: projectIds.filter(function(id) { return projects[id].category === 'graphic'; }).map(function(id) { return toCardData(id, projects[id]); })
     };
 
     function buildTrackData(set) { return set.concat(set); }
@@ -437,6 +449,24 @@ document.addEventListener('DOMContentLoaded', function () {
       '04': [
         'https://placehold.co/1200x675/FF43B4/FFF9C7?text=04-01',
         'https://placehold.co/1200x675/FFF9C7/FF43B4?text=04-02'
+      ],
+      '05': [
+        'https://placehold.co/1200x675/000000/FF43B4?text=05-01',
+        'https://placehold.co/1200x675/FF43B4/000000?text=05-02',
+        'https://placehold.co/1200x675/000000/FF43B4?text=05-03'
+      ],
+      '06': [
+        'https://placehold.co/1200x675/000000/FF43B4?text=06-01',
+        'https://placehold.co/1200x675/FF43B4/000000?text=06-02'
+      ],
+      '07': [
+        'https://placehold.co/1200x675/000000/FF43B4?text=07-01',
+        'https://placehold.co/1200x675/FF43B4/000000?text=07-02',
+        'https://placehold.co/1200x675/000000/FF43B4?text=07-03'
+      ],
+      '08': [
+        'https://placehold.co/1200x675/000000/FF43B4?text=08-01',
+        'https://placehold.co/1200x675/FF43B4/000000?text=08-02'
       ]
     },
 
