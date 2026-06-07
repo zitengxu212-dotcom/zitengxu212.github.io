@@ -208,16 +208,12 @@ document.addEventListener('DOMContentLoaded', function () {
     var projects = {
       '01': { number: '01', title: 'Project One',   tags: ['Brand', 'Design'],  category: 'spatial', representative: true  },
       '02': { number: '02', title: 'Project Two',   tags: ['Spatial', 'Motion'], category: 'spatial', representative: false },
-      '03': { number: '03', title: 'Project Three', tags: ['Graphic', 'Concept'], category: 'spatial', representative: false },
+      '03': { number: '03', title: 'Project Three', tags: ['Graphic', 'Concept'], category: 'spatial', representative: true  },
       '04': { number: '04', title: 'Project Four',  tags: ['Brand', 'Motion'],  category: 'spatial', representative: false },
       '05': { number: '05', title: 'Project Five',  tags: ['UI', 'Design'],     category: 'graphic', representative: true  },
       '06': { number: '06', title: 'Project Six',   tags: ['Motion', '3D'],     category: 'graphic', representative: false },
       '07': { number: '07', title: 'Project Seven', tags: ['Editorial', 'Print'], category: 'graphic', representative: false },
-      '08': { number: '08', title: 'Project Eight', tags: ['Web', 'Code'],      category: 'graphic', representative: true  },
-      '09': { number: '09', title: 'Project Nine',  tags: ['Photo', 'Art'],     category: 'brand',   representative: true  },
-      '10': { number: '10', title: 'Project Ten',   tags: ['Type', 'Layout'],  category: 'brand',   representative: false },
-      '11': { number: '11', title: 'Project Eleven',tags: ['Exhibition', 'Space'], category: 'brand', representative: false },
-      '12': { number: '12', title: 'Project Twelve',tags: ['Digital', 'VR'],   category: 'brand',   representative: false }
+      '08': { number: '08', title: 'Project Eight', tags: ['Web', 'Code'],      category: 'graphic', representative: true  }
     };
 
     // Build a card-data entry from a project registry entry
@@ -237,8 +233,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var cardSets = {
       set1: projectIds.filter(function(id) { return projects[id].representative; }).map(function(id) { return toCardData(id, projects[id]); }),
       set2: projectIds.filter(function(id) { return projects[id].category === 'spatial'; }).map(function(id) { return toCardData(id, projects[id]); }),
-      set3: projectIds.filter(function(id) { return projects[id].category === 'graphic'; }).map(function(id) { return toCardData(id, projects[id]); }),
-      set4: projectIds.filter(function(id) { return projects[id].category === 'brand'; }).map(function(id) { return toCardData(id, projects[id]); })
+      set3: projectIds.filter(function(id) { return projects[id].category === 'graphic'; }).map(function(id) { return toCardData(id, projects[id]); })
     };
 
     function buildTrackData(set) { return set.concat(set); }
@@ -486,24 +481,6 @@ document.addEventListener('DOMContentLoaded', function () {
       '08': [
         'https://placehold.co/1200x675/000000/FF43B4?text=08-01',
         'https://placehold.co/1200x675/FF43B4/000000?text=08-02'
-      ],
-      '09': [
-        'https://placehold.co/1200x675/FF43B4/FFF9C7?text=09-01',
-        'https://placehold.co/1200x675/FFF9C7/FF43B4?text=09-02',
-        'https://placehold.co/1200x675/FF43B4/FFF9C7?text=09-03'
-      ],
-      '10': [
-        'https://placehold.co/1200x675/FF43B4/FFF9C7?text=10-01',
-        'https://placehold.co/1200x675/FFF9C7/FF43B4?text=10-02'
-      ],
-      '11': [
-        'https://placehold.co/1200x675/FF43B4/FFF9C7?text=11-01',
-        'https://placehold.co/1200x675/FFF9C7/FF43B4?text=11-02',
-        'https://placehold.co/1200x675/FF43B4/FFF9C7?text=11-03'
-      ],
-      '12': [
-        'https://placehold.co/1200x675/FF43B4/FFF9C7?text=12-01',
-        'https://placehold.co/1200x675/FFF9C7/FF43B4?text=12-02'
       ]
     },
 
