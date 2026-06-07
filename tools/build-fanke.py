@@ -69,63 +69,107 @@ def build_full_block():
     return block, len(block)
 
 
+def minify_html_aggressive(html_text):
+    """激进 HTML 压缩：去除所有标签间空白，用于体积大的片段"""
+    html_text = re.sub(r'>\s+<', '><', html_text)
+    html_text = re.sub(r'\s{2,}', ' ', html_text)
+    lines = [l.strip() for l in html_text.split('\n') if l.strip()]
+    return ''.join(lines)
+
+
+def extract_detail_css(css_text):
+    """从完整 CSS 中提取详情面板需要的规则（变量 + reset + 面板样式 + 响应式）"""
+    rules = []
+    # 1. @font-face
+    ff = re.search(r'@font-face\s*\{[^}]*\}', css_text)
+    if ff:
+        rules.append(ff.group(0))
+    # 2. :root 变量
+    root = re.search(r':root\s*\{[^}]*\}', css_text)
+    if root:
+        rules.append(root.group(0))
+    # 3. Reset (*, html, body, img, a, ul)
+    for sel in [r'\*\s*,\s*\*::before\s*,\s*\*::after', 'html', 'body', 'img', 'a', 'ul']:
+        m = re.search(sel + r'\s*\{[^}]*\}', css_text)
+        if m:
+            rules.append(m.group(0))
+    # 4. Detail panel rules: .project-detail-panel through end of file
+    #    also include .main-header (fixed header needed for detail overlay)
+    detail_start = css_text.find('.project-detail-panel')
+    header_start = css_text.find('.main-header {')
+    if header_start != -1:
+        header_end = css_text.find('}', header_start) + 1
+        # Grab the full .main-header block (multi-rule)
+        header_match = re.search(r'\.main-header\s*\{[^}]*\}', css_text)
+        if header_match:
+            rules.append(header_match.group(0))
+        # .main-header-inner and children
+        for inner in [r'.main-header-inner', r'.main-header-inner .location', r'.main-header-inner .coords',
+                       r'.main-header-inner .time', r'.main-header-inner nav', r'.nav-item__outer .nav-item',
+                       r'.nav-item__outer:hover .nav-item']:
+            m = re.search(re.escape(inner) + r'\s*\{[^}]*\}', css_text)
+            if m:
+                rules.append(m.group(0))
+    if detail_start != -1:
+        detail_css = css_text[detail_start:]
+        # Include all detail + responsive rules at the end
+        rules.append(detail_css)
+    return '\n'.join(rules)
+
+
 def build_split_blocks():
-    """超限时拆分为两个代码块"""
+    """拆分为两个代码块：主页面（代码块1） + 详情面板（代码块2）"""
     html = read_file('index.html')
     css = read_file('styles.css')
     js = read_file('main.js')
 
     css_min = minify_css(css)
+    js_min = minify_js(js)
 
-    # 代码块1 JS: 打字动画 + 箭头滚动
-    block1_js = (
-        "(function(){"
-        "var lines=document.querySelectorAll('.hero-title > span[data-text]');"
-        "var cl=0;"
-        "function tl(i){"
-        "if(i>=lines.length)return;"
-        "var el=lines[i];"
-        "var ft=el.getAttribute('data-text');"
-        "el.classList.add('typed');"
-        "var ci=0;"
-        "var iv=setInterval(function(){"
-        "el.textContent=ft.slice(0,ci+1);ci++;"
-        "if(ci>ft.length){clearInterval(iv);el.classList.remove('typed');el.classList.add('done');cl++;setTimeout(function(){tl(cl)},150)}"
-        "},80)}"
-        "tl(0);"
-        "var arrow=document.querySelector('.hero-decoration');"
-        "if(arrow){arrow.addEventListener('click',function(){"
-        "document.dispatchEvent(new CustomEvent('xuziteng:scroll-to-content'))"
-        "})}"
-        "})();"
-    )
-
-    # 代码块2 JS: 其他所有交互
-    block2_js = minify_js(js)
-
-    # 拆分 HTML
-    hero_match = re.search(r'<section class="hero">.*?</section>', html, re.DOTALL)
-    if not hero_match:
-        print('ERROR: 未找到 <section class="hero"> 区域')
+    # ── 拆分点：详情面板起始标签 ──
+    split_marker = '<div class="project-detail-panel"'
+    split_idx = html.find(split_marker)
+    if split_idx == -1:
+        print('ERROR: 未找到 <div class="project-detail-panel"> 区域')
         sys.exit(1)
 
-    hero_html = hero_match.group(0)
-    hero_end = hero_match.end()
-    rest_html = html[hero_end:].strip()
-    # 移除 <script src="main.js"> 引用
-    rest_html = re.sub(r'<script src="main\.js"></script>', '', rest_html)
+    # ── 代码块1：主页面（Hero + 主体内容 + Footer）──
+    block1_html = html[:split_idx]
 
+    # 去掉 doctype / head / 开篇 body 标签
+    body_match = re.search(r'<body>[\s\S]*', block1_html, re.DOTALL)
+    if body_match:
+        block1_html = body_match.group(0)
+        block1_html = re.sub(r'^<body>\s*', '', block1_html)
+
+    # 去掉 main.js 外部引用（JS 已内联）
+    block1_html = re.sub(r'<script src="main\.js"></script>', '', block1_html)
+
+    # ── 代码块2：详情面板 ──
+    block2_html = html[split_idx:]
+
+    # 去掉末尾的 </body></html>（凡科容器自带）
+    block2_html = re.sub(r'\s*</body>\s*</html>\s*$', '', block2_html)
+    block2_html = re.sub(r'<script src="main\.js"></script>', '', block2_html)
+
+    # 激进压缩 Block 2 的 HTML（详情面板 ~45KB，压缩可节省 ~6-8KB）
+    block2_html = minify_html_aggressive(block2_html)
+
+    # ── 组装 ──
     block1 = '\n'.join([
-        '<!-- 代码块1: Hero 区域 -->',
+        '<!-- 代码块1: 主页面 -->',
         '<style>' + css_min + '</style>',
-        hero_html,
-        '<script>' + block1_js + '</script>'
+        block1_html.strip(),
+        '<script>' + js_min + '</script>'
     ])
 
+    # Block 2: 详情面板 + 精简 CSS（仅面板相关样式 + 变量）+ XZT 命名空间桥接
+    detail_css = minify_css(extract_detail_css(css))
+    block2_js = 'window.XZT=window.XZT||{};'
     block2 = '\n'.join([
-        '<!-- 代码块2: 主体内容（因代码块1超限而拆分） -->',
-        '<style>' + css_min + '</style>',
-        rest_html,
+        '<!-- 代码块2: 项目详情面板 -->',
+        '<style>' + detail_css + '</style>',
+        block2_html,
         '<script>' + block2_js + '</script>'
     ])
 
@@ -180,8 +224,8 @@ else:
     b1_ok = len(block1) <= MAX_CHARS
     b2_ok = len(block2) <= MAX_CHARS
 
-    for name, blk, ok in [('代码块1 (Hero)', block1, b1_ok),
-                           ('代码块2 (Content)', block2, b2_ok)]:
+    for name, blk, ok in [('代码块1 (主页面)', block1, b1_ok),
+                           ('代码块2 (详情面板)', block2, b2_ok)]:
         print(f'  {name}:')
         print(f'    字符数: {len(blk):,}')
         print(f'    上限:   {MAX_CHARS:,}')
