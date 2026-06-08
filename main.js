@@ -163,11 +163,8 @@ document.addEventListener('DOMContentLoaded', function () {
     var STAMP_FULL   = '主页图片/stamp-full.png';   // 盖章大图（用户替换）
     var STAMP_SIZE   = 80;                           // 盖章大小 px，按需调整
 
-    // Cursor layer — fixed container for all stamps
-    var layer = document.createElement('div');
-    layer.id = 'stamp-layer';
-    layer.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9999;';
-    document.body.appendChild(layer);
+    // Ensure body is the positioned ancestor for absolute stamps
+    document.body.style.position = 'relative';
 
     // Replace native cursor — inject !important style to override ALL element cursors
     var cursorStyle = document.createElement('style');
@@ -179,14 +176,14 @@ document.addEventListener('DOMContentLoaded', function () {
       stamp.src = STAMP_FULL;
       stamp.alt = '';
       stamp.draggable = false;
-      stamp.style.cssText = 'position:fixed;pointer-events:none;width:' + STAMP_SIZE + 'px;height:auto;opacity:1;';
-      stamp.style.left = e.clientX + 'px';
-      stamp.style.top  = e.clientY + 'px';
+      stamp.style.cssText = 'position:absolute;pointer-events:none;z-index:9999;width:' + STAMP_SIZE + 'px;height:auto;opacity:1;';
+      stamp.style.left = e.pageX + 'px';
+      stamp.style.top  = e.pageY + 'px';
 
       var deg = (Math.random() - 0.5) * 30; // ±15°
       stamp.style.transform = 'translate(-50%, -50%) rotate(' + deg + 'deg)';
 
-      layer.appendChild(stamp);
+      document.body.appendChild(stamp);
 
       gsap.to(stamp, {
         opacity: 0,
