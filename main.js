@@ -152,6 +152,44 @@ document.addEventListener('DOMContentLoaded', function () {
     hero.addEventListener('touchmove', onTouchMove, { passive: true });
   }
 
+  // ===== Stamp Effect =====
+  function initStampEffect() {
+    var STAMP_CURSOR = '主页图片/stamp-cursor.png'; // 印章光标（≤32px，用户替换）
+    var STAMP_FULL   = '主页图片/stamp-full.png';   // 盖章大图（用户替换）
+    var STAMP_SIZE   = 80;                           // 盖章大小 px，按需调整
+
+    // Cursor layer — fixed container for all stamps
+    var layer = document.createElement('div');
+    layer.id = 'stamp-layer';
+    layer.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9999;';
+    document.body.appendChild(layer);
+
+    // Replace native cursor
+    document.body.style.cursor = 'url(' + STAMP_CURSOR + ') ' + (STAMP_SIZE / 4) + ' ' + (STAMP_SIZE / 4) + ', auto';
+
+    document.addEventListener('click', function (e) {
+      var stamp = document.createElement('img');
+      stamp.src = STAMP_FULL;
+      stamp.alt = '';
+      stamp.draggable = false;
+      stamp.style.cssText = 'position:fixed;pointer-events:none;width:' + STAMP_SIZE + 'px;height:auto;opacity:1;';
+      stamp.style.left = e.clientX + 'px';
+      stamp.style.top  = e.clientY + 'px';
+
+      var deg = (Math.random() - 0.5) * 30; // ±15°
+      stamp.style.transform = 'translate(-50%, -50%) rotate(' + deg + 'deg)';
+
+      layer.appendChild(stamp);
+
+      gsap.to(stamp, {
+        opacity: 0,
+        duration: 10,
+        ease: 'power2.in',
+        onComplete: function () { stamp.remove(); }
+      });
+    });
+  }
+
   // ===== Clock =====
   function updateClock() {
     var d = new Date();
@@ -742,5 +780,6 @@ document.addEventListener('DOMContentLoaded', function () {
   initBreak();
   initFooter();
   initBackToTop();
+  initStampEffect();
   initSmoothAnchors();
 });
