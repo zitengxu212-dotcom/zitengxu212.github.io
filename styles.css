@@ -529,7 +529,8 @@ ul {
   overflow: hidden;
   display: block;
   will-change: transform;
-  padding-top: 200px;
+  position: relative;
+  top: 200px;
 }
 .t-line-mask .hg-1 {
   font-size: clamp(64px, 10vw, 140px);
@@ -549,7 +550,8 @@ ul {
   flex-shrink: 0;
   max-width: 180px;
   will-change: transform;
-  padding-top: 500px;
+  position: relative;
+  top: 500px;
 }
 .t-caption {
   font-size: 13px;
