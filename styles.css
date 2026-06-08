@@ -542,6 +542,10 @@ ul {
   font-family: var(--font-primary);
   color: var(--color-pink);
 }
+.t-line-mask .about-en {
+  font-size: clamp(28px, 5vw, 70px);
+  letter-spacing: 0;
+}
 .t-line-mask .hg-1.revealed {
   transform: translateY(0);
 }
