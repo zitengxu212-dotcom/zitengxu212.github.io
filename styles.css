@@ -980,10 +980,11 @@ ul {
   text-decoration: none;
 }
 .social-icon-btn:hover { opacity: 1; }
-.social-icon-btn img {
+.social-icon-btn svg {
   display: block;
   width: 36px;
   height: 36px;
+  color: var(--color-yellow);
 }
 /* QR bubble */
 .qr-bubble {
