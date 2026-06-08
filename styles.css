@@ -919,21 +919,6 @@ ul {
   overflow: hidden;
   white-space: nowrap;
 }
-/* ===== Works Marquee ===== */
-.works-marquee {
-  background: var(--color-black);
-}
-.works-marquee .hg {
-  display: inline-block;
-  font-size: clamp(72px, 14vw, 200px);
-  font-weight: 400;
-  letter-spacing: -4px;
-  animation: marquee-scroll 18s linear infinite;
-  font-family: var(--font-primary);
-  background: var(--color-black);
-  color: var(--color-pink);
-  padding: 20px 0;
-}
 .t-marquee .hg {
   display: inline-block;
   font-size: clamp(72px, 14vw, 200px);
