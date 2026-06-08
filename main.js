@@ -93,11 +93,6 @@ document.addEventListener('DOMContentLoaded', function () {
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
-    function getPos(e) {
-      var rect = hero.getBoundingClientRect();
-      return { x: e.clientX - rect.left, y: e.clientY - rect.top };
-    }
-
     function drawDot(x, y) {
       ctx.globalCompositeOperation = 'destination-out';
       ctx.beginPath();
@@ -132,29 +127,33 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     var firstMove = true;
-    function onMouseMove(e) {
-      var pos = getPos(e);
-      if (pos.y > hero.clientHeight - 120) return;
+
+    initCanvas();
+    window.addEventListener('resize', function () { resize(); });
+
+    // Listen on document to avoid any cursor/overlay interference
+    document.addEventListener('mousemove', function (e) {
+      var rect = hero.getBoundingClientRect();
+      if (e.clientX < rect.left || e.clientX > rect.right) return;
+      if (e.clientY < rect.top  || e.clientY > rect.bottom - 120) return;
+      var pos = { x: e.clientX - rect.left, y: e.clientY - rect.top };
       pending.push(pos);
       if (!rafId) {
         rafId = requestAnimationFrame(flushPending);
         if (firstMove) { console.log('[Eraser] first move at', pos.x.toFixed(0) + ',' + pos.y.toFixed(0)); firstMove = false; }
       }
-    }
+    }, { passive: true });
 
-    function onTouchMove(e) {
+    document.addEventListener('touchmove', function (e) {
       var touch = e.touches[0];
       if (!touch) return;
-      var pos = getPos(touch);
-      if (pos.y > hero.clientHeight - 120) return;
+      var rect = hero.getBoundingClientRect();
+      if (touch.clientX < rect.left || touch.clientX > rect.right) return;
+      if (touch.clientY < rect.top  || touch.clientY > rect.bottom - 120) return;
+      var pos = { x: touch.clientX - rect.left, y: touch.clientY - rect.top };
       pending.push(pos);
       if (!rafId) rafId = requestAnimationFrame(flushPending);
-    }
-
-    initCanvas();
-    window.addEventListener('resize', function () { resize(); });
-    hero.addEventListener('mousemove', onMouseMove, { passive: true });
-    hero.addEventListener('touchmove', onTouchMove, { passive: true });
+    }, { passive: true });
   }
 
   // ===== Stamp Effect =====
