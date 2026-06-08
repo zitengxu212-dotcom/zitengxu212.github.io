@@ -529,6 +529,7 @@ ul {
   overflow: hidden;
   display: block;
   will-change: transform;
+  margin-left: 50px;
 }
 .t-line-mask .hg-1 {
   font-size: clamp(64px, 10vw, 140px);
