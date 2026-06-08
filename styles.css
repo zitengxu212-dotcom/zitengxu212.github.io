@@ -510,15 +510,6 @@ ul {
   max-width: 1200px;
   width: 100%;
 }
-.about-subtitle {
-  margin-top: 40px;
-  font-size: 18px;
-  font-weight: 400;
-  font-family: var(--font-primary);
-  line-height: 1.6;
-  color: var(--color-white);
-  max-width: 800px;
-}
 .heading-display {
   width: 100%;
 }
