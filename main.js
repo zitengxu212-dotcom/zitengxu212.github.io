@@ -186,7 +186,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       gsap.to(stamp, {
         opacity: 0,
-        duration: 10,
+        duration: 5,
         ease: 'power2.in',
         onComplete: function () { stamp.remove(); }
       });
