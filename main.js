@@ -524,45 +524,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // ===== Break section =====
-  function initBreak() {
-    // Hover image
-    var breakCards = document.querySelectorAll('.list-break .t-card[data-img]');
-    var hoverImg = document.getElementById('break-hover-img');
-    breakCards.forEach(function (card) {
-      card.addEventListener('mouseenter', function () {
-        hoverImg.src = card.getAttribute('data-img');
-        hoverImg.classList.add('visible');
-      });
-      card.addEventListener('mousemove', function (e) {
-        hoverImg.style.left = (e.clientX + 20) + 'px';
-        hoverImg.style.top = (e.clientY - 90) + 'px';
-      });
-      card.addEventListener('mouseleave', function () { hoverImg.classList.remove('visible'); });
-    });
-
-    // Marquee speed modulation
-    ScrollTrigger.create({
-      trigger: '.section-break',
-      start: 'top bottom', end: 'bottom top',
-      onUpdate: function (self) {
-        document.querySelectorAll('.section-break .t-marquee .hg').forEach(function (el) {
-          el.style.animationDuration = (12 + self.progress * 6) + 's';
-        });
-      }
-    });
-
-    // Section entrance
-    ScrollTrigger.create({
-      trigger: '.section-break',
-      start: 'top 80%',
-      onEnter: function () {
-        gsap.fromTo('.list-break .t-card', { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.5, stagger: 0.08, ease: 'power2.out' });
-      },
-      once: true
-    });
-  }
-
   // ===== Footer entrance =====
   function initFooter() {
     ScrollTrigger.create({
@@ -780,7 +741,6 @@ document.addEventListener('DOMContentLoaded', function () {
   initHeader();
   initTextReveal();
   initWorks();
-  initBreak();
   initFooter();
   initBackToTop();
   initStampEffect();
