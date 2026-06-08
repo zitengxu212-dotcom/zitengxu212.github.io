@@ -936,8 +936,8 @@ ul {
   100% { transform: translateX(-50%); }
 }
 @keyframes marquee-scroll-right {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(50%); }
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
 }
 .s-tag .s-tag-label {
   font-size: 12px;
