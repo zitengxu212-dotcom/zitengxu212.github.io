@@ -50,6 +50,108 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
+  // ===== Hero Eraser (Canvas) =====
+  function initHeroEraser() {
+    var hero = document.getElementById('hero');
+    var canvas = document.getElementById('hero-canvas');
+    if (!hero || !canvas) return;
+
+    var ctx = canvas.getContext('2d');
+    var BRUSH_DIAMETER = 50;
+    var brushRadius = BRUSH_DIAMETER / 2;
+    var pending = [];
+    var rafId = null;
+
+    function getPinkColor() {
+      return getComputedStyle(document.documentElement).getPropertyValue('--color-pink').trim() || '#FF43B4';
+    }
+
+    function resize() {
+      var rect = hero.getBoundingClientRect();
+      var w = Math.floor(rect.width);
+      var h = Math.floor(rect.height);
+      if (canvas.width === w && canvas.height === h) return;
+
+      var saved = document.createElement('canvas');
+      saved.width = canvas.width;
+      saved.height = canvas.height;
+      saved.getContext('2d').drawImage(canvas, 0, 0);
+
+      canvas.width = w;
+      canvas.height = h;
+      ctx.fillStyle = getPinkColor();
+      ctx.fillRect(0, 0, w, h);
+      if (saved.width > 0 && saved.height > 0) {
+        ctx.drawImage(saved, 0, 0);
+      }
+    }
+
+    function initCanvas() {
+      resize();
+      ctx.fillStyle = getPinkColor();
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function getPos(e) {
+      var rect = hero.getBoundingClientRect();
+      return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+    }
+
+    function drawDot(x, y) {
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.beginPath();
+      ctx.arc(x, y, brushRadius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalCompositeOperation = 'source-over';
+    }
+
+    function drawStroke(fromX, fromY, toX, toY) {
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.beginPath();
+      ctx.moveTo(fromX, fromY);
+      ctx.lineTo(toX, toY);
+      ctx.lineWidth = BRUSH_DIAMETER;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.stroke();
+      ctx.globalCompositeOperation = 'source-over';
+    }
+
+    function flushPending() {
+      if (!pending.length) return;
+      if (pending.length === 1) {
+        drawDot(pending[0].x, pending[0].y);
+      } else {
+        for (var i = 1; i < pending.length; i++) {
+          drawStroke(pending[i - 1].x, pending[i - 1].y, pending[i].x, pending[i].y);
+        }
+      }
+      pending = [];
+      rafId = null;
+    }
+
+    function onMouseMove(e) {
+      var pos = getPos(e);
+      if (pos.y > hero.clientHeight - 120) return;
+      pending.push(pos);
+      if (!rafId) rafId = requestAnimationFrame(flushPending);
+    }
+
+    function onTouchMove(e) {
+      var touch = e.touches[0];
+      if (!touch) return;
+      var pos = getPos(touch);
+      if (pos.y > hero.clientHeight - 120) return;
+      pending.push(pos);
+      if (!rafId) rafId = requestAnimationFrame(flushPending);
+    }
+
+    initCanvas();
+    window.addEventListener('resize', function () { resize(); });
+    hero.addEventListener('mousemove', onMouseMove, { passive: true });
+    hero.addEventListener('touchmove', onTouchMove, { passive: true });
+  }
+
   // ===== Clock =====
   function updateClock() {
     var d = new Date();
@@ -121,6 +223,7 @@ document.addEventListener('DOMContentLoaded', function () {
           document.getElementById('main-header').style.pointerEvents = 'auto';
         }});
         if (startTypewriter) startTypewriter();
+        initHeroEraser();
       }, 400);
     }
 
