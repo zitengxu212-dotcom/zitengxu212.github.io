@@ -935,6 +935,10 @@ ul {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
+@keyframes marquee-scroll-right {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(50%); }
+}
 .s-tag .s-tag-label {
   font-size: 12px;
   text-transform: uppercase;
@@ -1050,7 +1054,7 @@ ul {
   white-space: nowrap;
   overflow: hidden;
   display: inline-block;
-  animation: marquee-scroll 18s linear infinite;
+  animation: marquee-scroll-right 10s linear infinite;
 }
 .footer-metadata {
   display: flex;
