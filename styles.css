@@ -540,7 +540,7 @@ ul {
   transform: translateY(105%);
   transition: transform 0.9s cubic-bezier(.22, 1, .36, 1);
   font-family: var(--font-primary);
-  color: var(--color-white);
+  color: var(--color-pink);
 }
 .t-line-mask .about-en {
   font-size: clamp(28px, 5vw, 70px);
@@ -563,7 +563,7 @@ ul {
   opacity: .6;
   line-height: 1.4;
   font-family: var(--font-primary);
-  color: var(--color-white);
+  color: var(--color-pink);
 }
 .caption-1 { text-align: right; }
 .caption-2 { text-align: left; }
