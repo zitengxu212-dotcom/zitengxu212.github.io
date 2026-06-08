@@ -317,19 +317,23 @@ document.addEventListener('DOMContentLoaded', function () {
     var aboutCaptions = document.querySelectorAll('.section-home-intro .t-caption-wrapper');
     var aboutTextLines = document.querySelectorAll('.section-home-intro .t-line-mask');
     if (aboutSection) {
+      console.log('[Parallax] setting up — captions:', aboutCaptions.length, 'text lines:', aboutTextLines.length);
       // Single timeline for synced parallax, shorter range = visible effect
       var aboutTl = gsap.timeline({
         scrollTrigger: {
           trigger: aboutSection,
           start: 'top bottom',
           end: 'bottom top',
-          scrub: true
+          scrub: true,
+          onUpdate: function (self) { console.log('[Parallax] progress:', self.progress.toFixed(3)); }
         }
       });
       // Captions: fastest (closest layer)
       aboutTl.to(aboutCaptions, { y: -1000, ease: 'none' }, 0);
       // Main text: middle layer
       aboutTl.to(aboutTextLines, { y: -400, ease: 'none' }, 0);
+    } else {
+      console.warn('[Parallax] .section-home-intro not found');
     }
   }
 
