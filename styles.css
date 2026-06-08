@@ -500,7 +500,7 @@ ul {
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
-  background: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url('主页图片/about-bg.jpg') center/cover no-repeat;
+  background: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url('主页图片/about-bg-new.jpg') center/cover no-repeat;
   background-position: center, 50% 20%;
   color: var(--color-white);
   overflow: hidden;
