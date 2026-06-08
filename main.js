@@ -530,12 +530,48 @@ document.addEventListener('DOMContentLoaded', function () {
       trigger: '.main-footer-new',
       start: 'top 90%',
       onEnter: function () {
-        gsap.fromTo('.main-footer-new .labels span', { opacity: 0, y: 8 }, { opacity: 0.5, y: 0, duration: 0.4, stagger: 0.08, ease: 'power2.out' });
-        gsap.fromTo('.social-container .nav-item', { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.35, stagger: 0.08, ease: 'power2.out', delay: 0.1 });
-        gsap.fromTo('.nav-container .nav-item', { opacity: 0, y: 8 }, { opacity: 0.7, y: 0, duration: 0.35, stagger: 0.06, ease: 'power2.out', delay: 0.2 });
-        gsap.fromTo('.footer-metadata span, .footer-metadata .copyright', { opacity: 0 }, { opacity: 0.5, duration: 0.4, stagger: 0.06, ease: 'power2.out', delay: 0.3 });
+        gsap.fromTo('.social-icon-btn', { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: 0.35, stagger: 0.08, ease: 'power2.out' });
+        gsap.fromTo('.nav-container .nav-item', { opacity: 0, y: 8 }, { opacity: 0.7, y: 0, duration: 0.35, stagger: 0.06, ease: 'power2.out', delay: 0.1 });
+        gsap.fromTo('.footer-metadata > *, .footer-metadata .copyright', { opacity: 0 }, { opacity: 0.5, duration: 0.4, stagger: 0.06, ease: 'power2.out', delay: 0.2 });
       },
       once: true
+    });
+  }
+
+  // ===== QR Bubble =====
+  function initQrBubble() {
+    var bubble = document.getElementById('qr-bubble');
+    var bubbleImg = document.getElementById('qr-bubble-img');
+    if (!bubble || !bubbleImg) return;
+
+    // QR image paths
+    var QR_PATHS = {
+      wechat: '主页图片/wechat-qr.png',
+      qq: '主页图片/qq-qr.png'
+    };
+
+    document.querySelectorAll('.social-icon-btn').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        var platform = btn.getAttribute('data-platform');
+        if (!QR_PATHS[platform]) return; // xiaohongshu: let the link handle it
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (bubble.classList.contains('visible') && bubble.dataset.active === platform) {
+          bubble.classList.remove('visible');
+          return;
+        }
+
+        bubbleImg.src = QR_PATHS[platform];
+        bubble.dataset.active = platform;
+        bubble.classList.add('visible');
+      });
+    });
+
+    // Close bubble on outside click
+    document.addEventListener('click', function () {
+      bubble.classList.remove('visible');
     });
   }
 
@@ -742,6 +778,7 @@ document.addEventListener('DOMContentLoaded', function () {
   initTextReveal();
   initWorks();
   initFooter();
+  initQrBubble();
   initBackToTop();
   initStampEffect();
   initSmoothAnchors();
