@@ -512,6 +512,7 @@ ul {
 }
 .heading-display {
   width: 100%;
+  margin-top: 100px;
 }
 .heading-display-inner {
   display: flex;
