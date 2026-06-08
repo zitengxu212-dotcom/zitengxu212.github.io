@@ -169,8 +169,10 @@ document.addEventListener('DOMContentLoaded', function () {
     layer.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9999;';
     document.body.appendChild(layer);
 
-    // Replace native cursor
-    document.body.style.cursor = 'url(' + STAMP_CURSOR + ') 16 15, auto';
+    // Replace native cursor — inject !important style to override ALL element cursors
+    var cursorStyle = document.createElement('style');
+    cursorStyle.textContent = 'body, body * { cursor: url(' + STAMP_CURSOR + ') 16 15, auto !important; }';
+    document.head.appendChild(cursorStyle);
 
     document.addEventListener('click', function (e) {
       var stamp = document.createElement('img');
