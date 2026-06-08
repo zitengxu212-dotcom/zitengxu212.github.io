@@ -54,13 +54,14 @@ document.addEventListener('DOMContentLoaded', function () {
   function initHeroEraser() {
     var hero = document.getElementById('hero');
     var canvas = document.getElementById('hero-canvas');
-    if (!hero || !canvas) return;
+    if (!hero || !canvas) { console.warn('[Eraser] hero or canvas not found'); return; }
 
     var ctx = canvas.getContext('2d');
     var BRUSH_DIAMETER = 50;
     var brushRadius = BRUSH_DIAMETER / 2;
     var pending = [];
     var rafId = null;
+    console.log('[Eraser] init — hero:', hero.clientWidth + '×' + hero.clientHeight, 'canvas:', canvas.width + '×' + canvas.height);
 
     function getPinkColor() {
       return getComputedStyle(document.documentElement).getPropertyValue('--color-pink').trim() || '#FF43B4';
@@ -130,11 +131,15 @@ document.addEventListener('DOMContentLoaded', function () {
       rafId = null;
     }
 
+    var firstMove = true;
     function onMouseMove(e) {
       var pos = getPos(e);
       if (pos.y > hero.clientHeight - 120) return;
       pending.push(pos);
-      if (!rafId) rafId = requestAnimationFrame(flushPending);
+      if (!rafId) {
+        rafId = requestAnimationFrame(flushPending);
+        if (firstMove) { console.log('[Eraser] first move at', pos.x.toFixed(0) + ',' + pos.y.toFixed(0)); firstMove = false; }
+      }
     }
 
     function onTouchMove(e) {
