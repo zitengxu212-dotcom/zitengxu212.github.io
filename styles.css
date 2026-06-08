@@ -498,8 +498,8 @@ ul {
   width: 100%;
   min-height: 100vh;
   display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
+  align-items: flex-end;
+  justify-content: flex-end;
   background: linear-gradient(rgba(0,0,0,0.35), rgba(0,0,0,0.35)), url('主页图片/about-bg-new.jpg') center/cover no-repeat;
   background-position: center, 50% 20%;
   color: var(--color-white);
