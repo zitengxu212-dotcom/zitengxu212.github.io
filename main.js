@@ -165,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.body.appendChild(layer);
 
     // Replace native cursor
-    document.body.style.cursor = 'url(' + STAMP_CURSOR + ') ' + (STAMP_SIZE / 4) + ' ' + (STAMP_SIZE / 4) + ', auto';
+    document.body.style.cursor = 'url(' + STAMP_CURSOR + ') 16 15, auto';
 
     document.addEventListener('click', function (e) {
       var stamp = document.createElement('img');
