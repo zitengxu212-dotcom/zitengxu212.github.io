@@ -353,7 +353,7 @@ document.addEventListener('DOMContentLoaded', function () {
       '02': { number: '02', title: 'Feces with Earth',   tags: ['展厅概念设计'], category: 'spatial', representative: false },
       '03': { number: '03', title: '嘬味ZUOWEI', tags: ['店铺空间设计'], category: 'spatial', representative: true  },
       '04': { number: '04', title: 'Prometheus',  tags: ['未来建筑概念设计'],  category: 'spatial', representative: false },
-      '05': { number: '05', title: 'XIANYU招新',  tags: ['海报&物料设计'],     category: 'graphic', representative: true  },
+      '05': { number: '05', title: 'XIANYU 招新',  tags: ['海报&物料设计'],     category: 'graphic', representative: true  },
       '06': { number: '06', title: '海边的蒲公英',   tags: ['专辑设计'],     category: 'graphic', representative: false },
       '07': { number: '07', title: '鱼苗计划', tags: ['海报&物料设计'], category: 'graphic', representative: false },
       '08': { number: '08', title: '嘬味ZUOWEI', tags: ['品牌设计'],      category: 'graphic', representative: true  },
@@ -366,12 +366,12 @@ document.addEventListener('DOMContentLoaded', function () {
       '01': '主页图片/01/1.jpg',
       '02': '主页图片/02/1.jpg',
       '03': '主页图片/03/1.jpg',
-      '04': '主页图片/04/1.png',
-      '05': '主页图片/05/1.png',
+      '04': '主页图片/04/1.jpg',
+      '05': '主页图片/05/1.jpg',
       '06': '主页图片/06/1.jpg',
       '07': '主页图片/07/1.jpg',
-      '08': '主页图片/08/1.png',
-      '09': '主页图片/09/1.png',
+      '08': '主页图片/08/1.jpg',
+      '09': '主页图片/09/1.jpg',
       '10': '主页图片/10/1.jpg'
     };
 
@@ -420,7 +420,7 @@ document.addEventListener('DOMContentLoaded', function () {
           var title = card.querySelector('.t-card-title');
           if (title) { title.textContent = d.title; }
           var terms = card.querySelectorAll('.t-card-term-name');
-          terms.forEach(function (term, j) { if (d.tags[j]) { term.textContent = d.tags[j]; } });
+          terms.forEach(function (term, j) { term.textContent = d.tags[j] || ''; });
         } else {
           card.style.display = 'none';
         }
@@ -436,7 +436,12 @@ document.addEventListener('DOMContentLoaded', function () {
       // ── Recalculate geometry (card width may change with different text) ──
       var firstVisible = track.querySelector('.t-card:not([style*="display: none"])');
       cardWidth = firstVisible ? firstVisible.offsetWidth + 40 : cardWidth;
-      halfWidth = uniqueCount * cardWidth;  // 1 full unique set width → seamless wrap
+      // Measure exact offset of one unique set (dom measurement vs calculation)
+      if (cards[uniqueCount]) {
+        halfWidth = cards[uniqueCount].offsetLeft - cards[0].offsetLeft;
+      } else {
+        halfWidth = uniqueCount * cardWidth;
+      }
 
       // Immediately apply position reset (not deferred to next rAF frame)
       marqueeX = 0;
@@ -616,9 +621,9 @@ document.addEventListener('DOMContentLoaded', function () {
     _galleryImages: {
       '01': [
         '主页图片/01/1.jpg',
-        '主页图片/01/2.png',
+        '主页图片/01/2.jpg',
         '主页图片/01/3.jpg',
-        '主页图片/01/4.png',
+        '主页图片/01/4.jpg',
         '主页图片/01/5.jpg'
       ],
       '02': [
@@ -636,15 +641,15 @@ document.addEventListener('DOMContentLoaded', function () {
         '主页图片/03/4.jpg'
       ],
       '04': [
-        '主页图片/04/1.png',
-        '主页图片/04/2.png',
-        '主页图片/04/3.png'
+        '主页图片/04/1.jpg',
+        '主页图片/04/2.jpg',
+        '主页图片/04/3.jpg'
       ],
       '05': [
-        '主页图片/05/1.png',
+        '主页图片/05/1.jpg',
         '主页图片/05/2.jpg',
         '主页图片/05/3.jpg',
-        '主页图片/05/4.png'
+        '主页图片/05/4.jpg'
       ],
       '06': [
         '主页图片/06/1.jpg',
@@ -660,18 +665,18 @@ document.addEventListener('DOMContentLoaded', function () {
         '主页图片/07/5.jpg'
       ],
       '08': [
-        '主页图片/08/1.png',
+        '主页图片/08/1.jpg',
         '主页图片/08/2.jpg'
       ],
       '09': [
-        '主页图片/09/1.png',
-        '主页图片/09/2.png',
-        '主页图片/09/3.png',
-        '主页图片/09/4.png'
+        '主页图片/09/1.jpg',
+        '主页图片/09/2.jpg',
+        '主页图片/09/3.jpg',
+        '主页图片/09/4.jpg'
       ],
       '10': [
         '主页图片/10/1.jpg',
-        '主页图片/10/2.png',
+        '主页图片/10/2.jpg',
         '主页图片/10/3.jpg',
         '主页图片/10/4.jpg',
         '主页图片/10/5.jpg',
