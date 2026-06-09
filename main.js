@@ -500,6 +500,12 @@ document.addEventListener('DOMContentLoaded', function () {
         isHovering = false;
       }
 
+      // Per-frame safety net: if hover state is stale (no card actually under cursor), force reset
+      if (isHovering && !track.querySelector('.t-card:hover')) {
+        gsap.to(track.querySelectorAll('.t-card'), { scale: 1, zIndex: 1, duration: 0.25, ease: 'power2.out', overwrite: true });
+        isHovering = false;
+      }
+
       requestAnimationFrame(loop);
     }
 
