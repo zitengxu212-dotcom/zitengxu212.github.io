@@ -487,11 +487,18 @@ document.addEventListener('DOMContentLoaded', function () {
         marqueeX -= autoSpeed * dt;
       }
 
-      // Wrap
-      if (marqueeX <= -halfWidth) marqueeX += halfWidth;
-      if (marqueeX > 0) marqueeX -= halfWidth;
+      // Wrap — detect whether a reset occurred this frame
+      var wrapped = false;
+      if (marqueeX <= -halfWidth) { marqueeX += halfWidth; wrapped = true; }
+      if (marqueeX > 0) { marqueeX -= halfWidth; wrapped = true; }
 
       gsap.set(track, { x: marqueeX });
+
+      // If wrap displaced the card under cursor, mouseleave won't fire (browser limitation)
+      if (wrapped && isHovering) {
+        gsap.to(track.querySelectorAll('.t-card'), { scale: 1, zIndex: 1, duration: 0.25, ease: 'power2.out', overwrite: true });
+        isHovering = false;
+      }
 
       requestAnimationFrame(loop);
     }
