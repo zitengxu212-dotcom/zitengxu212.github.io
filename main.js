@@ -625,7 +625,7 @@ document.addEventListener('DOMContentLoaded', function () {
       ]
     },
 
-    _currentIdx: {},
+    _observer: null,
 
     // Open detail panel — fixed overlay slides up from bottom
     openDetail: function (detailId) {
@@ -639,26 +639,38 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
       }
 
+      // Disconnect previous observer
+      if (this._observer) { this._observer.disconnect(); this._observer = null; }
+
       // Switch to another project
       panel.querySelectorAll('.project-detail').forEach(function (a) { a.classList.remove('active'); });
       article.classList.add('active');
 
-      // Reset gallery to first image
-      this._currentIdx[detailId] = 0;
+      // Render gallery images vertically
       var track = article.querySelector('.gallery-track');
-      if (track) {
-        track.style.position = 'relative';
-        track.querySelectorAll('.gallery-img').forEach(function (img, i) { if (i > 0) img.remove(); });
-        var firstImg = track.querySelector('.gallery-img');
-        var imgs = this._galleryImages[detailId];
-        if (firstImg && imgs && imgs.length) {
-          firstImg.src = imgs[0];
-          firstImg.style.position = 'relative';
-          firstImg.style.top = '';
-          firstImg.style.left = '';
-          firstImg.style.width = '100%';
-          gsap.set(firstImg, { x: 0 });
-        }
+      var imgs = this._galleryImages[detailId];
+      if (track && imgs && imgs.length) {
+        track.innerHTML = '';
+        imgs.forEach(function (src) {
+          var img = document.createElement('img');
+          img.className = 'gallery-img';
+          img.src = src;
+          img.alt = '';
+          track.appendChild(img);
+        });
+        // IntersectionObserver: fade-in when entering viewport (100px before bottom edge)
+        var self = this;
+        self._observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('revealed');
+              self._observer.unobserve(entry.target);
+            }
+          });
+        }, { rootMargin: '0px 0px -100px 0px', threshold: 0 });
+        track.querySelectorAll('.gallery-img').forEach(function (img) {
+          self._observer.observe(img);
+        });
       }
 
       // Show fixed overlay — clear any residual inline display:none
@@ -675,6 +687,9 @@ document.addEventListener('DOMContentLoaded', function () {
       var panel = document.getElementById('project-detail-panel');
       if (!panel) return;
 
+      // Disconnect observer
+      if (this._observer) { this._observer.disconnect(); this._observer = null; }
+
       var self = this;
 
       // Animate: slide down and away
@@ -687,73 +702,17 @@ document.addEventListener('DOMContentLoaded', function () {
           gsap.set(panel, { y: 0 });
           document.body.style.overflow = '';
           panel.querySelectorAll('.project-detail').forEach(function (a) { a.classList.remove('active'); });
-          self._currentIdx = {};
         }
       });
-    },
-
-    // Gallery prev/next — infinite loop with horizontal slide
-    galleryShift: function (detailId, direction) {
-      var article = document.getElementById('detail-' + detailId);
-      if (!article) return;
-      var imgs = this._galleryImages[detailId];
-      if (!imgs || imgs.length < 2) return;
-      var track = article.querySelector('.gallery-track');
-      var cur = track ? track.querySelector('.gallery-img') : null;
-      if (!cur) return;
-
-      var idx = this._currentIdx[detailId] || 0;
-      var newIdx = direction === 'prev'
-        ? (idx - 1 + imgs.length) % imgs.length
-        : (idx + 1) % imgs.length;
-      this._currentIdx[detailId] = newIdx;
-
-      var fromX = direction === 'prev' ? '-100%' : '100%';
-      var exitX = direction === 'prev' ? '100%' : '-100%';
-
-      // Create new image — absolute positioned, slides in
-      var img = document.createElement('img');
-      img.className = 'gallery-img';
-      img.src = imgs[newIdx];
-      img.alt = 'Image ' + (newIdx + 1);
-      img.style.position = 'absolute';
-      img.style.top = '0';
-      img.style.left = '0';
-      img.style.width = '100%';
-      img.style.display = 'block';
-
-      track.style.position = 'relative';
-      // Keep current image relative to maintain track height
-      if (cur.style.position !== 'relative') cur.style.position = 'relative';
-
-      // Animate: old exits, new enters
-      gsap.to(cur, { x: exitX, duration: 0.4, ease: 'power2.inOut' });
-      track.appendChild(img);
-      gsap.fromTo(img, { x: fromX }, { x: '0%', duration: 0.4, ease: 'power2.inOut', onComplete: function () {
-        // Cleanup: remove old, make new relative to maintain track height
-        cur.remove();
-        img.style.position = 'relative';
-        img.style.top = '';
-        img.style.left = '';
-      } });
     }
   };
 
-  // Back button + gallery arrows — event delegation on panel
+  // Back button — event delegation on panel
   (function () {
     var panel = document.getElementById('project-detail-panel');
     if (!panel) return;
     panel.addEventListener('click', function (e) {
       if (e.target.closest('.detail-back')) { XZT.closeDetail(); return; }
-      var prevBtn = e.target.closest('.gallery-prev');
-      var nextBtn = e.target.closest('.gallery-next');
-      if (prevBtn || nextBtn) {
-        var article = e.target.closest('.project-detail');
-        if (article) {
-          var did = article.getAttribute('data-project');
-          if (did) XZT.galleryShift(did, prevBtn ? 'prev' : 'next');
-        }
-      }
     });
   })();
 
