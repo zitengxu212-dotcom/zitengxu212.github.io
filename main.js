@@ -341,13 +341,12 @@ document.addEventListener('DOMContentLoaded', function () {
     var nextBtn = document.getElementById('works-next');
     if (!track || !viewport) return;
 
-    // 8 fixed DOM cards — never added or removed (per design constraint)
+    // 12 fixed DOM cards — cards beyond current set's needs are hidden
     var cards = track.querySelectorAll('.t-card');
     var cardWidth = cards[0].offsetWidth + 40;
     var halfWidth = (cardWidth * cards.length) / 2;  // recalculated in renderCards
 
     // ═══ Master project registry — single source of truth ═══
-    // Each category ≤ 4 unique cards so 4×2=8 fits the fixed 8-card track.
     // To add a project: add entry here → add article#detail-XX in HTML → add _galleryImages entry
     var projects = {
       '01': { number: '01', title: 'Project One',   tags: ['Brand', 'Design'],  category: 'spatial', representative: true  },
@@ -357,14 +356,34 @@ document.addEventListener('DOMContentLoaded', function () {
       '05': { number: '05', title: 'Project Five',  tags: ['UI', 'Design'],     category: 'graphic', representative: true  },
       '06': { number: '06', title: 'Project Six',   tags: ['Motion', '3D'],     category: 'graphic', representative: false },
       '07': { number: '07', title: 'Project Seven', tags: ['Editorial', 'Print'], category: 'graphic', representative: false },
-      '08': { number: '08', title: 'Project Eight', tags: ['Web', 'Code'],      category: 'graphic', representative: true  }
+      '08': { number: '08', title: 'Project Eight', tags: ['Web', 'Code'],      category: 'graphic', representative: true  },
+      '09': { number: '09', title: 'Project Nine',  tags: ['Photo', 'Art'],     category: 'graphic', representative: false },
+      '10': { number: '10', title: 'Project Ten',   tags: ['Type', 'Layout'],   category: 'graphic', representative: false }
+    };
+
+    // Card cover images — all projects use real images
+    var _cardImages = {
+      '01': '主页图片/01/1.jpg',
+      '02': '主页图片/02/1.jpg',
+      '03': '主页图片/03/1.jpg',
+      '04': '主页图片/04/1.png',
+      '05': '主页图片/05/1.png',
+      '06': '主页图片/06/1.jpg',
+      '07': '主页图片/07/1.jpg',
+      '08': '主页图片/08/1.png',
+      '09': '主页图片/09/1.png',
+      '10': '主页图片/10/1.jpg'
     };
 
     // Build a card-data entry from a project registry entry
     function toCardData(id, p) {
-      var palette = (p.category === 'spatial') ? ['FF43B4', 'FFF9C7'] : ['000000', 'FF43B4'];
+      var img = _cardImages[id];
+      if (!img) {
+        var palette = (p.category === 'spatial') ? ['FF43B4', 'FFF9C7'] : ['000000', 'FF43B4'];
+        img = 'https://placehold.co/600x400/' + palette[0] + '/' + palette[1] + '?text=' + p.number;
+      }
       return {
-        img: 'https://placehold.co/600x400/' + palette[0] + '/' + palette[1] + '?text=' + p.number,
+        img: img,
         number: p.number,
         title: p.title,
         tags: p.tags,
@@ -383,32 +402,40 @@ document.addEventListener('DOMContentLoaded', function () {
     function buildTrackData(set) { return set.concat(set); }
 
     function renderCards(category) {
-      var uniqueSet = cardSets[category];      // array of unique cards (≤ 4)
-      var data = buildTrackData(uniqueSet);    // doubled: [A,B,C,D, A,B,C,D]
-      var uniqueCount = uniqueSet.length;      // 4 unique → 8 doubled → halfWidth=4*cw
+      var uniqueSet = cardSets[category];      // array of unique cards
+      var data = buildTrackData(uniqueSet);    // doubled: [A,B,C,D,E,F, A,B,C,D,E,F]
+      var uniqueCount = uniqueSet.length;
+      var totalNeeded = data.length;           // how many DOM slots to fill
 
-      // Fill each fixed card with its data
+      // Fill or hide each DOM card based on data availability
       cards.forEach(function (card, i) {
-        var d = data[i];
-        card.setAttribute('data-detail', d.detailId);
-        var img = card.querySelector('.t-card-featured-image');
-        if (img) { img.src = d.img; }
-        var num = card.querySelector('.t-card-number');
-        if (num) { num.textContent = d.number; }
-        var title = card.querySelector('.t-card-title');
-        if (title) { title.textContent = d.title; }
-        var terms = card.querySelectorAll('.t-card-term-name');
-        terms.forEach(function (term, j) { if (d.tags[j]) { term.textContent = d.tags[j]; } });
+        if (i < totalNeeded) {
+          var d = data[i];
+          card.style.display = '';
+          card.setAttribute('data-detail', d.detailId);
+          var img = card.querySelector('.t-card-featured-image');
+          if (img) { img.src = d.img; }
+          var num = card.querySelector('.t-card-number');
+          if (num) { num.textContent = d.number; }
+          var title = card.querySelector('.t-card-title');
+          if (title) { title.textContent = d.title; }
+          var terms = card.querySelectorAll('.t-card-term-name');
+          terms.forEach(function (term, j) { if (d.tags[j]) { term.textContent = d.tags[j]; } });
+        } else {
+          card.style.display = 'none';
+        }
       });
 
-      // Update onclick handlers
+      // Update onclick handlers (visible cards only)
       cards.forEach(function (card) {
+        if (card.style.display === 'none') return;
         var did = card.getAttribute('data-detail');
         card.setAttribute('onclick', did ? "XZT.openDetail('" + did + "')" : '');
       });
 
       // ── Recalculate geometry (card width may change with different text) ──
-      cardWidth = cards[0].offsetWidth + 40;
+      var firstVisible = track.querySelector('.t-card:not([style*="display: none"])');
+      cardWidth = firstVisible ? firstVisible.offsetWidth + 40 : cardWidth;
       halfWidth = uniqueCount * cardWidth;  // 1 full unique set width → seamless wrap
 
       // Immediately apply position reset (not deferred to next rAF frame)
@@ -587,14 +614,69 @@ document.addEventListener('DOMContentLoaded', function () {
   window.XZT = {
     // Gallery images per project — edit here to add/change images
     _galleryImages: {
-      '01': ['#FF43B4', '#FFF9C7', '#D9D9D9'],
-      '02': ['#FFF9C7', '#FF43B4'],
-      '03': ['#FF43B4', '#FFF9C7', '#D9D9D9'],
-      '04': ['#FFF9C7', '#FF43B4'],
-      '05': ['#000000', '#FF43B4', '#FFF9C7'],
-      '06': ['#000000', '#FF43B4'],
-      '07': ['#000000', '#FF43B4', '#FFF9C7'],
-      '08': ['#000000', '#FF43B4']
+      '01': [
+        '主页图片/01/1.jpg',
+        '主页图片/01/2.png',
+        '主页图片/01/3.jpg',
+        '主页图片/01/4.png',
+        '主页图片/01/5.jpg'
+      ],
+      '02': [
+        '主页图片/02/1.jpg',
+        '主页图片/02/2.jpg',
+        '主页图片/02/3.jpg',
+        '主页图片/02/4.jpg',
+        '主页图片/02/5.jpg',
+        '主页图片/02/6.jpg'
+      ],
+      '03': [
+        '主页图片/03/1.jpg',
+        '主页图片/03/2.jpg',
+        '主页图片/03/3.jpg',
+        '主页图片/03/4.jpg'
+      ],
+      '04': [
+        '主页图片/04/1.png',
+        '主页图片/04/2.png',
+        '主页图片/04/3.png'
+      ],
+      '05': [
+        '主页图片/05/1.png',
+        '主页图片/05/2.jpg',
+        '主页图片/05/3.jpg',
+        '主页图片/05/4.png'
+      ],
+      '06': [
+        '主页图片/06/1.jpg',
+        '主页图片/06/2.jpg',
+        '主页图片/06/3.jpg',
+        '主页图片/06/4.jpg'
+      ],
+      '07': [
+        '主页图片/07/1.jpg',
+        '主页图片/07/2.jpg',
+        '主页图片/07/3.jpg',
+        '主页图片/07/4.jpg',
+        '主页图片/07/5.jpg'
+      ],
+      '08': [
+        '主页图片/08/1.png',
+        '主页图片/08/2.jpg'
+      ],
+      '09': [
+        '主页图片/09/1.png',
+        '主页图片/09/2.png',
+        '主页图片/09/3.png',
+        '主页图片/09/4.png'
+      ],
+      '10': [
+        '主页图片/10/1.jpg',
+        '主页图片/10/2.png',
+        '主页图片/10/3.jpg',
+        '主页图片/10/4.jpg',
+        '主页图片/10/5.jpg',
+        '主页图片/10/6.jpg'
+      ]
     },
 
     _observer: null,
@@ -615,16 +697,28 @@ document.addEventListener('DOMContentLoaded', function () {
       panel.querySelectorAll('.project-detail').forEach(function (a) { a.classList.remove('active'); });
       article.classList.add('active');
 
-      // Render gallery color blocks vertically
+      // Render gallery items vertically (image paths or color placeholders)
       var track = article.querySelector('.gallery-track');
-      var colors = this._galleryImages[detailId];
-      if (track && colors && colors.length) {
+      var items = this._galleryImages[detailId];
+      if (track && items && items.length) {
         track.innerHTML = '';
-        colors.forEach(function (color) {
-          var block = document.createElement('div');
-          block.className = 'gallery-img';
-          block.style.backgroundColor = color;
-          track.appendChild(block);
+        items.forEach(function (item) {
+          if (item.charAt(0) === '#') {
+            // Color placeholder for projects without real images yet
+            var block = document.createElement('div');
+            block.className = 'gallery-img';
+            block.style.backgroundColor = item;
+            block.style.height = '500px';
+            track.appendChild(block);
+          } else {
+            // Real image
+            var img = document.createElement('img');
+            img.className = 'gallery-img';
+            img.src = item;
+            img.alt = '';
+            img.loading = 'lazy';
+            track.appendChild(img);
+          }
         });
         // IntersectionObserver: fade-in 100px before entering viewport
         var self = this;
@@ -637,8 +731,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
           });
         }, { rootMargin: '0px 0px -100px 0px', threshold: 0 });
-        track.querySelectorAll('.gallery-img').forEach(function (img) {
-          self._observer.observe(img);
+        track.querySelectorAll('.gallery-img').forEach(function (el) {
+          self._observer.observe(el);
         });
       }
 
@@ -681,6 +775,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!panel) return;
     panel.addEventListener('click', function (e) {
       if (e.target.closest('.detail-back')) { XZT.closeDetail(); return; }
+      if (!e.target.closest('.project-detail')) { XZT.closeDetail(); return; }
     });
   })();
 
