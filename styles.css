@@ -788,9 +788,8 @@ ul {
 .project-detail {
   display: none;
   width: 100%;
-  max-width: var(--max-width);
   margin: 0 auto;
-  padding: 120px 40px;
+  padding: 120px 50px;
   box-sizing: border-box;
 }
 
@@ -858,8 +857,9 @@ ul {
   min-width: 0;
   color: var(--color-white);
   font-size: 20px;
-  font-family: var(--font-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   line-height: 1.6;
+  text-align: justify;
 }
 .detail-en p { margin: 0 0 20px 0; }
 
@@ -875,8 +875,8 @@ ul {
 
 /* Gallery — full-bleed vertical image blocks */
 .detail-gallery {
-  width: calc(100% + 80px);
-  margin: 60px -40px 0;
+  width: calc(100% + 100px);
+  margin: 60px -50px 0;
 }
 
 .gallery-stage {
@@ -887,12 +887,12 @@ ul {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 0 12px;
+  padding: 0 50px;
 }
 
 .gallery-img {
   width: 100%;
-  height: 500px;
+  height: auto;
   display: block;
   background: var(--color-gray);
   opacity: 0;
@@ -1072,7 +1072,7 @@ ul {
   .social-icons { gap: 40px; }
   .nav-container { flex-direction: column; gap: 8px; }
   /* Detail panel */
-  .project-detail { padding: 80px 20px; }
+  .project-detail { padding: 80px 5px; }
   .detail-title { font-size: 48px; margin-bottom: 60px; }
   .detail-text-row { flex-direction: column; gap: 40px; }
   .detail-meta { flex: none; }
@@ -1080,9 +1080,8 @@ ul {
   .detail-meta dd { margin-bottom: 0; }
   .detail-en,
   .detail-cn { flex: none; }
-  .detail-gallery { width: calc(100% + 40px); margin: 50px -20px 0; }
-  .gallery-track { padding: 0 10px; }
-  .gallery-img { height: 400px; }
+  .detail-gallery { width: calc(100% + 10px); margin: 50px -5px 0; }
+  .gallery-track { padding: 0 5px; }
 }
 @media (max-width: 600px) {
   .main-header { padding: 14px 16px; }
@@ -1092,7 +1091,7 @@ ul {
   .t-marquee .hg { font-size: 48px; }
   .main-footer-new .t-marquee-item-inner { font-size: 36px; }
   /* Detail panel */
-  .project-detail { padding: 60px 16px; }
+  .project-detail { padding: 60px 5px; }
   .detail-back { width: 48px; height: 48px; }
   .detail-back svg { width: 48px; height: 48px; }
   .detail-title { font-size: 36px; margin-bottom: 40px; }
@@ -1102,7 +1101,6 @@ ul {
   .detail-cn { font-size: 16px; }
   .detail-meta dt { font-size: 11px; }
   .detail-meta dd { font-size: 16px; }
-  .detail-gallery { width: calc(100% + 32px); margin: 40px -16px 0; }
-  .gallery-track { padding: 0 8px; }
-  .gallery-img { height: 300px; }
+  .detail-gallery { width: calc(100% + 10px); margin: 40px -5px 0; }
+  .gallery-track { padding: 0 5px; }
 }

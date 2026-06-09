@@ -349,16 +349,16 @@ document.addEventListener('DOMContentLoaded', function () {
     // ═══ Master project registry — single source of truth ═══
     // To add a project: add entry here → add article#detail-XX in HTML → add _galleryImages entry
     var projects = {
-      '01': { number: '01', title: 'Project One',   tags: ['Brand', 'Design'],  category: 'spatial', representative: true  },
-      '02': { number: '02', title: 'Project Two',   tags: ['Spatial', 'Motion'], category: 'spatial', representative: false },
-      '03': { number: '03', title: 'Project Three', tags: ['Graphic', 'Concept'], category: 'spatial', representative: true  },
-      '04': { number: '04', title: 'Project Four',  tags: ['Brand', 'Motion'],  category: 'spatial', representative: false },
-      '05': { number: '05', title: 'Project Five',  tags: ['UI', 'Design'],     category: 'graphic', representative: true  },
-      '06': { number: '06', title: 'Project Six',   tags: ['Motion', '3D'],     category: 'graphic', representative: false },
-      '07': { number: '07', title: 'Project Seven', tags: ['Editorial', 'Print'], category: 'graphic', representative: false },
-      '08': { number: '08', title: 'Project Eight', tags: ['Web', 'Code'],      category: 'graphic', representative: true  },
-      '09': { number: '09', title: 'Project Nine',  tags: ['Photo', 'Art'],     category: 'graphic', representative: false },
-      '10': { number: '10', title: 'Project Ten',   tags: ['Type', 'Layout'],   category: 'graphic', representative: false }
+      '01': { number: '01', title: '浮——岛',   tags: ['酒店概念设计'],  category: 'spatial', representative: true  },
+      '02': { number: '02', title: 'Feces with Earth',   tags: ['展厅概念设计'], category: 'spatial', representative: false },
+      '03': { number: '03', title: '嘬味ZUOWEI', tags: ['店铺空间设计'], category: 'spatial', representative: true  },
+      '04': { number: '04', title: 'Prometheus',  tags: ['未来建筑概念设计'],  category: 'spatial', representative: false },
+      '05': { number: '05', title: 'XIANYU招新',  tags: ['海报&物料设计'],     category: 'graphic', representative: true  },
+      '06': { number: '06', title: '海边的蒲公英',   tags: ['专辑设计'],     category: 'graphic', representative: false },
+      '07': { number: '07', title: '鱼苗计划', tags: ['海报&物料设计'], category: 'graphic', representative: false },
+      '08': { number: '08', title: '嘬味ZUOWEI', tags: ['品牌设计'],      category: 'graphic', representative: true  },
+      '09': { number: '09', title: '关于自我',  tags: ['平面设计'],     category: 'graphic', representative: false },
+      '10': { number: '10', title: '唐崖TANGYA',   tags: ['品牌&包装设计'],   category: 'graphic', representative: false }
     };
 
     // Card cover images — all projects use real images
@@ -739,6 +739,7 @@ document.addEventListener('DOMContentLoaded', function () {
       // Show fixed overlay — clear any residual inline display:none
       panel.style.display = '';
       panel.classList.add('open');
+      panel.scrollTop = 0;
       document.body.style.overflow = 'hidden';
 
       // Animate: slide up from bottom
@@ -775,7 +776,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!panel) return;
     panel.addEventListener('click', function (e) {
       if (e.target.closest('.detail-back')) { XZT.closeDetail(); return; }
-      if (!e.target.closest('.project-detail')) { XZT.closeDetail(); return; }
+      if (!e.target.closest('.project-detail') || e.target.classList.contains('project-detail')) { XZT.closeDetail(); return; }
     });
   })();
 
@@ -786,7 +787,17 @@ document.addEventListener('DOMContentLoaded', function () {
         var href = this.getAttribute('href');
         if (!href || href === '#') return;
         var target = document.querySelector(href);
-        if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+        if (!target) return;
+        e.preventDefault();
+        var panel = document.getElementById('project-detail-panel');
+        // If detail panel is open, close it first, then scroll after animation
+        if (panel && panel.classList.contains('open')) {
+          XZT.closeDetail();
+          // Scroll after close animation completes (0.4s)
+          setTimeout(function () { target.scrollIntoView({ behavior: 'smooth' }); }, 450);
+        } else {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
       });
     });
   }
