@@ -587,42 +587,14 @@ document.addEventListener('DOMContentLoaded', function () {
   window.XZT = {
     // Gallery images per project — edit here to add/change images
     _galleryImages: {
-      '01': [
-        'https://placehold.co/1200x675/FF43B4/FFF9C7?text=01-01',
-        'https://placehold.co/1200x675/FFF9C7/FF43B4?text=01-02',
-        'https://placehold.co/1200x675/FF43B4/FFF9C7?text=01-03'
-      ],
-      '02': [
-        'https://placehold.co/1200x675/FF43B4/FFF9C7?text=02-01',
-        'https://placehold.co/1200x675/FFF9C7/FF43B4?text=02-02'
-      ],
-      '03': [
-        'https://placehold.co/1200x675/FF43B4/FFF9C7?text=03-01',
-        'https://placehold.co/1200x675/FFF9C7/FF43B4?text=03-02',
-        'https://placehold.co/1200x675/FF43B4/FFF9C7?text=03-03'
-      ],
-      '04': [
-        'https://placehold.co/1200x675/FF43B4/FFF9C7?text=04-01',
-        'https://placehold.co/1200x675/FFF9C7/FF43B4?text=04-02'
-      ],
-      '05': [
-        'https://placehold.co/1200x675/000000/FF43B4?text=05-01',
-        'https://placehold.co/1200x675/FF43B4/000000?text=05-02',
-        'https://placehold.co/1200x675/000000/FF43B4?text=05-03'
-      ],
-      '06': [
-        'https://placehold.co/1200x675/000000/FF43B4?text=06-01',
-        'https://placehold.co/1200x675/FF43B4/000000?text=06-02'
-      ],
-      '07': [
-        'https://placehold.co/1200x675/000000/FF43B4?text=07-01',
-        'https://placehold.co/1200x675/FF43B4/000000?text=07-02',
-        'https://placehold.co/1200x675/000000/FF43B4?text=07-03'
-      ],
-      '08': [
-        'https://placehold.co/1200x675/000000/FF43B4?text=08-01',
-        'https://placehold.co/1200x675/FF43B4/000000?text=08-02'
-      ]
+      '01': ['#FF43B4', '#FFF9C7', '#D9D9D9'],
+      '02': ['#FFF9C7', '#FF43B4'],
+      '03': ['#FF43B4', '#FFF9C7', '#D9D9D9'],
+      '04': ['#FFF9C7', '#FF43B4'],
+      '05': ['#000000', '#FF43B4', '#FFF9C7'],
+      '06': ['#000000', '#FF43B4'],
+      '07': ['#000000', '#FF43B4', '#FFF9C7'],
+      '08': ['#000000', '#FF43B4']
     },
 
     _observer: null,
@@ -639,27 +611,24 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
       }
 
-      // Disconnect previous observer
-      if (this._observer) { this._observer.disconnect(); this._observer = null; }
-
       // Switch to another project
       panel.querySelectorAll('.project-detail').forEach(function (a) { a.classList.remove('active'); });
       article.classList.add('active');
 
-      // Render gallery images vertically
+      // Render gallery color blocks vertically
       var track = article.querySelector('.gallery-track');
-      var imgs = this._galleryImages[detailId];
-      if (track && imgs && imgs.length) {
+      var colors = this._galleryImages[detailId];
+      if (track && colors && colors.length) {
         track.innerHTML = '';
-        imgs.forEach(function (src) {
-          var img = document.createElement('img');
-          img.className = 'gallery-img';
-          img.src = src;
-          img.alt = '';
-          track.appendChild(img);
+        colors.forEach(function (color) {
+          var block = document.createElement('div');
+          block.className = 'gallery-img';
+          block.style.backgroundColor = color;
+          track.appendChild(block);
         });
-        // IntersectionObserver: fade-in when entering viewport (100px before bottom edge)
+        // IntersectionObserver: fade-in 100px before entering viewport
         var self = this;
+        if (self._observer) self._observer.disconnect();
         self._observer = new IntersectionObserver(function (entries) {
           entries.forEach(function (entry) {
             if (entry.isIntersecting) {
@@ -687,7 +656,6 @@ document.addEventListener('DOMContentLoaded', function () {
       var panel = document.getElementById('project-detail-panel');
       if (!panel) return;
 
-      // Disconnect observer
       if (this._observer) { this._observer.disconnect(); this._observer = null; }
 
       var self = this;
