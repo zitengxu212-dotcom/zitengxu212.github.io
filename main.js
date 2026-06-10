@@ -363,16 +363,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Card cover images — all projects use real images
     var _cardImages = {
-      '01': '主页图片/01/1.jpg',
-      '02': '主页图片/02/1.jpg',
-      '03': '主页图片/03/1.jpg',
-      '04': '主页图片/04/1.jpg',
-      '05': '主页图片/05/1.jpg',
-      '06': '主页图片/06/1.jpg',
-      '07': '主页图片/07/1.jpg',
-      '08': '主页图片/08/1.png',
-      '09': '主页图片/09/1.jpg',
-      '10': '主页图片/10/1.jpg'
+      '01': '主页图片/01/1.webp',
+      '02': '主页图片/02/1.webp',
+      '03': '主页图片/03/1.webp',
+      '04': '主页图片/04/1.webp',
+      '05': '主页图片/05/1.webp',
+      '06': '主页图片/06/1.webp',
+      '07': '主页图片/07/1.webp',
+      '08': '主页图片/08/1.webp',
+      '09': '主页图片/09/1.webp',
+      '10': '主页图片/10/1.webp'
     };
 
     // Build a card-data entry from a project registry entry
@@ -591,8 +591,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // QR image paths
     var QR_PATHS = {
-      wechat: '主页图片/wechat-qr.png',
-      qq: '主页图片/qq-qr.png'
+      wechat: '主页图片/wechat-qr.webp',
+      qq: '主页图片/qq-qr.webp'
     };
 
     document.querySelectorAll('.social-icon-btn').forEach(function (btn) {
@@ -633,71 +633,71 @@ document.addEventListener('DOMContentLoaded', function () {
     // Gallery images per project — edit here to add/change images
     _galleryImages: {
       '01': [
-        '主页图片/01/1.jpg',
-        '主页图片/01/2.jpg',
-        '主页图片/01/3.jpg',
-        '主页图片/01/4.jpg',
-        '主页图片/01/5.jpg'
+        '主页图片/01/1.webp',
+        '主页图片/01/2.webp',
+        '主页图片/01/3.webp',
+        '主页图片/01/4.webp',
+        '主页图片/01/5.webp'
       ],
       '02': [
-        '主页图片/02/1.jpg',
-        '主页图片/02/2.jpg',
-        '主页图片/02/3.jpg',
-        '主页图片/02/4.jpg',
-        '主页图片/02/5.jpg',
-        '主页图片/02/6.jpg'
+        '主页图片/02/1.webp',
+        '主页图片/02/2.webp',
+        '主页图片/02/3.webp',
+        '主页图片/02/4.webp',
+        '主页图片/02/5.webp',
+        '主页图片/02/6.webp'
       ],
       '03': [
-        '主页图片/03/1.jpg',
-        '主页图片/03/2.jpg',
-        '主页图片/03/3.jpg',
-        '主页图片/03/4.jpg'
+        '主页图片/03/1.webp',
+        '主页图片/03/2.webp',
+        '主页图片/03/3.webp',
+        '主页图片/03/4.webp'
       ],
       '04': [
-        '主页图片/04/1.jpg',
-        '主页图片/04/2.jpg',
-        '主页图片/04/3.jpg'
+        '主页图片/04/1.webp',
+        '主页图片/04/2.webp',
+        '主页图片/04/3.webp'
       ],
       '05': [
-        '主页图片/05/1.jpg',
-        '主页图片/05/2.jpg',
-        '主页图片/05/3.jpg',
-        '主页图片/05/4.jpg'
+        '主页图片/05/1.webp',
+        '主页图片/05/2.webp',
+        '主页图片/05/3.webp',
+        '主页图片/05/4.webp'
       ],
       '06': [
-        '主页图片/06/1.jpg',
-        '主页图片/06/2.jpg',
-        '主页图片/06/3.jpg',
-        '主页图片/06/4.jpg'
+        '主页图片/06/1.webp',
+        '主页图片/06/2.webp',
+        '主页图片/06/3.webp',
+        '主页图片/06/4.webp'
       ],
       '07': [
-        '主页图片/07/1.jpg',
-        '主页图片/07/2.jpg',
-        '主页图片/07/3.jpg',
-        '主页图片/07/4.jpg',
-        '主页图片/07/5.jpg'
+        '主页图片/07/1.webp',
+        '主页图片/07/2.webp',
+        '主页图片/07/3.webp',
+        '主页图片/07/4.webp',
+        '主页图片/07/5.webp'
       ],
       '08': [
-        '主页图片/08/1.png',
-        '主页图片/08/2.png',
-        '主页图片/08/3.png',
-        '主页图片/08/4.png',
-        '主页图片/08/5.jpg',
-        '主页图片/08/6.jpg'
+        '主页图片/08/1.webp',
+        '主页图片/08/2.webp',
+        '主页图片/08/3.webp',
+        '主页图片/08/4.webp',
+        '主页图片/08/5.webp',
+        '主页图片/08/6.webp'
       ],
       '09': [
-        '主页图片/09/1.jpg',
-        '主页图片/09/2.jpg',
-        '主页图片/09/3.jpg',
-        '主页图片/09/4.jpg'
+        '主页图片/09/1.webp',
+        '主页图片/09/2.webp',
+        '主页图片/09/3.webp',
+        '主页图片/09/4.webp'
       ],
       '10': [
-        '主页图片/10/1.jpg',
-        '主页图片/10/2.png',
-        '主页图片/10/3.jpg',
-        '主页图片/10/4.jpg',
-        '主页图片/10/5.jpg',
-        '主页图片/10/6.jpg'
+        '主页图片/10/1.webp',
+        '主页图片/10/2.webp',
+        '主页图片/10/3.webp',
+        '主页图片/10/4.webp',
+        '主页图片/10/5.webp',
+        '主页图片/10/6.webp'
       ]
     },
 
