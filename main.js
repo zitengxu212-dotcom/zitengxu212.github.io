@@ -353,10 +353,10 @@ document.addEventListener('DOMContentLoaded', function () {
       '02': { number: '02', title: 'Feces with Earth',   tags: ['展厅概念设计'], category: 'spatial', representative: false },
       '03': { number: '03', title: '嘬味ZUOWEI', tags: ['店铺空间设计'], category: 'spatial', representative: true  },
       '04': { number: '04', title: 'Prometheus',  tags: ['未来建筑概念设计'],  category: 'spatial', representative: false },
-      '05': { number: '05', title: 'XIANYU 招新',  tags: ['海报&物料设计'],     category: 'graphic', representative: true  },
+      '05': { number: '05', title: '“来”',  tags: ['海报&物料设计'],     category: 'graphic', representative: true  },
       '06': { number: '06', title: '海边的蒲公英',   tags: ['专辑设计'],     category: 'graphic', representative: false },
       '07': { number: '07', title: '鱼苗计划', tags: ['海报&物料设计'], category: 'graphic', representative: false },
-      '08': { number: '08', title: '嘬味ZUOWEI', tags: ['品牌设计'],      category: 'graphic', representative: true  },
+      '08': { number: '08', title: '开个方子', tags: ['品牌设计'],      category: 'graphic', representative: true  },
       '09': { number: '09', title: '关于自我',  tags: ['平面设计'],     category: 'graphic', representative: false },
       '10': { number: '10', title: '唐崖TANGYA',   tags: ['品牌&包装设计'],   category: 'graphic', representative: false }
     };
@@ -370,7 +370,7 @@ document.addEventListener('DOMContentLoaded', function () {
       '05': '主页图片/05/1.jpg',
       '06': '主页图片/06/1.jpg',
       '07': '主页图片/07/1.jpg',
-      '08': '主页图片/08/1.jpg',
+      '08': '主页图片/08/1.png',
       '09': '主页图片/09/1.jpg',
       '10': '主页图片/10/1.jpg'
     };
@@ -678,8 +678,12 @@ document.addEventListener('DOMContentLoaded', function () {
         '主页图片/07/5.jpg'
       ],
       '08': [
-        '主页图片/08/1.jpg',
-        '主页图片/08/2.jpg'
+        '主页图片/08/1.png',
+        '主页图片/08/2.png',
+        '主页图片/08/3.png',
+        '主页图片/08/4.png',
+        '主页图片/08/5.jpg',
+        '主页图片/08/6.jpg'
       ],
       '09': [
         '主页图片/09/1.jpg',
@@ -689,7 +693,7 @@ document.addEventListener('DOMContentLoaded', function () {
       ],
       '10': [
         '主页图片/10/1.jpg',
-        '主页图片/10/2.jpg',
+        '主页图片/10/2.png',
         '主页图片/10/3.jpg',
         '主页图片/10/4.jpg',
         '主页图片/10/5.jpg',
@@ -762,6 +766,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
       // Animate: slide up from bottom
       gsap.fromTo(panel, { y: '100%' }, { y: '0%', duration: 0.5, ease: 'power2.out' });
+
+      // Safety net: manually reveal gallery images already in viewport
+      // IntersectionObserver may miss them when panel toggles from display:none
+      var galleryImgs = track.querySelectorAll('.gallery-img:not(.revealed)');
+      if (galleryImgs.length) {
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            galleryImgs.forEach(function (el) {
+              var rect = el.getBoundingClientRect();
+              if (rect.top < window.innerHeight + 100 && rect.bottom > -100) {
+                el.classList.add('revealed');
+              }
+            });
+          });
+        });
+      }
     },
 
     // Close detail — slide overlay down, restore page scroll
