@@ -31,10 +31,16 @@ def minify_css(css_text):
 
 
 def minify_js(js_text):
+    # Protect https:// and http:// from being treated as // comments
+    js_text = js_text.replace('https://', 'https:__PROTO_SLASH__')
+    js_text = js_text.replace('http://', 'http:__PROTO_SLASH__')
     js_text = re.sub(r'//.+\n', '\n', js_text)
     js_text = re.sub(r'/\*.*?\*/', '', js_text, flags=re.DOTALL)
     js_text = re.sub(r'\n\s*\n', '\n', js_text)
     js_text = re.sub(r'^\s+', '', js_text, flags=re.MULTILINE)
+    # Restore https:// and http://
+    js_text = js_text.replace('https:__PROTO_SLASH__', 'https://')
+    js_text = js_text.replace('http:__PROTO_SLASH__', 'http://')
     return js_text.strip()
 
 
@@ -117,6 +123,28 @@ def extract_detail_css(css_text):
     return '\n'.join(rules)
 
 
+def _optimize_html(html_text):
+    """无损 HTML 压缩（不影响任何渲染效果）"""
+    # 1. &nbsp; → literal non-breaking space (each saves 5 chars)
+    html_text = html_text.replace('&nbsp;', ' ')
+    # 2. Remove redundant onclick from cards (JS renderCards overrides them)
+    html_text = re.sub(r'\s*onclick="XZT\.openDetail\(\x27[^\x27]*\x27\)"', '', html_text)
+    # 3. Round SVG path decimal coordinates (imperceptible at 56x56 viewBox)
+    def round_path(m):
+        d = m.group(1)
+        def rn(n):
+            v = float(n.group(0))
+            if abs(v - round(v)) < 0.001:
+                return str(int(round(v)))
+            return f'{v:.1f}'
+        d = re.sub(r'\d+\.\d+', rn, d)
+        return 'd="' + d + '"'
+    html_text = re.sub(r'd="([^"]*)"', round_path, html_text)
+    # 4. Remove <picture> wrapper from cards (single img, no <source>, fully redundant)
+    html_text = re.sub(r'<picture class="t-card-featured-image-wrapper">(<img[^>]*>)</picture>', r'\1', html_text)
+    return html_text
+
+
 def build_split_blocks():
     """拆分为两个代码块：主页面（代码块1） + 详情面板（代码块2）"""
     html = read_file('index.html')
@@ -124,9 +152,27 @@ def build_split_blocks():
     js = read_file('main.js')
 
     css_min = minify_css(css)
-    js_min = minify_js(js)
+    # Merge .t-card-featured-image-wrapper into .t-card-featured-image (picture wrapper removed)
+    css_min = css_min.replace('.t-card-featured-image-wrapper{display:block;width:100%;height:100%}', '')
+    css_min = css_min.replace('.t-card-featured-image{width:100%;height:100%;object-fit:cover}',
+                               '.t-card-featured-image{display:block;width:100%;height:100%;object-fit:cover}')
 
-    # ── 拆分点：详情面板起始标签 ──
+    # ── JS 拆分：将 XZT 详情面板逻辑从代码块1 移至代码块2 ──
+    # XZT 定义 + 详情面板事件监听器只操作代码块2 的 DOM，挪到代码块2
+    xzt_marker = '// ===== Global XZT namespace for detail panel ====='
+    smooth_marker = '// ===== Smooth anchor scroll ====='
+    xzt_idx = js.find(xzt_marker)
+    smooth_idx = js.find(smooth_marker)
+    if xzt_idx != -1 and smooth_idx != -1:
+        js_detail = js[xzt_idx:smooth_idx]
+        js_main = js[:xzt_idx] + js[smooth_idx:]
+    else:
+        js_detail = ''
+        js_main = js
+    js_main_min = minify_js(js_main)
+    js_detail_min = minify_js(js_detail) if js_detail else ''
+
+    # ── HTML 拆分点：详情面板起始标签 ──
     split_marker = '<div class="project-detail-panel"'
     split_idx = html.find(split_marker)
     if split_idx == -1:
@@ -155,22 +201,21 @@ def build_split_blocks():
     # 激进压缩 Block 2 的 HTML（详情面板 ~45KB，压缩可节省 ~6-8KB）
     block2_html = minify_html_aggressive(block2_html)
 
-    # ── 组装 ──
+    # ── 组装（含后处理优化）──
     block1 = '\n'.join([
         '<!-- 代码块1: 主页面 -->',
         '<style>' + css_min + '</style>',
-        block1_html.strip(),
-        '<script>' + js_min + '</script>'
+        _optimize_html(block1_html.strip()),
+        '<script>' + js_main_min + '</script>'
     ])
 
-    # Block 2: 详情面板 + 精简 CSS（仅面板相关样式 + 变量）+ XZT 命名空间桥接
+    # Block 2: 详情面板 + 精简 CSS + 详情 JS（XZT 定义 + 事件监听）
     detail_css = minify_css(extract_detail_css(css))
-    block2_js = 'window.XZT=window.XZT||{};'
     block2 = '\n'.join([
         '<!-- 代码块2: 项目详情面板 -->',
         '<style>' + detail_css + '</style>',
-        block2_html,
-        '<script>' + block2_js + '</script>'
+        _optimize_html(block2_html),
+        '<script>' + js_detail_min + '</script>'
     ])
 
     return block1, block2
