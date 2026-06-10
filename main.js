@@ -115,18 +115,35 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function flushPending() {
       if (!pending.length) return;
+      // Prepend last point from previous frame to bridge gaps
+      if (lastPoint) { pending.unshift(lastPoint); }
       if (pending.length === 1) {
         drawDot(pending[0].x, pending[0].y);
       } else {
         for (var i = 1; i < pending.length; i++) {
-          drawStroke(pending[i - 1].x, pending[i - 1].y, pending[i].x, pending[i].y);
+          var x1 = pending[i - 1].x, y1 = pending[i - 1].y;
+          var x2 = pending[i].x,     y2 = pending[i].y;
+          var dx = x2 - x1, dy = y2 - y1;
+          var dist = Math.sqrt(dx * dx + dy * dy);
+          var step = brushRadius * 0.8; // overlap ensures seamless coverage
+          if (dist <= step) {
+            drawDot(x2, y2);
+          } else {
+            var steps = Math.ceil(dist / step);
+            for (var s = 1; s <= steps; s++) {
+              var t = s / steps;
+              drawDot(x1 + dx * t, y1 + dy * t);
+            }
+          }
         }
       }
+      lastPoint = pending[pending.length - 1];
       pending = [];
       rafId = null;
     }
 
     var firstMove = true;
+    var lastPoint = null; // bridge across animation frames
 
     initCanvas();
     window.addEventListener('resize', function () { resize(); });
