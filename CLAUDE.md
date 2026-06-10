@@ -12,7 +12,7 @@
 | 开发需求 | [docs/requirements.md](docs/requirements.md) | 功能需求、优先级、目标用户 |
 | 技术规范 | [docs/tech-spec.md](docs/tech-spec.md) | 技术栈、项目结构、代码规范、断点、性能指标 |
 | 设计规范 | [docs/design-spec.md](docs/design-spec.md) | 色彩系统、字体层级、间距系统、组件规范 |
-| 执行步骤 | [docs/execution-steps.md](docs/execution-steps.md) | 开发流程、日常流程、AI 协作指引 |
+| 执行步骤 | [docs/execution-steps.md](docs/execution-steps.md) | 开发流程、日常流程、触发词规则、AI 协作指引 |
 | 凡科部署 | [docs/fanke-deploy-guide.md](docs/fanke-deploy-guide.md) | 代码块拆分策略、命名空间规范、生成脚本 |
 | 开发日志 | [dev-logs/](dev-logs/) | 每日开发记录 |
 
