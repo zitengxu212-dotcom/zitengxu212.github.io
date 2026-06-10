@@ -2,7 +2,7 @@
 import os
 from PIL import Image
 
-BASE = r'e:\Desktop\个人网站\主页图片'
+BASE = r'e:\Desktop\个人网站\images'
 CARD_MAX_W = 800
 GALLERY_MAX_W = 2000
 WEBP_QUALITY = 82
