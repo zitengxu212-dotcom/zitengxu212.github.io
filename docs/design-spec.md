@@ -13,6 +13,12 @@
 | 灰色 | `#D9D9D9` | 图片占位区 |
 
 ## 字体层级
+
+### 主字体 Desolator
+- 文件：`fonts/Desolator.woff2`（400 常规）、`fonts/Desolator-Light.woff2`（300 细体）
+- 回退栈：Courier New → Noto Sans SC → monospace
+- 加载策略：`font-display: swap`（先显示回退字体，加载完成后切换）
+
 | 层级 | 字号 | 用途 |
 |------|------|------|
 | H1 主标题 | 64px | 姓名 "XUZITENG" |

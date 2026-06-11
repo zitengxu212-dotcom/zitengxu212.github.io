@@ -1,8 +1,17 @@
 /* ===== Font Face ===== */
 @font-face {
   font-family: 'Desolator';
-  src: local('Desolator'), local('Desolator-Regular');
+  src: local('Desolator'), local('Desolator-Regular'),
+       url('fonts/Desolator.woff2') format('woff2');
   font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Desolator';
+  src: local('Desolator Light'), local('Desolator-Light'),
+       url('fonts/Desolator-Light.woff2') format('woff2');
+  font-weight: 300;
   font-style: normal;
   font-display: swap;
 }
